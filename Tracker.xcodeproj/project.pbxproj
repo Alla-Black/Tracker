@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		4D6B5CB52EC227390060D37E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4D6B5CAD2EC227390060D37E /* LaunchScreen.storyboard */; };
+		4D6B5CB62EC227390060D37E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4D6B5CAF2EC227390060D37E /* Main.storyboard */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		4D6B5C8C2EC221B00060D37E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,27 +32,12 @@
 		4D6B5C752EC221AE0060D37E /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D6B5C8B2EC221B00060D37E /* TrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D6B5C952EC221B00060D37E /* TrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D6B5CAB2EC227390060D37E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4D6B5CAC2EC227390060D37E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		4D6B5CAE2EC227390060D37E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		4D6B5C9D2EC221B00060D37E /* Exceptions for "Tracker" folder in "Tracker" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 4D6B5C742EC221AE0060D37E /* Tracker */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		4D6B5C772EC221AE0060D37E /* Tracker */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				4D6B5C9D2EC221B00060D37E /* Exceptions for "Tracker" folder in "Tracker" target */,
-			);
-			path = Tracker;
-			sourceTree = "<group>";
-		};
 		4D6B5C8E2EC221B00060D37E /* TrackerTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = TrackerTests;
@@ -56,6 +46,21 @@
 		4D6B5C982EC221B00060D37E /* TrackerUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = TrackerUITests;
+			sourceTree = "<group>";
+		};
+		4D6B5D2B2EC25A550060D37E /* Resources */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		4D6B5D2C2EC25AA40060D37E /* App */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = App;
+			sourceTree = "<group>";
+		};
+		4D6B5D2D2EC25ACB0060D37E /* Modules */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Modules;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -88,7 +93,7 @@
 		4D6B5C6C2EC221AE0060D37E = {
 			isa = PBXGroup;
 			children = (
-				4D6B5C772EC221AE0060D37E /* Tracker */,
+				4D6B5CB22EC227390060D37E /* Tracker */,
 				4D6B5C8E2EC221B00060D37E /* TrackerTests */,
 				4D6B5C982EC221B00060D37E /* TrackerUITests */,
 				4D6B5C762EC221AE0060D37E /* Products */,
@@ -103,6 +108,19 @@
 				4D6B5C952EC221B00060D37E /* TrackerUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		4D6B5CB22EC227390060D37E /* Tracker */ = {
+			isa = PBXGroup;
+			children = (
+				4D6B5D2D2EC25ACB0060D37E /* Modules */,
+				4D6B5D2C2EC25AA40060D37E /* App */,
+				4D6B5D2B2EC25A550060D37E /* Resources */,
+				4D6B5CAB2EC227390060D37E /* Info.plist */,
+				4D6B5CAD2EC227390060D37E /* LaunchScreen.storyboard */,
+				4D6B5CAF2EC227390060D37E /* Main.storyboard */,
+			);
+			path = Tracker;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -121,7 +139,9 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				4D6B5C772EC221AE0060D37E /* Tracker */,
+				4D6B5D2B2EC25A550060D37E /* Resources */,
+				4D6B5D2C2EC25AA40060D37E /* App */,
+				4D6B5D2D2EC25ACB0060D37E /* Modules */,
 			);
 			name = Tracker;
 			packageProductDependencies = (
@@ -225,6 +245,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D6B5CB52EC227390060D37E /* LaunchScreen.storyboard in Resources */,
+				4D6B5CB62EC227390060D37E /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,6 +302,25 @@
 			targetProxy = 4D6B5C962EC221B00060D37E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		4D6B5CAD2EC227390060D37E /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4D6B5CAC2EC227390060D37E /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		4D6B5CAF2EC227390060D37E /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4D6B5CAE2EC227390060D37E /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		4D6B5C9F2EC221B00060D37E /* Debug */ = {
