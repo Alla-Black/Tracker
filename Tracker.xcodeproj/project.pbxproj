@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4D14D6532EC4B18400289E5F /* DatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D14D6522EC4B18400289E5F /* DatePickerView.swift */; };
 		4D6B5D3C2EC358F40060D37E /* StatisticViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6B5D352EC358F40060D37E /* StatisticViewController.swift */; };
 		4D6B5D3D2EC358F40060D37E /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6B5D372EC358F40060D37E /* TabBarController.swift */; };
 		4D6B5D3E2EC358F40060D37E /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6B5D392EC358F40060D37E /* TrackersViewController.swift */; };
@@ -30,6 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4D14D6522EC4B18400289E5F /* DatePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerView.swift; sourceTree = "<group>"; };
 		4D6B5C752EC221AE0060D37E /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D6B5C8B2EC221B00060D37E /* TrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D6B5C952EC221B00060D37E /* TrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -155,6 +157,7 @@
 			isa = PBXGroup;
 			children = (
 				4D6B5D392EC358F40060D37E /* TrackersViewController.swift */,
+				4D14D6522EC4B18400289E5F /* DatePickerView.swift */,
 			);
 			path = TrackersViewController;
 			sourceTree = "<group>";
@@ -315,6 +318,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D14D6532EC4B18400289E5F /* DatePickerView.swift in Sources */,
 				4D6B5D3C2EC358F40060D37E /* StatisticViewController.swift in Sources */,
 				4D6B5D3D2EC358F40060D37E /* TabBarController.swift in Sources */,
 				4D6B5D3E2EC358F40060D37E /* TrackersViewController.swift in Sources */,
