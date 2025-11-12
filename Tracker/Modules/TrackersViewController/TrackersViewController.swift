@@ -5,14 +5,8 @@ final class TrackersViewController: UIViewController {
     // MARK: - Private Properties
     
     private let titleNameLabel = UILabel()
-    private let addTrackerButton = UIButton.systemButton(
-        with: UIImage(resource: .addTracker),
-        target: TrackersViewController.self,
-        action: #selector(didTapAddTrackerButton)
-    )
-    
+    private let addTrackerButton = UIButton()
     private let searchBar = UISearchBar()
-    
     
     private let stubImage = UIImageView()
     private let stubLabel = UILabel()
@@ -39,6 +33,7 @@ final class TrackersViewController: UIViewController {
         addSubviews()
         configureAppearance()
         setupConstraints()
+        setupActions()
         
         func addSubviews() {
             view.addSubview(titleContainer)
@@ -53,38 +48,38 @@ final class TrackersViewController: UIViewController {
         
         func configureAppearance() {
             titleNameLabel.text = "Трекеры"
-            titleNameLabel.textColor = UIColor(resource: .black)
+            titleNameLabel.textColor = UIColor(resource: .blackYP)
             titleNameLabel.font = UIFont.systemFont(ofSize: 34, weight: .bold)
             titleNameLabel.textAlignment = .left
             
             datePicker.preferredDatePickerStyle = .compact
             datePicker.datePickerMode = .date
             datePicker.locale = Locale(identifier: "ru_RU")
-            // перенести куда то  в другое место
-            datePicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
             datePicker.alpha = 0.02
             datePicker.setContentHuggingPriority(.defaultLow, for: .horizontal)
             datePicker.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
             
             dateLabel.text = DateFormatterHelper.dateFormatter.string(from: datePicker.date)
-            dateLabel.textColor = UIColor(resource: .black)
+            dateLabel.textColor = UIColor(resource: .blackYP).resolvedColor(with: UITraitCollection(userInterfaceStyle: .light))
             dateLabel.font = UIFont.systemFont(ofSize: 17, weight: .regular)
             dateLabel.setContentHuggingPriority(.required, for: .horizontal)
             dateLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
             
-            dateContainer.backgroundColor = UIColor(red: 0xF0/255, green: 0xF0/255, blue: 0xF0/255, alpha: 1)
+            dateContainer.backgroundColor = UIColor(red: 0xF0/255.0, green: 0xF0/255.0, blue: 0xF0/255.0, alpha: 1)
             dateContainer.layer.cornerRadius = 8
             
             stubImage.image = UIImage(resource: .trackersPlaceholder)
             
             stubLabel.text = "Что будем отслеживать?"
-            stubLabel.textColor = UIColor(resource: .black)
+            stubLabel.textColor = UIColor(resource: .blackYP)
             stubLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
             stubLabel.textAlignment = .center
             
             var config = addTrackerButton.configuration ?? UIButton.Configuration.plain()
+            let plusImage = UIImage(resource: .addTracker).withRenderingMode(.alwaysTemplate)
+            config.image = plusImage
             config.contentInsets = .init(top: 12, leading: 0, bottom: 12, trailing: 0)
-            config.baseBackgroundColor = UIColor(resource: .black)
+            config.baseForegroundColor = UIColor(resource: .blackYP)
             addTrackerButton.configuration = config
             addTrackerButton.imageView?.contentMode = .scaleAspectFit
             addTrackerButton.contentHorizontalAlignment = .leading
@@ -152,6 +147,21 @@ final class TrackersViewController: UIViewController {
             ])
         }
         
+        func setupActions() {
+            datePicker.addTarget(
+                self,
+                action: #selector(dateChanged),
+                for: .valueChanged
+            )
+            
+            addTrackerButton.addTarget(
+                self,
+                action: #selector(didTapAddTrackerButton),
+                for: .touchUpInside
+            )
+            
+            searchBar.delegate = self
+        }
     }
     
     // MARK: - Actions
@@ -166,4 +176,3 @@ final class TrackersViewController: UIViewController {
 
 }
 
-// решить проблему дублирования цветов, решить проблему перемещения ПЛист, сделать увета в темной теме
