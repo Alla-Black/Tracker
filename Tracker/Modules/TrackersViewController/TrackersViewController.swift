@@ -13,6 +13,7 @@ final class TrackersViewController: UIViewController {
     
     private let searchBar = UISearchBar()
     
+    
     private let stubImage = UIImageView()
     private let stubLabel = UILabel()
     
@@ -83,9 +84,9 @@ final class TrackersViewController: UIViewController {
             
             var config = addTrackerButton.configuration ?? UIButton.Configuration.plain()
             config.contentInsets = .init(top: 12, leading: 0, bottom: 12, trailing: 0)
+            config.baseBackgroundColor = UIColor(resource: .black)
             addTrackerButton.configuration = config
             addTrackerButton.imageView?.contentMode = .scaleAspectFit
-            addTrackerButton.tintColor = UIColor(resource: .black)
             addTrackerButton.contentHorizontalAlignment = .leading
             
             searchBar.placeholder = "Поиск"
@@ -165,3 +166,4 @@ final class TrackersViewController: UIViewController {
 
 }
 
+// решить проблему дублирования цветов, решить проблему перемещения ПЛист, сделать увета в темной теме
