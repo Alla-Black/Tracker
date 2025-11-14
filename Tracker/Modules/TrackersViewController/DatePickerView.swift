@@ -11,6 +11,7 @@ final class DatePickerView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         setupView()
         setupActions()
     }

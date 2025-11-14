@@ -51,6 +51,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		4D14D72B2EC7CDC300289E5F /* Models */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Models;
+			sourceTree = "<group>";
+		};
 		4D6B5C8E2EC221B00060D37E /* TrackerTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = TrackerTests;
@@ -130,6 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				4D6B5D2C2EC25AA40060D37E /* App */,
+				4D14D72B2EC7CDC300289E5F /* Models */,
 				4D6B5D3B2EC358F40060D37E /* Modules */,
 				4D6B5D3F2EC361050060D37E /* Shared */,
 				4D6B5D2B2EC25A550060D37E /* Resources */,
@@ -188,6 +194,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				4D14D72B2EC7CDC300289E5F /* Models */,
 				4D6B5D2B2EC25A550060D37E /* Resources */,
 				4D6B5D2C2EC25AA40060D37E /* App */,
 				4D6B5D3F2EC361050060D37E /* Shared */,

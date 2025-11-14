@@ -16,6 +16,9 @@ final class TrackersViewController: UIViewController {
     
     private let datePickerView = DatePickerView()
     
+    private var categories: [TrackerCategory] = []
+    private var completedTrackers: [TrackerRecord] = []
+    
     
     // MARK: - Lifecycle
     
