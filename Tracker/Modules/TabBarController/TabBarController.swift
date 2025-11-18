@@ -19,5 +19,9 @@ final class TabBarController: UITabBarController {
         )
         
         viewControllers = [trackersViewController, statisticViewController]
+        
+        tabBar.layer.borderWidth = 0.5
+        tabBar.layer.borderColor = UIColor(resource: .grayYP).cgColor
+        tabBar.clipsToBounds = true
     }
 }

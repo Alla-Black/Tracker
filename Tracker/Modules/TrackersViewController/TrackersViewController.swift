@@ -141,3 +141,6 @@ final class TrackersViewController: UIViewController {
     
 }
 
+#Preview {
+    TabBarController()
+}
