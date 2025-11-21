@@ -16,9 +16,19 @@ final class TrackersViewController: UIViewController {
     
     private let datePickerView = DatePickerView()
     
+    private let collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        
+        return collectionView
+    }()
+    
+    private let params = TrackersLayoutParams(cellCount: 2, leftInset: 16, rightInset: 16, cellSpaсing: 9)
+    
+    private var trackersCollectionView: TrackersCollectionView?
+    
     private var categories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
-    
     
     // MARK: - Lifecycle
     
@@ -29,6 +39,11 @@ final class TrackersViewController: UIViewController {
         configureAppearance()
         setupConstraints()
         setupActions()
+        
+        trackersCollectionView = TrackersCollectionView(using: params, collectionView: collectionView)
+        
+        categories = TrackersMockData.makeCategories()
+        updateCollection(with: categories)
     }
     
     // MARK: - Private Methods
@@ -41,6 +56,8 @@ final class TrackersViewController: UIViewController {
         
         view.addSubview(stubContainer)
         stubContainer.addSubviews([stubImage, stubLabel])
+        
+        view.addSubview(collectionView)
     }
     
     private func configureAppearance() {
@@ -77,13 +94,13 @@ final class TrackersViewController: UIViewController {
     private func setupConstraints() {
         let field = searchBar.searchTextField
         
-        [titleContainer, titleNameLabel, addTrackerButton, searchBar, stubContainer, stubImage, stubLabel, datePickerView, field].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        [titleContainer, titleNameLabel, addTrackerButton, searchBar, stubContainer, stubImage, stubLabel, datePickerView, field, collectionView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         
         NSLayoutConstraint.activate([
             titleContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             titleContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             titleContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            titleContainer.bottomAnchor.constraint(equalTo: searchBar.topAnchor, constant: -10),
+            titleContainer.bottomAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 10),
             
             datePickerView.trailingAnchor.constraint(equalTo: titleContainer.trailingAnchor, constant: -16),
             datePickerView.topAnchor.constraint(equalTo: titleContainer.topAnchor, constant: 5),
@@ -119,7 +136,12 @@ final class TrackersViewController: UIViewController {
             stubLabel.centerXAnchor.constraint(equalTo: stubImage.centerXAnchor),
             stubLabel.topAnchor.constraint(equalTo: stubImage.bottomAnchor, constant: 8),
             stubLabel.leadingAnchor.constraint(greaterThanOrEqualTo: stubContainer.leadingAnchor, constant: 16),
-            stubLabel.trailingAnchor.constraint(lessThanOrEqualTo: stubContainer.trailingAnchor, constant: -16)
+            stubLabel.trailingAnchor.constraint(lessThanOrEqualTo: stubContainer.trailingAnchor, constant: -16),
+            
+            collectionView.topAnchor.constraint(equalTo: titleContainer.bottomAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
     
@@ -137,6 +159,17 @@ final class TrackersViewController: UIViewController {
     
     @objc private func didTapAddTrackerButton() {
         //TODO: реализовать функционал нажатия на кнопку
+    }
+    
+    private func updateCollection(with categories: [TrackerCategory]) {
+        self.categories = categories
+        trackersCollectionView?.update(with: categories)
+        
+        let hasTrackers = categories.contains { !$0.trackers.isEmpty }
+        
+        stubContainer.isHidden = hasTrackers
+        collectionView.isHidden = !hasTrackers
+        
     }
     
 }

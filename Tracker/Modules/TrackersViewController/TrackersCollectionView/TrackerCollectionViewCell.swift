@@ -8,6 +8,10 @@ import UIKit
 
 final class TrackerCollectionViewCell: UICollectionViewCell {
     
+    // MARK: - Static Properties
+    
+    static let identifier = "trackerCell"
+    
     // MARK: - Private Properties
     
     private let topContainerView = UIView()
@@ -34,6 +38,22 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Public Methods
+    
+    // MARK: - Configure
+    
+    func configure(with tracker: Tracker, days: Int = 0) {
+        emojiLabel.text = tracker.emoji
+        
+        titleLabel.text = tracker.name
+        
+        topContainerView.backgroundColor = tracker.color
+        plusButton.backgroundColor = tracker.color
+        
+        daysCountLabel.text = "\(days) дней"
+        // TODO: daysCountLabel.text = "\(формула) дней"
+    }
+    
     // MARK: - Private Methods
     
     // MARK: - Setup UI
@@ -55,6 +75,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         emojiLabel.clipsToBounds = true
         emojiLabel.backgroundColor = .whiteYP.withAlphaComponent(0.3)
         emojiLabel.textAlignment = .center
+        emojiLabel.font = UIFont.systemFont(ofSize: 16)
         
         titleLabel.font = .systemFont(ofSize: 12, weight: .medium)
         titleLabel.textColor = .whiteYP
@@ -93,7 +114,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             emojiLabel.topAnchor.constraint(equalTo: topContainerView.topAnchor, constant: 12),
             emojiLabel.leadingAnchor.constraint(equalTo: topContainerView.leadingAnchor, constant: 12),
             
-            titleLabel.topAnchor.constraint(greaterThanOrEqualTo: emojiLabel.bottomAnchor, constant: 8),
+            titleLabel.topAnchor.constraint(equalTo: emojiLabel.bottomAnchor, constant: 8),
             titleLabel.leadingAnchor.constraint(equalTo: topContainerView.leadingAnchor, constant: 12),
             titleLabel.trailingAnchor.constraint(equalTo: topContainerView.trailingAnchor, constant: -12),
             titleLabel.bottomAnchor.constraint(equalTo: topContainerView.bottomAnchor, constant: -12),
