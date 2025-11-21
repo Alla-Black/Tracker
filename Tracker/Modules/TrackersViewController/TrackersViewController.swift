@@ -85,9 +85,20 @@ final class TrackersViewController: UIViewController {
         addTrackerButton.imageView?.contentMode = .scaleAspectFit
         addTrackerButton.contentHorizontalAlignment = .leading
         
-        searchBar.placeholder = "Поиск"
+        let placeholder = NSAttributedString(
+            string: "Поиск",
+            attributes: [
+                .foregroundColor: UIColor(resource: .graySearch),
+                .font: UIFont.systemFont(ofSize: 17, weight: .regular)
+            ]
+        )
+        searchBar.searchTextField.attributedPlaceholder = placeholder
         searchBar.searchBarStyle = .minimal
-        searchBar.searchTextField.textColor = .graySearch
+        searchBar.searchTextField.textColor = .blackYP
+        
+        let icon = UIImage(systemName: "magnifyingglass")?
+            .withTintColor(UIColor(resource: .graySearch), renderingMode: .alwaysOriginal)
+        searchBar.setImage(icon, for: .search, state: .normal)
     }
     
     // MARK: - Constraints
