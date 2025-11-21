@@ -11,6 +11,15 @@ final class AddTrackerViewController: UIViewController {
     private let cancelButton = UIButton()
     private let createButton = UIButton()
     
+    private let tableViewContainer = UIView()
+    private let tableView: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .plain)
+        
+        return tableView
+    }()
+    
+    private var settingsTableView: TrackerSettingsTableView?
+    
     
     // MARK: - Lifecycle
     
@@ -21,6 +30,7 @@ final class AddTrackerViewController: UIViewController {
         configureAppearance()
         setupConstraints()
         setupActions()
+        setupTrackerSettingsTableView()
         
     }
     
@@ -29,8 +39,9 @@ final class AddTrackerViewController: UIViewController {
     // MARK: - Add Subviews
     
     private func addSubviews() {
-        view.addSubviews([titleLabel, textFieldContainer, cancelButton, createButton])
+        view.addSubviews([titleLabel, textFieldContainer, cancelButton, createButton, tableViewContainer])
         textFieldContainer.addSubview(textField)
+        tableViewContainer.addSubview(tableView)
     }
     
     // MARK: - Configure Appearance
@@ -52,7 +63,7 @@ final class AddTrackerViewController: UIViewController {
         textField.attributedPlaceholder = placeholder
         textField.textAlignment = .left
         textField.textColor = .whiteYP
-    
+        
         textFieldContainer.backgroundColor = .backgroundYP
         textFieldContainer.layer.cornerRadius = 16
         textFieldContainer.clipsToBounds = true
@@ -72,12 +83,16 @@ final class AddTrackerViewController: UIViewController {
         createButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         createButton.setTitleColor(.whiteStatic, for: .normal)
         createButton.titleLabel?.textAlignment = .center
+        
+        tableViewContainer.backgroundColor = .backgroundYP
+        tableViewContainer.layer.cornerRadius = 16
+        tableViewContainer.layer.masksToBounds = true
     }
     
     // MARK: - Setup Constraints
     
     private func setupConstraints() {
-        [textField, textFieldContainer, titleLabel, cancelButton, createButton].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        [textField, textFieldContainer, titleLabel, cancelButton, createButton, tableView, tableViewContainer].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -100,8 +115,17 @@ final class AddTrackerViewController: UIViewController {
             
             createButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             createButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            createButton.heightAnchor.constraint(equalToConstant: 60)
+            createButton.heightAnchor.constraint(equalToConstant: 60),
             
+            tableViewContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            tableViewContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            tableViewContainer.topAnchor.constraint(equalTo: textFieldContainer.bottomAnchor, constant: 24),
+            tableViewContainer.heightAnchor.constraint(equalToConstant: 150),
+            
+            tableView.topAnchor.constraint(equalTo: tableViewContainer.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: tableViewContainer.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: tableViewContainer.leadingAnchor),
+            tableViewContainer.trailingAnchor.constraint(equalTo: tableView.trailingAnchor)
         ])
     }
     
@@ -110,6 +134,29 @@ final class AddTrackerViewController: UIViewController {
     private func setupActions() {
         //TODO: Дописать методы для кнопок и поля с названием
         
+    }
+    
+    // MARK: - Setup TrackerSettingsTableView
+    
+    private func setupTrackerSettingsTableView() {
+        settingsTableView = TrackerSettingsTableView(tableView: tableView)
+        
+        settingsTableView?.onSelectRow = { index in
+            
+            switch index {
+                
+            case 0:
+                print("Тап по строке Категория")
+                // TODO: открыть экран категорий
+                
+            case 1:
+                print("Тап по строке Расписание")
+                // TODO: открыть экран с расписанием
+                
+            default:
+                break
+            }
+        }
     }
 }
 
