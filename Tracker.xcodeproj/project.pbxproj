@@ -100,6 +100,11 @@
 			path = Shared;
 			sourceTree = "<group>";
 		};
+		4DBF55BE2ED0E9D600076E0F /* AddTrackerCollectionView */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = AddTrackerCollectionView;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -222,6 +227,7 @@
 			isa = PBXGroup;
 			children = (
 				4DBF55BB2ED07FA200076E0F /* AddTrackerViewController.swift */,
+				4DBF55BE2ED0E9D600076E0F /* AddTrackerCollectionView */,
 			);
 			path = AddTrackerViewController;
 			sourceTree = "<group>";
@@ -246,6 +252,7 @@
 				4D6B5D2B2EC25A550060D37E /* Resources */,
 				4D6B5D2C2EC25AA40060D37E /* App */,
 				4D6B5D3F2EC361050060D37E /* Shared */,
+				4DBF55BE2ED0E9D600076E0F /* AddTrackerCollectionView */,
 			);
 			name = Tracker;
 			packageProductDependencies = (

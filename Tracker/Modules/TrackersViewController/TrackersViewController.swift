@@ -23,7 +23,7 @@ final class TrackersViewController: UIViewController {
         return collectionView
     }()
     
-    private let params = TrackersLayoutParams(cellCount: 2, leftInset: 16, rightInset: 16, cellSpaсing: 9)
+    private let params = CollectionLayoutParams(cellCount: 2, leftInset: 16, rightInset: 16, cellSpaсing: 9)
     
     private var trackersCollectionView: TrackersCollectionView?
     
