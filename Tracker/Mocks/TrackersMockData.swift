@@ -5,7 +5,7 @@ enum TrackersMockData {
         let tracker1 = Tracker(
             id: UUID(),
             name: "Ежедневно поливать цветы",
-            color: UIColor(resource: .blueYP),
+            color: UIColor(resource: .blueStatic),
             emoji: "🌺",
             schedule: []
         )
@@ -13,7 +13,7 @@ enum TrackersMockData {
         let tracker2 = Tracker(
             id: UUID(),
             name: "Гулять 30 минут в день",
-            color: UIColor(resource: .redYP),
+            color: UIColor(resource: .redStatic),
             emoji: "🚶‍♀️",
             schedule: []
         )
@@ -21,7 +21,7 @@ enum TrackersMockData {
         let tracker3 = Tracker(
             id: UUID(),
             name: "Гладить кошку каждый день",
-            color: UIColor(resource: .grayYP),
+            color: UIColor(resource: .grayStatic),
             emoji: "😻",
             schedule: []
         )
@@ -29,7 +29,7 @@ enum TrackersMockData {
         let tracker4 = Tracker(
             id: UUID(),
             name: "Свидание с парнем каждый выходной день",
-            color: UIColor(resource: .redYP),
+            color: UIColor(resource: .redStatic),
             emoji: "❤️",
             schedule: []
         )

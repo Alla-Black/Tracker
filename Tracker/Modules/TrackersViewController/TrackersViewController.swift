@@ -87,6 +87,7 @@ final class TrackersViewController: UIViewController {
         
         searchBar.placeholder = "Поиск"
         searchBar.searchBarStyle = .minimal
+        searchBar.searchTextField.textColor = .graySearch
     }
     
     // MARK: - Constraints

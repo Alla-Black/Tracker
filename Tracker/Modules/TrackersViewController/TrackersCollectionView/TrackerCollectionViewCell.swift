@@ -67,18 +67,18 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         
         topContainerView.layer.cornerRadius = 16
         topContainerView.layer.borderWidth = 1
-        topContainerView.layer.borderColor = UIColor.grayYP.withAlphaComponent(0.3).cgColor
+        topContainerView.layer.borderColor = UIColor.grayStatic.withAlphaComponent(0.3).cgColor
         topContainerView.clipsToBounds = true
         
         
         emojiLabel.layer.cornerRadius = 12
         emojiLabel.clipsToBounds = true
-        emojiLabel.backgroundColor = .whiteYP.withAlphaComponent(0.3)
+        emojiLabel.backgroundColor = .whiteStatic.withAlphaComponent(0.3)
         emojiLabel.textAlignment = .center
         emojiLabel.font = UIFont.systemFont(ofSize: 16)
         
         titleLabel.font = .systemFont(ofSize: 12, weight: .medium)
-        titleLabel.textColor = .whiteYP
+        titleLabel.textColor = .whiteStatic
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 2
         titleLabel.lineBreakMode = .byTruncatingTail
