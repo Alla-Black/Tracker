@@ -4,7 +4,6 @@ final class AddTrackerViewController: UIViewController {
     
     // MARK: - Private Properties
     
-    private let titleLabel = UILabel()
     private let textField = UITextField()
     private let textFieldContainer = UIView()
     
@@ -39,7 +38,7 @@ final class AddTrackerViewController: UIViewController {
     // MARK: - Add Subviews
     
     private func addSubviews() {
-        view.addSubviews([titleLabel, textFieldContainer, cancelButton, createButton, tableViewContainer])
+        view.addSubviews([textFieldContainer, cancelButton, createButton, tableViewContainer])
         textFieldContainer.addSubview(textField)
         tableViewContainer.addSubview(tableView)
     }
@@ -47,12 +46,28 @@ final class AddTrackerViewController: UIViewController {
     // MARK: - Configure Appearance
     
     private func configureAppearance() {
-        titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        titleLabel.text = "Новая привычка"
-        titleLabel.textAlignment = .center
-        titleLabel.textColor = .blackYP
+        view.backgroundColor = .whiteYP
         
+        // NavBar Title
+        title = "Новая привычка"
+        if let navBar = navigationController?.navigationBar {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            
+            appearance.backgroundColor = .whiteYP
+            appearance.titleTextAttributes = [
+                .foregroundColor: UIColor.blackYP,
+                .font: UIFont.systemFont(ofSize: 16, weight: .medium)
+            ]
+            
+            appearance.shadowColor = .clear
+            
+            navBar.standardAppearance = appearance
+            navBar.scrollEdgeAppearance = appearance
+            navBar.compactAppearance = appearance
+        }
         
+        // TextField + textFieldContainer
         let placeholder = NSAttributedString(
             string: "Введите название трекера",
             attributes: [
@@ -62,12 +77,14 @@ final class AddTrackerViewController: UIViewController {
         )
         textField.attributedPlaceholder = placeholder
         textField.textAlignment = .left
-        textField.textColor = .whiteYP
+        textField.textColor = .blackYP
+        textField.clearButtonMode = .whileEditing
         
         textFieldContainer.backgroundColor = .backgroundYP
         textFieldContainer.layer.cornerRadius = 16
         textFieldContainer.clipsToBounds = true
         
+        // CancelButton
         cancelButton.backgroundColor = .clear
         cancelButton.layer.cornerRadius = 16
         cancelButton.layer.borderWidth = 1
@@ -77,6 +94,7 @@ final class AddTrackerViewController: UIViewController {
         cancelButton.setTitleColor(.redStatic, for: .normal)
         cancelButton.titleLabel?.textAlignment = .center
         
+        // CreateButton
         createButton.backgroundColor = .grayStatic
         createButton.layer.cornerRadius = 16
         createButton.setTitle("Создать", for: .normal)
@@ -84,6 +102,7 @@ final class AddTrackerViewController: UIViewController {
         createButton.setTitleColor(.whiteStatic, for: .normal)
         createButton.titleLabel?.textAlignment = .center
         
+        // TableViewContainer
         tableViewContainer.backgroundColor = .backgroundYP
         tableViewContainer.layer.cornerRadius = 16
         tableViewContainer.layer.masksToBounds = true
@@ -92,19 +111,17 @@ final class AddTrackerViewController: UIViewController {
     // MARK: - Setup Constraints
     
     private func setupConstraints() {
-        [textField, textFieldContainer, titleLabel, cancelButton, createButton, tableView, tableViewContainer].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        [textField, textFieldContainer, cancelButton, createButton, tableView, tableViewContainer].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         
         NSLayoutConstraint.activate([
-            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 27),
             
-            textFieldContainer.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
+            textFieldContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
             textFieldContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             textFieldContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             textFieldContainer.heightAnchor.constraint(equalToConstant: 75),
             
             textField.leadingAnchor.constraint(equalTo: textFieldContainer.leadingAnchor, constant: 16),
-            textField.trailingAnchor.constraint(equalTo: textFieldContainer.trailingAnchor, constant: -41),
+            textField.trailingAnchor.constraint(equalTo: textFieldContainer.trailingAnchor, constant: -16),
             textField.centerYAnchor.constraint(equalTo: textFieldContainer.centerYAnchor),
             
             cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),

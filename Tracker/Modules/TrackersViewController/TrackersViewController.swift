@@ -170,7 +170,12 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc private func didTapAddTrackerButton() {
-        //TODO: реализовать функционал нажатия на кнопку
+        let addTracker = AddTrackerViewController()
+        let navigationController = UINavigationController(rootViewController: addTracker)
+        
+        navigationController.modalPresentationStyle = .pageSheet
+        
+        present(navigationController, animated: true)
     }
     
     private func updateCollection(with categories: [TrackerCategory]) {
