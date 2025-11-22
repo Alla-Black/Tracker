@@ -70,7 +70,15 @@ final class AddTrackerViewController: UIViewController {
     
     func updateCreateButtonState(isTextValid: Bool) {
         createButton.isEnabled = isTextValid
-        createButton.backgroundColor = isTextValid ? .blackYP : .grayStatic
+        
+        if isTextValid {
+            createButton.backgroundColor = .blackYP
+            createButton.setTitleColor(.whiteYP, for: .normal)
+        } else {
+            createButton.backgroundColor = .grayStatic
+            createButton.setTitleColor(.whiteStatic, for: .normal)
+        }
+        
     }
     
     // MARK: - Private Methods
