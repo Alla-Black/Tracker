@@ -2,6 +2,10 @@ import UIKit
 
 final class AddTrackerViewController: UIViewController {
     
+    // MARK: - Public Properties
+    
+    let characterLimit = 38
+    
     // MARK: - Private Properties
     
     private let textField = UITextField()
@@ -9,6 +13,10 @@ final class AddTrackerViewController: UIViewController {
     
     private let cancelButton = UIButton()
     private let createButton = UIButton()
+    
+    private let limitLabel = UILabel()
+    
+    private let mainStack = UIStackView()
     
     private let tableViewContainer = UIView()
     private let tableView: UITableView = {
@@ -30,8 +38,39 @@ final class AddTrackerViewController: UIViewController {
         setupConstraints()
         setupActions()
         setupTrackerSettingsTableView()
+        
         setupHideKeyboardGesture()
         
+        updateLimitLayout(isTooLong: false)
+        
+        updateCreateButtonState(isTextValid: false)
+        
+    }
+    
+    // MARK: - Public Methods
+    
+    // MARK: - UpdateLimitLayout
+    
+    func updateLimitLayout(isTooLong: Bool) {
+        if isTooLong {
+            
+            limitLabel.isHidden = false
+            
+            mainStack.spacing = 24
+            mainStack.setCustomSpacing(8, after: textFieldContainer)
+            mainStack.setCustomSpacing(32, after: limitLabel)
+        } else {
+            
+            limitLabel.isHidden = true
+            
+            mainStack.spacing = 24
+            mainStack.setCustomSpacing(24, after: textFieldContainer)
+        }
+    }
+    
+    func updateCreateButtonState(isTextValid: Bool) {
+        createButton.isEnabled = isTextValid
+        createButton.backgroundColor = isTextValid ? .blackYP : .grayStatic
     }
     
     // MARK: - Private Methods
@@ -39,7 +78,12 @@ final class AddTrackerViewController: UIViewController {
     // MARK: - Add Subviews
     
     private func addSubviews() {
-        view.addSubviews([textFieldContainer, cancelButton, createButton, tableViewContainer])
+        view.addSubviews([mainStack, cancelButton, createButton])
+        
+        mainStack.addArrangedSubview(textFieldContainer)
+        mainStack.addArrangedSubview(limitLabel)
+        mainStack.addArrangedSubview(tableViewContainer)
+        
         textFieldContainer.addSubview(textField)
         tableViewContainer.addSubview(tableView)
     }
@@ -48,6 +92,12 @@ final class AddTrackerViewController: UIViewController {
     
     private func configureAppearance() {
         view.backgroundColor = .whiteYP
+        
+        //MainStack
+        mainStack.axis = .vertical
+        mainStack.alignment = .fill
+        mainStack.distribution = .fill
+        mainStack.spacing = 24
         
         // NavBar Title
         title = "Новая привычка"
@@ -87,6 +137,13 @@ final class AddTrackerViewController: UIViewController {
         textFieldContainer.layer.cornerRadius = 16
         textFieldContainer.clipsToBounds = true
         
+        // LimitLabel
+        limitLabel.text = "Ограничение 38 символов"
+        limitLabel.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        limitLabel.textAlignment = .center
+        limitLabel.textColor = .redStatic
+        limitLabel.isHidden = true
+        
         // CancelButton
         cancelButton.backgroundColor = .clear
         cancelButton.layer.cornerRadius = 16
@@ -114,18 +171,21 @@ final class AddTrackerViewController: UIViewController {
     // MARK: - Setup Constraints
     
     private func setupConstraints() {
-        [textField, textFieldContainer, cancelButton, createButton, tableView, tableViewContainer].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        [mainStack, textField, textFieldContainer, limitLabel, cancelButton, createButton, tableView, tableViewContainer].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         
         NSLayoutConstraint.activate([
             
-            textFieldContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
-            textFieldContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            textFieldContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            mainStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
+            mainStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            mainStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+
             textFieldContainer.heightAnchor.constraint(equalToConstant: 75),
             
             textField.leadingAnchor.constraint(equalTo: textFieldContainer.leadingAnchor, constant: 16),
             textField.trailingAnchor.constraint(equalTo: textFieldContainer.trailingAnchor, constant: -16),
             textField.centerYAnchor.constraint(equalTo: textFieldContainer.centerYAnchor),
+            
+            limitLabel.centerXAnchor.constraint(equalTo: textFieldContainer.centerXAnchor),
             
             cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -137,9 +197,6 @@ final class AddTrackerViewController: UIViewController {
             createButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             createButton.heightAnchor.constraint(equalToConstant: 60),
             
-            tableViewContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            tableViewContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            tableViewContainer.topAnchor.constraint(equalTo: textFieldContainer.bottomAnchor, constant: 24),
             tableViewContainer.heightAnchor.constraint(equalToConstant: 150),
             
             tableView.topAnchor.constraint(equalTo: tableViewContainer.topAnchor),
