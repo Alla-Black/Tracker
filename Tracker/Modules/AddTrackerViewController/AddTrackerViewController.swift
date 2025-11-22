@@ -30,6 +30,7 @@ final class AddTrackerViewController: UIViewController {
         setupConstraints()
         setupActions()
         setupTrackerSettingsTableView()
+        setupHideKeyboardGesture()
         
     }
     
@@ -79,6 +80,8 @@ final class AddTrackerViewController: UIViewController {
         textField.textAlignment = .left
         textField.textColor = .blackYP
         textField.clearButtonMode = .whileEditing
+        textField.returnKeyType = .go
+        textField.enablesReturnKeyAutomatically = true
         
         textFieldContainer.backgroundColor = .backgroundYP
         textFieldContainer.layer.cornerRadius = 16
@@ -149,6 +152,8 @@ final class AddTrackerViewController: UIViewController {
     // MARK: - Setup Actions
     
     private func setupActions() {
+        textField.delegate = self
+        
         //TODO: Дописать методы для кнопок и поля с названием
         
     }
@@ -174,6 +179,21 @@ final class AddTrackerViewController: UIViewController {
                 break
             }
         }
+    }
+    
+    // MARK: - SetupHideKeyboardGesture
+    
+    private func setupHideKeyboardGesture() {
+        let tap = UITapGestureRecognizer(
+            target: self,
+            action: #selector(hideKeyboard)
+        )
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc private func hideKeyboard() {
+        view.endEditing(true)
     }
 }
 
