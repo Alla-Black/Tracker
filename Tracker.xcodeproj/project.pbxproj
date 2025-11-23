@@ -22,6 +22,9 @@
 		4DBF55CA2ED0ED3000076E0F /* TrackerSettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBF55C72ED0ED3000076E0F /* TrackerSettingsCell.swift */; };
 		4DBF55CB2ED0ED3000076E0F /* TrackerSettingsTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBF55C82ED0ED3000076E0F /* TrackerSettingsTableView.swift */; };
 		4DBF55CD2ED1EACA00076E0F /* UITextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBF55CC2ED1EACA00076E0F /* UITextFieldDelegate.swift */; };
+		4DBF55D72ED39A0800076E0F /* ScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBF55D52ED39A0800076E0F /* ScheduleViewController.swift */; };
+		4DBF55DB2ED3ABB500076E0F /* ScheduleTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBF55DA2ED3ABB500076E0F /* ScheduleTableView.swift */; };
+		4DBF55DD2ED3ABCB00076E0F /* ScheduleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBF55DC2ED3ABCB00076E0F /* ScheduleCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +63,9 @@
 		4DBF55C72ED0ED3000076E0F /* TrackerSettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerSettingsCell.swift; sourceTree = "<group>"; };
 		4DBF55C82ED0ED3000076E0F /* TrackerSettingsTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerSettingsTableView.swift; sourceTree = "<group>"; };
 		4DBF55CC2ED1EACA00076E0F /* UITextFieldDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldDelegate.swift; sourceTree = "<group>"; };
+		4DBF55D52ED39A0800076E0F /* ScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewController.swift; sourceTree = "<group>"; };
+		4DBF55DA2ED3ABB500076E0F /* ScheduleTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableView.swift; sourceTree = "<group>"; };
+		4DBF55DC2ED3ABCB00076E0F /* ScheduleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -196,6 +202,7 @@
 		4D6B5D3B2EC358F40060D37E /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				4DBF55D62ED39A0800076E0F /* ScheduleViewController */,
 				4DBF55BC2ED07FA200076E0F /* AddTrackerViewController */,
 				4D6B5D382EC358F40060D37E /* TabBarController */,
 				4D6B5D3A2EC358F40060D37E /* TrackersViewController */,
@@ -241,6 +248,24 @@
 				4DBF55C82ED0ED3000076E0F /* TrackerSettingsTableView.swift */,
 			);
 			path = TrackerSettingsTableView;
+			sourceTree = "<group>";
+		};
+		4DBF55D62ED39A0800076E0F /* ScheduleViewController */ = {
+			isa = PBXGroup;
+			children = (
+				4DBF55D52ED39A0800076E0F /* ScheduleViewController.swift */,
+				4DBF55D92ED3AB9500076E0F /* ScheduleTableView */,
+			);
+			path = ScheduleViewController;
+			sourceTree = "<group>";
+		};
+		4DBF55D92ED3AB9500076E0F /* ScheduleTableView */ = {
+			isa = PBXGroup;
+			children = (
+				4DBF55DA2ED3ABB500076E0F /* ScheduleTableView.swift */,
+				4DBF55DC2ED3ABCB00076E0F /* ScheduleCell.swift */,
+			);
+			path = ScheduleTableView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -390,6 +415,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4DBF55DD2ED3ABCB00076E0F /* ScheduleCell.swift in Sources */,
 				4D14D6532EC4B18400289E5F /* DatePickerView.swift in Sources */,
 				4DBF55CA2ED0ED3000076E0F /* TrackerSettingsCell.swift in Sources */,
 				4DBF55CB2ED0ED3000076E0F /* TrackerSettingsTableView.swift in Sources */,
@@ -400,10 +426,12 @@
 				4DBF55A52ECF46E000076E0F /* TrackerCollectionViewCell.swift in Sources */,
 				4DBF55A62ECF46E000076E0F /* CollectionDataSource.swift in Sources */,
 				4DBF55A72ECF46E000076E0F /* TrackersCollectionView.swift in Sources */,
+				4DBF55D72ED39A0800076E0F /* ScheduleViewController.swift in Sources */,
 				4D6B5D3C2EC358F40060D37E /* StatisticViewController.swift in Sources */,
 				4DBF55B42ECFCE4A00076E0F /* TrackersMockData.swift in Sources */,
 				4D6B5D3D2EC358F40060D37E /* TabBarController.swift in Sources */,
 				4DBF55CD2ED1EACA00076E0F /* UITextFieldDelegate.swift in Sources */,
+				4DBF55DB2ED3ABB500076E0F /* ScheduleTableView.swift in Sources */,
 				4D6B5D3E2EC358F40060D37E /* TrackersViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

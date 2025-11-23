@@ -230,7 +230,8 @@ final class AddTrackerViewController: UIViewController {
     private func setupTrackerSettingsTableView() {
         settingsTableView = TrackerSettingsTableView(tableView: tableView)
         
-        settingsTableView?.onSelectRow = { index in
+        settingsTableView?.onSelectRow = { [weak self ] index in
+            guard let self else { return }
             
             switch index {
                 
@@ -240,9 +241,7 @@ final class AddTrackerViewController: UIViewController {
                 // self.openCategoryScreen()
                 
             case 1:
-                print("Тап по строке Расписание")
-                // TODO: открыть экран с расписанием
-                // self.openScheduleScreen()
+                self.openScheduleScreen()
                 
             default:
                 break
@@ -267,6 +266,12 @@ final class AddTrackerViewController: UIViewController {
     
     @objc private func hideKeyboard() {
         view.endEditing(true)
+    }
+    
+    private func openScheduleScreen() {
+        let scheduleViewController = ScheduleViewController()
+        
+        navigationController?.pushViewController(scheduleViewController, animated: true)
     }
 }
 
