@@ -5,6 +5,7 @@ final class AddTrackerViewController: UIViewController {
     // MARK: - Public Properties
     
     let characterLimit = 38
+    var selectedCategory: TrackerCategory = TrackerCategory(title: "Важное", trackers: [])
     
     // MARK: - Private Properties
     
@@ -68,6 +69,8 @@ final class AddTrackerViewController: UIViewController {
         }
     }
     
+    // MARK: - UpdateCreateButtonState
+    
     func updateCreateButtonState(isTextValid: Bool) {
         createButton.isEnabled = isTextValid
         
@@ -78,7 +81,6 @@ final class AddTrackerViewController: UIViewController {
             createButton.backgroundColor = .grayStatic
             createButton.setTitleColor(.whiteStatic, for: .normal)
         }
-        
     }
     
     // MARK: - Private Methods
@@ -235,15 +237,21 @@ final class AddTrackerViewController: UIViewController {
             case 0:
                 print("Тап по строке Категория")
                 // TODO: открыть экран категорий
+                // self.openCategoryScreen()
                 
             case 1:
                 print("Тап по строке Расписание")
                 // TODO: открыть экран с расписанием
+                // self.openScheduleScreen()
                 
             default:
                 break
             }
         }
+        
+        settingsTableView?.updateCategorySubtitle(selectedCategory.title)
+        //TODO: добавить обновление для расписания
+        // settingsTableView.updateScheduleSubtitle(nil)
     }
     
     // MARK: - SetupHideKeyboardGesture

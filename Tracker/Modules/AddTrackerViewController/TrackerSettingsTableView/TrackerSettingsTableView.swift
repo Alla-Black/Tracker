@@ -13,6 +13,9 @@ final class TrackerSettingsTableView: NSObject {
     private let items = ["Категория", "Расписание"]
     private weak var tableView: UITableView?
     
+    private var categorySubtitle: String?
+    private var scheduleSubtitle: String?
+    
     // MARK: - Initializers
     
     init(tableView: UITableView) {
@@ -27,6 +30,27 @@ final class TrackerSettingsTableView: NSObject {
         
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
+    }
+    
+    // MARK: - Public Methods
+    
+    func updateCategorySubtitle(_ text: String?) {
+        categorySubtitle = text
+        reloadRow(at: 0)
+    }
+
+    func updateScheduleSubtitle(_ text: String?) {
+        scheduleSubtitle = text
+        reloadRow(at: 1)
+    }
+    
+    // MARK: - Private Methods
+    
+    private func reloadRow(at row: Int) {
+        guard let tableView = tableView else { return }
+        
+        let indexPath = IndexPath(row: row, section: 0)
+        tableView.reloadRows(at: [indexPath], with: .none)
     }
 }
     
@@ -43,7 +67,17 @@ extension TrackerSettingsTableView: UITableViewDataSource {
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TrackerSettingsCell.reuseIdentifier, for: indexPath) as? TrackerSettingsCell else { return UITableViewCell() }
         
-        cell.configure(with: items[indexPath.row])
+        let title = items[indexPath.row]
+        cell.configure(with: title)
+        
+        switch indexPath.row {
+        case 0:
+            cell.setSubtitle(categorySubtitle)
+        case 1:
+            cell.setSubtitle(scheduleSubtitle)
+        default:
+            cell.setSubtitle(nil)
+        }
         
         let isLastRow = indexPath.row == items.count - 1
         cell.setSeparatorVisible(!isLastRow)

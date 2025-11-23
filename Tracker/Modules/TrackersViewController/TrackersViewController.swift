@@ -42,7 +42,9 @@ final class TrackersViewController: UIViewController {
         
         trackersCollectionView = TrackersCollectionView(using: params, collectionView: collectionView)
         
-        categories = TrackersMockData.makeCategories()
+        categories = [
+            TrackerCategory(title: "Важное", trackers: [])
+        ]
         updateCollection(with: categories)
     }
     
@@ -171,12 +173,19 @@ final class TrackersViewController: UIViewController {
     
     @objc private func didTapAddTrackerButton() {
         let addTracker = AddTrackerViewController()
+        
+        if let defaultCategory = categories.first {
+            addTracker.selectedCategory = defaultCategory
+        }
+        
         let navigationController = UINavigationController(rootViewController: addTracker)
         
         navigationController.modalPresentationStyle = .pageSheet
         
         present(navigationController, animated: true)
     }
+    
+    // MARK: - UpdateCollection
     
     private func updateCollection(with categories: [TrackerCategory]) {
         self.categories = categories

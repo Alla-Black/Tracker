@@ -9,8 +9,10 @@ final class TrackerSettingsCell: UITableViewCell {
     // MARK: - Private Properties
     
     private let titleLabel = UILabel()
+    private let subtitleLabel = UILabel()
     private let arrowImageView = UIImageView()
     private let separatorView = UIView()
+    private let textStack = UIStackView()
     
     // MARK: - Initializers
     
@@ -36,17 +38,34 @@ final class TrackerSettingsCell: UITableViewCell {
         separatorView.isHidden = !isVisible
     }
     
+    func setSubtitle(_ text: String?) {
+        subtitleLabel.text = text
+        subtitleLabel.isHidden = (text == nil || text?.isEmpty == true)
+    }
+    
     // MARK: - Private Methods
     
     private func setupUI() {
-        contentView.addSubviews([titleLabel, arrowImageView, separatorView])
+        contentView.addSubviews([textStack, arrowImageView, separatorView])
+        
+        textStack.addArrangedSubview(titleLabel)
+        textStack.addArrangedSubview(subtitleLabel)
         
         backgroundColor = .clear
         contentView.backgroundColor = .clear
         
+        textStack.axis = .vertical
+        textStack.alignment = .leading
+        textStack.spacing = 2
+        
         titleLabel.font = .systemFont(ofSize: 17, weight: .regular)
         titleLabel.textColor = .blackYP
         titleLabel.textAlignment = .left
+        
+        subtitleLabel.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        subtitleLabel.textColor = .grayStatic
+        subtitleLabel.textAlignment = .left
+        subtitleLabel.isHidden = true
         
         arrowImageView.image = .arrow
         
@@ -55,15 +74,15 @@ final class TrackerSettingsCell: UITableViewCell {
     }
     
     private func setupLayout() {
-        [titleLabel, arrowImageView, separatorView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        [textStack, arrowImageView, separatorView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -41),
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            textStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -41),
+            textStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             
             arrowImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            arrowImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            arrowImageView.centerYAnchor.constraint(equalTo: textStack.centerYAnchor),
             arrowImageView.heightAnchor.constraint(equalToConstant: 24),
             arrowImageView.widthAnchor.constraint(equalToConstant: 24),
             
