@@ -36,11 +36,29 @@ final class TrackersCollectionView: NSObject {
     }
     
     func addTracker(_ tracker: Tracker, to categoryIndex: Int) {
-        // TODO: реализовать функцию добавления новых ячеек (трекеров)
+        
+        guard categories.indices.contains(categoryIndex) else { return }
+        
+        let oldCategory = categories[categoryIndex]
+        let newTrackers = oldCategory.trackers + [tracker]
+        
+        let updatedCategory = TrackerCategory(
+            title: oldCategory.title,
+            trackers: newTrackers
+            )
+        
+        categories[categoryIndex] = updatedCategory
+        
+        let itemIndex = newTrackers.count - 1
+        let indexPath = IndexPath(item: itemIndex, section: categoryIndex)
+        
+        collectionView.performBatchUpdates({
+            collectionView.insertItems(at: [indexPath])
+        }, completion: nil)
     }
     
     func addCategory(_ category: TrackerCategory) {
-        // TODO: реализовать функцию добавления новых категорий (категории)
+        // TODO: в след. спринте реализовать функцию добавления новых категорий (категории)
     }
     
 }

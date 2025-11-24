@@ -9,6 +9,8 @@ final class AddTrackerViewController: UIViewController {
     
     var isTitleValid = false
     
+    var onCreateTracker: ((Tracker) -> Void)?
+    
     // MARK: - Private Properties
     
     private let textField = UITextField()
@@ -229,8 +231,33 @@ final class AddTrackerViewController: UIViewController {
     private func setupActions() {
         textField.delegate = self
         
-        //TODO: Дописать методы для кнопок и поля с названием
+        cancelButton.addTarget(
+            self,
+            action: #selector(cancelButtonTapped),
+            for: .touchUpInside
+        )
         
+        createButton.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func cancelButtonTapped() {
+        dismiss(animated: true)
+    }
+    
+    @objc private func createButtonTapped() {
+        guard createButton.isEnabled else { return }
+        
+        let tracker = Tracker(
+            id: UUID(),
+            name: textField.text?.trimmed ?? "",
+            color: .staticSelection5, //заглушка временно
+            emoji: "🙂", // заглушка временно
+            schedule: Array(selectedWeekdays)
+            )
+        
+        onCreateTracker?(tracker)
+        
+        dismiss(animated: true)
     }
     
     // MARK: - Setup TrackerSettingsTableView

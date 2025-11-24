@@ -178,8 +178,26 @@ final class TrackersViewController: UIViewController {
             addTracker.selectedCategory = defaultCategory
         }
         
-        let navigationController = UINavigationController(rootViewController: addTracker)
+        addTracker.onCreateTracker = { [weak self] tracker in
+            guard let self else { return }
+            
+            guard !self.categories.isEmpty else { return }
+            
+            let oldCategory = self.categories[0]
+            let newCategory = TrackerCategory(
+                title: oldCategory.title,
+                trackers: oldCategory.trackers + [tracker]
+            )
+            self.categories[0] = newCategory
+            
+            self.trackersCollectionView?.addTracker(tracker, to: 0)
+            
+            let hasTrackers = self.categories.contains { !$0.trackers.isEmpty }
+            self.stubContainer.isHidden = hasTrackers
+            self.collectionView.isHidden = !hasTrackers
+        }
         
+        let navigationController = UINavigationController(rootViewController: addTracker)
         navigationController.modalPresentationStyle = .pageSheet
         
         present(navigationController, animated: true)
