@@ -20,7 +20,9 @@ extension AddTrackerViewController: UITextFieldDelegate {
         let isEmpty = trimmed.isEmpty
         
         updateLimitLayout(isTooLong: isTooLong)
-        updateCreateButtonState(isTextValid: !isEmpty && !isTooLong)
+        
+        isTitleValid = !isEmpty && !isTooLong
+        updateCreateButtonState()
         
         return true
         

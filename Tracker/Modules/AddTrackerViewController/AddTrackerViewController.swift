@@ -7,6 +7,8 @@ final class AddTrackerViewController: UIViewController {
     let characterLimit = 38
     var selectedCategory: TrackerCategory = TrackerCategory(title: "Важное", trackers: [])
     
+    var isTitleValid = false
+    
     // MARK: - Private Properties
     
     private let textField = UITextField()
@@ -30,7 +32,6 @@ final class AddTrackerViewController: UIViewController {
     
     private var selectedWeekdays = Set<Weekday>()
     
-    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -46,7 +47,7 @@ final class AddTrackerViewController: UIViewController {
         
         updateLimitLayout(isTooLong: false)
         
-        updateCreateButtonState(isTextValid: false)
+        updateCreateButtonState()
         
     }
     
@@ -73,10 +74,15 @@ final class AddTrackerViewController: UIViewController {
     
     // MARK: - UpdateCreateButtonState
     
-    func updateCreateButtonState(isTextValid: Bool) {
-        createButton.isEnabled = isTextValid
+    func updateCreateButtonState() {
         
-        if isTextValid {
+        let hasSchedule = !selectedWeekdays.isEmpty
+        
+        let isFormValid = isTitleValid && hasSchedule
+        
+        createButton.isEnabled = isFormValid
+        
+        if isFormValid {
             createButton.backgroundColor = .blackYP
             createButton.setTitleColor(.whiteYP, for: .normal)
         } else {
@@ -278,6 +284,8 @@ final class AddTrackerViewController: UIViewController {
             
             self.selectedWeekdays = weekdays
             self.updateScheduleSubtitle()
+            
+            self.updateCreateButtonState()
         }
         
         navigationController?.pushViewController(scheduleViewController, animated: true)
