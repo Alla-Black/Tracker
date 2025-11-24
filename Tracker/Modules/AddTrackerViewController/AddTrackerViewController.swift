@@ -28,6 +28,8 @@ final class AddTrackerViewController: UIViewController {
     
     private var settingsTableView: TrackerSettingsTableView?
     
+    private var selectedWeekdays = Set<Weekday>()
+    
     
     // MARK: - Lifecycle
     
@@ -249,8 +251,6 @@ final class AddTrackerViewController: UIViewController {
         }
         
         settingsTableView?.updateCategorySubtitle(selectedCategory.title)
-        //TODO: добавить обновление для расписания
-        // settingsTableView.updateScheduleSubtitle(nil)
     }
     
     // MARK: - SetupHideKeyboardGesture
@@ -268,10 +268,41 @@ final class AddTrackerViewController: UIViewController {
         view.endEditing(true)
     }
     
+    // MARK: - OpenScheduleScreen
+    
     private func openScheduleScreen() {
         let scheduleViewController = ScheduleViewController()
         
+        scheduleViewController.onScheduleSelected = { [weak self] weekdays in
+            guard let self else { return }
+            
+            self.selectedWeekdays = weekdays
+            self.updateScheduleSubtitle()
+        }
+        
         navigationController?.pushViewController(scheduleViewController, animated: true)
+    }
+    
+    // MARK: - UpdateScheduleSubtitle
+    
+    private func updateScheduleSubtitle() {
+        let weekdaysArray = Array(selectedWeekdays).sorted { $0.rawValue < $1.rawValue }
+        
+        if weekdaysArray.isEmpty {
+            settingsTableView?.updateScheduleSubtitle(nil)
+            return
+        }
+        
+        if weekdaysArray.count == Weekday.allCases.count {
+            settingsTableView?.updateScheduleSubtitle("Каждый день")
+            return
+        }
+        
+        let subtitle = weekdaysArray
+            .map { $0.shortTitle }
+            .joined(separator: ", ")
+        
+        settingsTableView?.updateScheduleSubtitle(subtitle)
     }
 }
 

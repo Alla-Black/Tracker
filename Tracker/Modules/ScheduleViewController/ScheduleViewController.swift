@@ -2,6 +2,10 @@ import UIKit
 
 final class ScheduleViewController: UIViewController {
     
+    // MARK: - Public Properties
+    
+    var onScheduleSelected: ((Set<Weekday>) -> Void)?
+    
     // MARK: - Private Properties
     
     private let doneButton = UIButton()
@@ -99,7 +103,19 @@ final class ScheduleViewController: UIViewController {
     }
     
     private func setupActions() {
-        // TODO: добавить действия после нажатия кнопки готово
+        doneButton.addTarget(
+            self,
+            action: #selector(doneButtonTapped),
+            for: .touchUpInside
+            )
+    }
+    
+    @objc private func doneButtonTapped() {
+        let selected = scheduleTableView?.getSelectedWeekdays() ?? []
+        
+        onScheduleSelected?(selected)
+        
+        navigationController?.popViewController(animated: true)
     }
     
 }

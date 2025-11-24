@@ -25,6 +25,10 @@ final class ScheduleTableView: NSObject {
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
     }
+    
+    func getSelectedWeekdays() -> Set<Weekday> {
+        return selectedWeekdays
+    }
 }
     
 // MARK: - UITableViewDataSource
