@@ -34,6 +34,9 @@ final class AddTrackerViewController: UIViewController {
     
     private var selectedWeekdays = Set<Weekday>()
     
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -98,7 +101,10 @@ final class AddTrackerViewController: UIViewController {
     // MARK: - Add Subviews
     
     private func addSubviews() {
-        view.addSubviews([mainStack, cancelButton, createButton])
+        view.addSubviews([scrollView, cancelButton, createButton])
+        
+        scrollView.addSubview(contentView)
+        contentView.addSubview(mainStack)
         
         mainStack.addArrangedSubview(textFieldContainer)
         mainStack.addArrangedSubview(limitLabel)
@@ -191,13 +197,26 @@ final class AddTrackerViewController: UIViewController {
     // MARK: - Setup Constraints
     
     private func setupConstraints() {
-        [mainStack, textField, textFieldContainer, limitLabel, cancelButton, createButton, tableView, tableViewContainer].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        [scrollView, contentView, mainStack, textField,
+         textFieldContainer, limitLabel, cancelButton, createButton, tableView, tableViewContainer].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         
         NSLayoutConstraint.activate([
             
-            mainStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
-            mainStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            mainStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -16),
+            
+            contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+            
+            mainStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
+            mainStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            mainStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            mainStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24),
 
             textFieldContainer.heightAnchor.constraint(equalToConstant: 75),
             
@@ -222,7 +241,7 @@ final class AddTrackerViewController: UIViewController {
             tableView.topAnchor.constraint(equalTo: tableViewContainer.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: tableViewContainer.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: tableViewContainer.leadingAnchor),
-            tableViewContainer.trailingAnchor.constraint(equalTo: tableView.trailingAnchor)
+            tableView.trailingAnchor.constraint(equalTo: tableViewContainer.trailingAnchor)
         ])
     }
     
