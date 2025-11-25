@@ -1,7 +1,10 @@
 import UIKit
 
-// TODO: protocol TrackerCellDelegate: AnyObject {
-// func trackerCellDidTapPlus(_ cell: TrackerCollectionViewCell) }
+// MARK: - TrackerCellDelegate Protocol
+
+protocol TrackerCellDelegate: AnyObject {
+    func trackerCellDidTapPlus(_ cell: TrackerCollectionViewCell)
+}
 
 
 // MARK: - TrackerCollectionViewCell
@@ -12,6 +15,10 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "trackerCell"
     
+    // MARK: - Public Properties
+    
+    weak var delegate: TrackerCellDelegate?
+    
     // MARK: - Private Properties
     
     private let topContainerView = UIView()
@@ -20,9 +27,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     private let bottomContainerView = UIView()
     private let daysCountLabel = UILabel()
-    private let plusButton = UIButton()
-    
-    // TODO: private weak var delegate: TrackerCellDelegate?
+    private let completeButton = UIButton()
     
     // MARK: - Initializers
     
@@ -42,16 +47,16 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Configure
     
-    func configure(with tracker: Tracker, days: Int = 0) {
+    func configure(with tracker: Tracker, days: Int, isCompleted: Bool) {
         emojiLabel.text = tracker.emoji
         
         titleLabel.text = tracker.name
         
         topContainerView.backgroundColor = tracker.color
-        plusButton.backgroundColor = tracker.color
+        completeButton.backgroundColor = tracker.color
         
-        daysCountLabel.text = "\(days) дней"
-        // TODO: daysCountLabel.text = "\(формула) дней"
+        daysCountLabel.text = makeDaysText(from: days)
+        updateCompleteButton(isCompleted: isCompleted)
     }
     
     // MARK: - Private Methods
@@ -63,7 +68,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         topContainerView.addSubviews([emojiLabel, titleLabel])
         
         contentView.addSubview(bottomContainerView)
-        bottomContainerView.addSubviews([daysCountLabel, plusButton])
+        bottomContainerView.addSubviews([daysCountLabel, completeButton])
         
         topContainerView.layer.cornerRadius = 16
         topContainerView.layer.borderWidth = 1
@@ -87,20 +92,16 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         daysCountLabel.textColor = .blackYP
         daysCountLabel.textAlignment = .left
         
-        plusButton.setImage(
-            UIImage(systemName: "plus"),
-            for: .normal
-        )
-        plusButton.imageView?.contentMode = .center
-        plusButton.tintColor = .whiteYP
-        plusButton.layer.cornerRadius = 17
-        plusButton.clipsToBounds = true
+        completeButton.imageView?.contentMode = .center
+        completeButton.tintColor = .whiteYP
+        completeButton.layer.cornerRadius = 17
+        completeButton.clipsToBounds = true
     }
     
     // MARK: - Setup Layout
     
     private func setupLayout() {
-        [topContainerView, bottomContainerView, emojiLabel, titleLabel, daysCountLabel, plusButton].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        [topContainerView, bottomContainerView, emojiLabel, titleLabel, daysCountLabel, completeButton].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         
         NSLayoutConstraint.activate([
             topContainerView.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -124,21 +125,21 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             bottomContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             bottomContainerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
-            plusButton.widthAnchor.constraint(equalToConstant: 34),
-            plusButton.heightAnchor.constraint(equalToConstant: 34),
-            plusButton.topAnchor.constraint(equalTo: bottomContainerView.topAnchor, constant: 8),
-            plusButton.trailingAnchor.constraint(equalTo: bottomContainerView.trailingAnchor, constant: -12),
+            completeButton.widthAnchor.constraint(equalToConstant: 34),
+            completeButton.heightAnchor.constraint(equalToConstant: 34),
+            completeButton.topAnchor.constraint(equalTo: bottomContainerView.topAnchor, constant: 8),
+            completeButton.trailingAnchor.constraint(equalTo: bottomContainerView.trailingAnchor, constant: -12),
             
             daysCountLabel.centerYAnchor.constraint(equalTo: bottomContainerView.centerYAnchor),
             daysCountLabel.leadingAnchor.constraint(equalTo: bottomContainerView.leadingAnchor, constant: 12),
-            daysCountLabel.trailingAnchor.constraint(lessThanOrEqualTo: plusButton.leadingAnchor, constant: -8)
+            daysCountLabel.trailingAnchor.constraint(lessThanOrEqualTo: completeButton.leadingAnchor, constant: -8)
         ])
     }
     
     // MARK: - Setup Actions
     
     private func setupActions() {
-        plusButton.addTarget(
+        completeButton.addTarget(
             self,
             action: #selector(didTapPlusButton),
             for: .touchUpInside
@@ -146,7 +147,49 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     }
     
     @objc private func didTapPlusButton() {
-    // TODO: тут должен быть делегат delegate?.trackerCellDidTapPlus(self)
+        delegate?.trackerCellDidTapPlus(self)
+    }
+    
+    // MARK: - UpdateCompleteButton
+    
+    private func updateCompleteButton(isCompleted: Bool) {
+        let config = UIImage.SymbolConfiguration(pointSize: 12, weight: .bold)
+        
+        if isCompleted {
+            let checkImage = UIImage(
+                systemName: "checkmark",
+                withConfiguration: config
+            )
+            completeButton.setImage(checkImage, for: .normal)
+            completeButton.alpha = 0.3
+        } else {
+            let plusImage = UIImage(
+                systemName: "plus",
+                withConfiguration: config
+            )
+            completeButton.setImage(plusImage, for: .normal)
+            completeButton.alpha = 1
+        }
+    }
+    
+    // MARK: - Declension of the counter days
+    
+    private func makeDaysText(from count: Int) -> String {
+        let lastTwo = count % 100
+        let last = count % 10
+        
+        let word: String
+        if lastTwo >= 11 && lastTwo <= 14 {
+            word = "дней"
+        } else if last == 1 {
+            word = "день"
+        } else if last >= 2 && last <= 4 {
+            word = "дня"
+        } else {
+            word = "дней"
+        }
+        
+        return "\(count) \(word)"
     }
     
     

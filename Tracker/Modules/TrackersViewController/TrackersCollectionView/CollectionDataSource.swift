@@ -21,7 +21,12 @@ extension TrackersCollectionView: UICollectionViewDataSource {
         let category = categories[indexPath.section]
         let tracker = category.trackers[indexPath.row]
         
-        cell.configure(with: tracker, days: 0) // TODO: потом доработать 
+        let days = delegate?.trackersCollectionView(self, completedCountFor: tracker) ?? 0
+        let isCompleted = delegate?.trackersCollectionView(self, isCompleted: tracker) ?? false
+        
+        cell.configure(with: tracker, days: days, isCompleted: isCompleted)
+        
+        cell.delegate = self
         
         return cell
     }

@@ -1,8 +1,28 @@
 import UIKit
 
+// MARK: - TrackersCollectionViewDelegate Protocol
+
+protocol TrackersCollectionViewDelegate: AnyObject {
+    func trackersCollectionView(_ collectionView: TrackersCollectionView, didTapPlusFor tracker: Tracker, at indexPath: IndexPath)
+    
+    func trackersCollectionView(
+        _ collectionView: TrackersCollectionView,
+        completedCountFor tracker: Tracker
+    ) -> Int
+    
+    func trackersCollectionView(
+        _ collectionView: TrackersCollectionView,
+        isCompleted tracker: Tracker
+    ) -> Bool
+}
+
 // MARK: TrackersCollectionView
 
 final class TrackersCollectionView: NSObject {
+    
+    // MARK: - Public Properties
+    
+    weak var delegate: TrackersCollectionViewDelegate?
     
     // MARK: - Private Properties
     
@@ -35,6 +55,10 @@ final class TrackersCollectionView: NSObject {
         collectionView.reloadData()
     }
     
+    func reloadItems(at indexPaths: [IndexPath]) {
+        collectionView.reloadItems(at: indexPaths)
+    }
+    
     func addTracker(_ tracker: Tracker, to categoryIndex: Int) {
         
         guard categories.indices.contains(categoryIndex) else { return }
@@ -61,4 +85,18 @@ final class TrackersCollectionView: NSObject {
         // TODO: в след. спринте реализовать функцию добавления новых категорий (категории)
     }
     
+}
+
+// MARK: - Extension TrackerCellDelegate
+
+extension TrackersCollectionView: TrackerCellDelegate {
+    
+    func trackerCellDidTapPlus(_ cell: TrackerCollectionViewCell) {
+        
+        guard let indexPath = collectionView.indexPath(for: cell) else { return }
+        
+        let tracker = categories[indexPath.section].trackers[indexPath.item]
+        
+        delegate?.trackersCollectionView(self, didTapPlusFor: tracker, at: indexPath)
+    }
 }

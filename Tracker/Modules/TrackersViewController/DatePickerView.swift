@@ -1,6 +1,13 @@
 import UIKit
 
 final class DatePickerView: UIView {
+    
+    // MARK: - Public Properties
+    
+    var selectedDate: Date {
+        datePicker.date
+    }
+    
     // MARK: - Private Properties
     
     private let dateContainer = UIView()

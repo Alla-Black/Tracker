@@ -1,6 +1,11 @@
 import UIKit
 
 final class TrackersViewController: UIViewController {
+    
+    // MARK: - Public Properties
+    
+    let datePickerView = DatePickerView()
+    var completedTrackers: [TrackerRecord] = []
  
     // MARK: - Private Properties
     
@@ -14,8 +19,6 @@ final class TrackersViewController: UIViewController {
     private let stubContainer = UIView()
     private let titleContainer = UIView()
     
-    private let datePickerView = DatePickerView()
-    
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -28,7 +31,6 @@ final class TrackersViewController: UIViewController {
     private var trackersCollectionView: TrackersCollectionView?
     
     private var categories: [TrackerCategory] = []
-    private var completedTrackers: [TrackerRecord] = []
     
     // MARK: - Lifecycle
     
@@ -39,13 +41,34 @@ final class TrackersViewController: UIViewController {
         configureAppearance()
         setupConstraints()
         setupActions()
-        
-        trackersCollectionView = TrackersCollectionView(using: params, collectionView: collectionView)
+        setupTrackersCollectionView()
         
         categories = [
             TrackerCategory(title: "Важное", trackers: [])
         ]
         updateCollection(with: categories)
+    }
+    
+    // MARK: - Public Methods
+    
+    // MARK: - Tracker completion helpers
+    
+    func normalizedDate(_ date: Date) -> Date {
+        let calendar = Calendar.current
+        return calendar.startOfDay(for: date)
+    }
+    
+    func isTrackerCompleted(_ tracker: Tracker, on date: Date) -> Bool {
+        let normalized = normalizedDate(date)
+        let calendar = Calendar.current
+        
+        return completedTrackers.contains { record in
+            record.trackerId == tracker.id && calendar.isDate(normalizedDate(record.date), inSameDayAs: normalized)
+        }
+    }
+    
+    func completedCount(for tracker: Tracker) -> Int {
+        return completedTrackers.filter { $0.trackerId == tracker.id }.count
     }
     
     // MARK: - Private Methods
@@ -203,6 +226,14 @@ final class TrackersViewController: UIViewController {
         present(navigationController, animated: true)
     }
     
+    // MARK: - SetupTrackersCollectionView
+    
+    private func setupTrackersCollectionView() {
+        trackersCollectionView = TrackersCollectionView(using: params, collectionView: collectionView)
+        
+        trackersCollectionView?.delegate = self
+    }
+    
     // MARK: - UpdateCollection
     
     private func updateCollection(with categories: [TrackerCategory]) {
@@ -213,11 +244,5 @@ final class TrackersViewController: UIViewController {
         
         stubContainer.isHidden = hasTrackers
         collectionView.isHidden = !hasTrackers
-        
     }
-    
-}
-
-#Preview {
-    TabBarController()
 }
