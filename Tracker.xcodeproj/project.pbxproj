@@ -26,6 +26,7 @@
 		4DBF55DB2ED3ABB500076E0F /* ScheduleTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBF55DA2ED3ABB500076E0F /* ScheduleTableView.swift */; };
 		4DBF55DD2ED3ABCB00076E0F /* ScheduleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBF55DC2ED3ABCB00076E0F /* ScheduleCell.swift */; };
 		4DBF55E32ED5971B00076E0F /* TrackersCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBF55E22ED5971B00076E0F /* TrackersCollectionViewDelegate.swift */; };
+		4DBF55E52ED5D48C00076E0F /* DatePickerViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBF55E42ED5D48C00076E0F /* DatePickerViewDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		4DBF55DA2ED3ABB500076E0F /* ScheduleTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableView.swift; sourceTree = "<group>"; };
 		4DBF55DC2ED3ABCB00076E0F /* ScheduleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleCell.swift; sourceTree = "<group>"; };
 		4DBF55E22ED5971B00076E0F /* TrackersCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersCollectionViewDelegate.swift; sourceTree = "<group>"; };
+		4DBF55E42ED5D48C00076E0F /* DatePickerViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerViewDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -195,6 +197,7 @@
 			children = (
 				4D6B5D392EC358F40060D37E /* TrackersViewController.swift */,
 				4DBF55E22ED5971B00076E0F /* TrackersCollectionViewDelegate.swift */,
+				4DBF55E42ED5D48C00076E0F /* DatePickerViewDelegate.swift */,
 				4D14D6522EC4B18400289E5F /* DatePickerView.swift */,
 				4DBF54F32ECB583A00076E0F /* UISearchBarDelegate.swift */,
 				4DBF55A42ECF46E000076E0F /* TrackersCollectionView */,
@@ -429,6 +432,7 @@
 				4DBF55E32ED5971B00076E0F /* TrackersCollectionViewDelegate.swift in Sources */,
 				4DBF55A52ECF46E000076E0F /* TrackerCollectionViewCell.swift in Sources */,
 				4DBF55A62ECF46E000076E0F /* CollectionDataSource.swift in Sources */,
+				4DBF55E52ED5D48C00076E0F /* DatePickerViewDelegate.swift in Sources */,
 				4DBF55A72ECF46E000076E0F /* TrackersCollectionView.swift in Sources */,
 				4DBF55D72ED39A0800076E0F /* ScheduleViewController.swift in Sources */,
 				4D6B5D3C2EC358F40060D37E /* StatisticViewController.swift in Sources */,

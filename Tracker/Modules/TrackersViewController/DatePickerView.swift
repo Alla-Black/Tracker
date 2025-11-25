@@ -1,8 +1,16 @@
 import UIKit
 
+// MARK: - DatePickerViewDelegate Protocol
+
+protocol DatePickerViewDelegate: AnyObject {
+    func datePickerView(_ view: DatePickerView, didChangeDate date: Date)
+}
+
 final class DatePickerView: UIView {
     
     // MARK: - Public Properties
+    
+    weak var delegate: DatePickerViewDelegate?
     
     var selectedDate: Date {
         datePicker.date
@@ -80,6 +88,7 @@ final class DatePickerView: UIView {
     }
     
     // MARK: - Actions
+    
     private func setupActions() {
         datePicker.addTarget(
             self,
@@ -90,6 +99,8 @@ final class DatePickerView: UIView {
     
     @objc private func dateChanged() {
         dateLabel.text = DateFormatterHelper.dateFormatter.string(from: datePicker.date)
+        
+        delegate?.datePickerView(self, didChangeDate: datePicker.date)
     }
 }
 

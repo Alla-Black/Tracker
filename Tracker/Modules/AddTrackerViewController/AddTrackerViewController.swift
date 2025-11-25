@@ -340,8 +340,3 @@ final class AddTrackerViewController: UIViewController {
         settingsTableView?.updateScheduleSubtitle(subtitle)
     }
 }
-
-
-#Preview {
-    AddTrackerViewController()
-}

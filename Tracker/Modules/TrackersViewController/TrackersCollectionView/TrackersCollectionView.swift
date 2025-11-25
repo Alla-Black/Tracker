@@ -59,6 +59,10 @@ final class TrackersCollectionView: NSObject {
         collectionView.reloadItems(at: indexPaths)
     }
     
+    // Сейчас не используется: коллекция обновляется через applyFilter в контроллере.
+    // Оставлено временно на всякий случай
+    
+    /*
     func addTracker(_ tracker: Tracker, to categoryIndex: Int) {
         
         guard categories.indices.contains(categoryIndex) else { return }
@@ -80,6 +84,7 @@ final class TrackersCollectionView: NSObject {
             collectionView.insertItems(at: [indexPath])
         }, completion: nil)
     }
+     */
     
     func addCategory(_ category: TrackerCategory) {
         // TODO: в след. спринте реализовать функцию добавления новых категорий (категории)

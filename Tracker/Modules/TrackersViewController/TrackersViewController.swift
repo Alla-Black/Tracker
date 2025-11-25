@@ -46,10 +46,9 @@ final class TrackersViewController: UIViewController {
         categories = [
             TrackerCategory(title: "Важное", trackers: [])
         ]
-        updateCollection(with: categories)
+        
+        applyFilter(for: datePickerView.selectedDate)
     }
-    
-    // MARK: - Public Methods
     
     // MARK: - Tracker completion helpers
     
@@ -71,7 +70,6 @@ final class TrackersViewController: UIViewController {
         return completedTrackers.filter { $0.trackerId == tracker.id }.count
     }
     
-    // MARK: - Private Methods
     
     // MARK: - Setup UI
     
@@ -192,6 +190,7 @@ final class TrackersViewController: UIViewController {
         )
         
         searchBar.delegate = self
+        datePickerView.delegate = self
     }
     
     @objc private func didTapAddTrackerButton() {
@@ -213,11 +212,8 @@ final class TrackersViewController: UIViewController {
             )
             self.categories[0] = newCategory
             
-            self.trackersCollectionView?.addTracker(tracker, to: 0)
-            
-            let hasTrackers = self.categories.contains { !$0.trackers.isEmpty }
-            self.stubContainer.isHidden = hasTrackers
-            self.collectionView.isHidden = !hasTrackers
+            let currentDate = self.datePickerView.selectedDate
+            self.applyFilter(for: currentDate)
         }
         
         let navigationController = UINavigationController(rootViewController: addTracker)
@@ -234,13 +230,26 @@ final class TrackersViewController: UIViewController {
         trackersCollectionView?.delegate = self
     }
     
-    // MARK: - UpdateCollection
+    // MARK: - Filtering for date
     
-    private func updateCollection(with categories: [TrackerCategory]) {
-        self.categories = categories
-        trackersCollectionView?.update(with: categories)
+    private func filteredCategories(for date: Date) -> [TrackerCategory] {
+        guard let weekday = Weekday.from(date: date) else { return [] }
         
-        let hasTrackers = categories.contains { !$0.trackers.isEmpty }
+        let filtered = categories.map { category in
+            let trackersForDay = category.trackers.filter { $0.schedule.contains(weekday) }
+            
+            return TrackerCategory(title: category.title, trackers: trackersForDay)
+        }
+        
+        return filtered.filter { !$0.trackers.isEmpty }
+    }
+    
+    func applyFilter(for date: Date) {
+        let visibleCategories = filteredCategories(for: date)
+        
+        trackersCollectionView?.update(with: visibleCategories)
+        
+        let hasTrackers = visibleCategories.contains { !$0.trackers.isEmpty }
         
         stubContainer.isHidden = hasTrackers
         collectionView.isHidden = !hasTrackers
