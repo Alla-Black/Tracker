@@ -4,11 +4,6 @@ final class AddTrackerViewController: UIViewController {
     
     // MARK: - Public Properties
     
-    let characterLimit = 38
-    var selectedCategory: TrackerCategory = TrackerCategory(title: "Важное", trackers: [])
-    
-    var isTitleValid = false
-    
     var onCreateTracker: ((Tracker) -> Void)?
     
     // MARK: - Private Properties
@@ -103,8 +98,6 @@ final class AddTrackerViewController: UIViewController {
     
     private lazy var settingsTableView =  TrackerSettingsTableView(tableView: tableView)
     
-    private var selectedWeekdays = Set<Weekday>()
-    
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         return scrollView
@@ -114,6 +107,14 @@ final class AddTrackerViewController: UIViewController {
         let contentView = UIView()
         return contentView
     }()
+    
+    private var selectedCategory: TrackerCategory = TrackerCategory(title: "Важное", trackers: [])
+    
+    private var selectedWeekdays = Set<Weekday>()
+    
+    private var isTitleValid = false
+    
+    private let characterLimit = 38
     
     // MARK: - Lifecycle
     
@@ -129,45 +130,6 @@ final class AddTrackerViewController: UIViewController {
         
         updateLimitLayout(isTooLong: false)
         updateCreateButtonState()
-    }
-    
-    // MARK: - Public Methods
-    
-    // MARK: - UpdateLimitLayout
-    
-    func updateLimitLayout(isTooLong: Bool) {
-        if isTooLong {
-            
-            limitLabel.isHidden = false
-            
-            mainStack.spacing = 24
-            mainStack.setCustomSpacing(8, after: textFieldContainer)
-            mainStack.setCustomSpacing(32, after: limitLabel)
-        } else {
-            
-            limitLabel.isHidden = true
-            
-            mainStack.spacing = 24
-            mainStack.setCustomSpacing(24, after: textFieldContainer)
-        }
-    }
-    
-    // MARK: - UpdateCreateButtonState
-    
-    func updateCreateButtonState() {
-        
-        let hasSchedule = !selectedWeekdays.isEmpty
-        let isFormValid = isTitleValid && hasSchedule
-        
-        createButton.isEnabled = isFormValid
-        
-        if isFormValid {
-            createButton.backgroundColor = .blackYP
-            createButton.setTitleColor(.whiteYP, for: .normal)
-        } else {
-            createButton.backgroundColor = .grayStatic
-            createButton.setTitleColor(.whiteStatic, for: .normal)
-        }
     }
     
     // MARK: - Private Methods
@@ -324,6 +286,43 @@ final class AddTrackerViewController: UIViewController {
         settingsTableView.updateCategorySubtitle(selectedCategory.title)
     }
     
+    // MARK: - UpdateLimitLayout
+    
+    private func updateLimitLayout(isTooLong: Bool) {
+        if isTooLong {
+            
+            limitLabel.isHidden = false
+            
+            mainStack.spacing = 24
+            mainStack.setCustomSpacing(8, after: textFieldContainer)
+            mainStack.setCustomSpacing(32, after: limitLabel)
+        } else {
+            
+            limitLabel.isHidden = true
+            
+            mainStack.spacing = 24
+            mainStack.setCustomSpacing(24, after: textFieldContainer)
+        }
+    }
+    
+    // MARK: - UpdateCreateButtonState
+    
+   private func updateCreateButtonState() {
+        
+        let hasSchedule = !selectedWeekdays.isEmpty
+        let isFormValid = isTitleValid && hasSchedule
+        
+        createButton.isEnabled = isFormValid
+        
+        if isFormValid {
+            createButton.backgroundColor = .blackYP
+            createButton.setTitleColor(.whiteYP, for: .normal)
+        } else {
+            createButton.backgroundColor = .grayStatic
+            createButton.setTitleColor(.whiteStatic, for: .normal)
+        }
+    }
+    
     // MARK: - SetupHideKeyboardGesture
     
     private func setupHideKeyboardGesture() {
@@ -376,5 +375,36 @@ final class AddTrackerViewController: UIViewController {
             .joined(separator: ", ")
         
         settingsTableView.updateScheduleSubtitle(subtitle)
+    }
+}
+
+// MARK: - Extension UITextFieldDelegate
+
+extension AddTrackerViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        
+        return true
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        let currentText = textField.text ?? ""
+        guard let textRange = Range(range, in: currentText) else { return true }
+        
+        let updatedText = currentText.replacingCharacters(in: textRange, with: string)
+        
+        let isTooLong = updatedText.count > characterLimit
+        
+        let trimmed = updatedText.trimmingCharacters(in: .whitespacesAndNewlines)
+        let isEmpty = trimmed.isEmpty
+        
+        updateLimitLayout(isTooLong: isTooLong)
+        
+        isTitleValid = !isEmpty && !isTooLong
+        updateCreateButtonState()
+        
+        return true
+        
     }
 }
