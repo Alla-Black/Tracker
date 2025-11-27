@@ -37,7 +37,7 @@ final class ScheduleViewController: UIViewController {
         return tableView
     }()
     
-    private lazy var scheduleTableView = ScheduleTableView(tableView: tableView)
+    private var scheduleTableView: ScheduleTableView?
     
     // MARK: - Lifecycle
     
@@ -47,6 +47,8 @@ final class ScheduleViewController: UIViewController {
         addSubviews()
         configureAppearance()
         setupConstraints()
+        
+        scheduleTableView = ScheduleTableView(tableView: tableView)
     }
     
     // MARK: - Private Methods
@@ -104,7 +106,7 @@ final class ScheduleViewController: UIViewController {
     }
     
     @objc private func doneButtonTapped() {
-        let selected = scheduleTableView.getSelectedWeekdays()
+        let selected = scheduleTableView?.getSelectedWeekdays() ?? []
         onScheduleSelected?(selected)
         
         navigationController?.popViewController(animated: true)

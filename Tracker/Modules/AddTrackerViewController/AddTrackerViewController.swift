@@ -6,6 +6,8 @@ final class AddTrackerViewController: UIViewController {
     
     var onCreateTracker: ((Tracker) -> Void)?
     
+    var selectedCategory: TrackerCategory = TrackerCategory(title: "Важное", trackers: [])
+    
     // MARK: - Private Properties
     
     private lazy var textField: UITextField = {
@@ -107,8 +109,6 @@ final class AddTrackerViewController: UIViewController {
         let contentView = UIView()
         return contentView
     }()
-    
-    private var selectedCategory: TrackerCategory = TrackerCategory(title: "Важное", trackers: [])
     
     private var selectedWeekdays = Set<Weekday>()
     
