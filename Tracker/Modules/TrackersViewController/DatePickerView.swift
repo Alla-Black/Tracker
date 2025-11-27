@@ -49,7 +49,6 @@ final class DatePickerView: UIView {
         
         datePicker.preferredDatePickerStyle = .compact
         datePicker.datePickerMode = .date
-        datePicker.locale = Locale(identifier: "ru_RU")
         datePicker.alpha = 0.02
         datePicker.setContentHuggingPriority(.defaultLow, for: .horizontal)
         datePicker.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
