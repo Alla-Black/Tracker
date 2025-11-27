@@ -4,22 +4,67 @@ final class TrackersViewController: UIViewController {
     
     // MARK: - Public Properties
     
-    let datePickerView = DatePickerView()
+    lazy var datePickerView: DatePickerView = {
+        let view = DatePickerView()
+        view.setContentHuggingPriority(.required, for: .horizontal)
+        view.setContentCompressionResistancePriority(.required, for: .horizontal)
+        return view
+    }()
+    
     var completedTrackers: [TrackerRecord] = []
  
     // MARK: - Private Properties
     
-    private let titleNameLabel = UILabel()
-    private let addTrackerButton = UIButton()
-    private let searchBar = UISearchBar()
+    private lazy var titleNameLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Трекеры"
+        label.textColor = UIColor(resource: .blackYP)
+        label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
+        label.textAlignment = .left
+        return label
+    }()
+    private lazy var addTrackerButton: UIButton = {
+        let button = UIButton()
+        button.imageView?.contentMode = .scaleAspectFit
+        button.contentHorizontalAlignment = .leading
+        button.addTarget(
+            self,
+            action: #selector(didTapAddTrackerButton),
+            for: .touchUpInside
+        )
+        return button
+    }()
+    private lazy var searchBar: UISearchBar = {
+        let searchBar = UISearchBar()
+        searchBar.searchBarStyle = .minimal
+        searchBar.searchTextField.textColor = .blackYP
+        return searchBar
+    }()
     
-    private let stubImage = UIImageView()
-    private let stubLabel = UILabel()
+    private lazy var stubImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(resource: .trackersPlaceholder)
+        return imageView
+    }()
+    private lazy var stubLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Что будем отслеживать?"
+        label.textColor = UIColor(resource: .blackYP)
+        label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        label.textAlignment = .center
+        return label
+    }()
     
-    private let stubContainer = UIView()
-    private let titleContainer = UIView()
+    private lazy var stubContainer: UIView = {
+        let view = UIView()
+        return view
+    }()
+    private lazy var titleContainer: UIView = {
+        let view = UIView()
+        return view
+    }()
     
-    private let collectionView: UICollectionView = {
+    private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         
@@ -28,9 +73,11 @@ final class TrackersViewController: UIViewController {
     
     private let params = CollectionLayoutParams(cellCount: 2, leftInset: 16, rightInset: 16, cellSpaсing: 9)
     
-    private var trackersCollectionView: TrackersCollectionView?
+    private lazy var trackersCollectionView = TrackersCollectionView(using: params, collectionView: collectionView)
     
-    private var categories: [TrackerCategory] = []
+    private var categories: [TrackerCategory] = [
+        TrackerCategory(title: "Важное", trackers: [])
+    ]
     
     // MARK: - Lifecycle
     
@@ -40,12 +87,7 @@ final class TrackersViewController: UIViewController {
         addSubviews()
         configureAppearance()
         setupConstraints()
-        setupActions()
-        setupTrackersCollectionView()
-        
-        categories = [
-            TrackerCategory(title: "Важное", trackers: [])
-        ]
+        setupDelegates()
         
         applyFilter(for: datePickerView.selectedDate)
     }
@@ -70,7 +112,6 @@ final class TrackersViewController: UIViewController {
         return completedTrackers.filter { $0.trackerId == tracker.id }.count
     }
     
-    
     // MARK: - Setup UI
     
     private func addSubviews() {
@@ -84,30 +125,15 @@ final class TrackersViewController: UIViewController {
     }
     
     private func configureAppearance() {
-        titleNameLabel.text = "Трекеры"
-        titleNameLabel.textColor = UIColor(resource: .blackYP)
-        titleNameLabel.font = UIFont.systemFont(ofSize: 34, weight: .bold)
-        titleNameLabel.textAlignment = .left
-        
-        stubImage.image = UIImage(resource: .trackersPlaceholder)
-        
-        stubLabel.text = "Что будем отслеживать?"
-        stubLabel.textColor = UIColor(resource: .blackYP)
-        stubLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        stubLabel.textAlignment = .center
-        
-        datePickerView.setContentHuggingPriority(.required, for: .horizontal)
-        datePickerView.setContentCompressionResistancePriority(.required, for: .horizontal)
-        
+        // addTrackerButton
         var config = addTrackerButton.configuration ?? UIButton.Configuration.plain()
         let plusImage = UIImage(resource: .addTracker).withRenderingMode(.alwaysTemplate)
         config.image = plusImage
         config.contentInsets = .init(top: 12, leading: 0, bottom: 12, trailing: 0)
         config.baseForegroundColor = UIColor(resource: .blackYP)
         addTrackerButton.configuration = config
-        addTrackerButton.imageView?.contentMode = .scaleAspectFit
-        addTrackerButton.contentHorizontalAlignment = .leading
         
+        // searchBar
         let placeholder = NSAttributedString(
             string: "Поиск",
             attributes: [
@@ -116,8 +142,6 @@ final class TrackersViewController: UIViewController {
             ]
         )
         searchBar.searchTextField.attributedPlaceholder = placeholder
-        searchBar.searchBarStyle = .minimal
-        searchBar.searchTextField.textColor = .blackYP
         
         let icon = UIImage(systemName: "magnifyingglass")?
             .withTintColor(UIColor(resource: .graySearch), renderingMode: .alwaysOriginal)
@@ -182,15 +206,10 @@ final class TrackersViewController: UIViewController {
     
     // MARK: - Actions wiring
     
-    private func setupActions() {
-        addTrackerButton.addTarget(
-            self,
-            action: #selector(didTapAddTrackerButton),
-            for: .touchUpInside
-        )
-        
+    private func setupDelegates() {
         searchBar.delegate = self
         datePickerView.delegate = self
+        trackersCollectionView.delegate = self
     }
     
     @objc private func didTapAddTrackerButton() {
@@ -222,14 +241,6 @@ final class TrackersViewController: UIViewController {
         present(navigationController, animated: true)
     }
     
-    // MARK: - SetupTrackersCollectionView
-    
-    private func setupTrackersCollectionView() {
-        trackersCollectionView = TrackersCollectionView(using: params, collectionView: collectionView)
-        
-        trackersCollectionView?.delegate = self
-    }
-    
     // MARK: - Filtering for date
     
     private func filteredCategories(for date: Date) -> [TrackerCategory] {
@@ -247,7 +258,7 @@ final class TrackersViewController: UIViewController {
     func applyFilter(for date: Date) {
         let visibleCategories = filteredCategories(for: date)
         
-        trackersCollectionView?.update(with: visibleCategories)
+        trackersCollectionView.update(with: visibleCategories)
         
         let hasTrackers = visibleCategories.contains { !$0.trackers.isEmpty }
         

@@ -26,6 +26,8 @@ final class ScheduleTableView: NSObject {
         tableView.backgroundColor = .clear
     }
     
+    // MARK: - Public Methods
+    
     func getSelectedWeekdays() -> Set<Weekday> {
         return selectedWeekdays
     }

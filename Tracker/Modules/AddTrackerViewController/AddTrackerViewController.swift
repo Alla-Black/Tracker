@@ -13,29 +13,107 @@ final class AddTrackerViewController: UIViewController {
     
     // MARK: - Private Properties
     
-    private let textField = UITextField()
-    private let textFieldContainer = UIView()
+    private lazy var textField: UITextField = {
+        let textField = UITextField()
+        textField.textAlignment = .left
+        textField.textColor = .blackYP
+        textField.clearButtonMode = .whileEditing
+        textField.returnKeyType = .go
+        textField.enablesReturnKeyAutomatically = true
+        return textField
+    }()
     
-    private let cancelButton = UIButton()
-    private let createButton = UIButton()
+    private lazy var textFieldContainer: UIView = {
+        let view = UIView()
+        view.backgroundColor = .backgroundYP
+        view.layer.cornerRadius = 16
+        view.clipsToBounds = true
+        return view
+    }()
     
-    private let limitLabel = UILabel()
-    
-    private let mainStack = UIStackView()
-    
-    private let tableViewContainer = UIView()
-    private let tableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .plain)
+    private lazy var cancelButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .clear
+        button.layer.cornerRadius = 16
+        button.layer.borderWidth = 1
+        button.layer.borderColor = UIColor.redStatic.cgColor
+        button.setTitle("Отменить", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        button.setTitleColor(.redStatic, for: .normal)
+        button.titleLabel?.textAlignment = .center
         
+        button.addTarget(
+            self,
+            action: #selector(cancelButtonTapped),
+            for: .touchUpInside
+        )
+        
+        return button
+    }()
+    
+    private lazy var createButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .grayStatic
+        button.layer.cornerRadius = 16
+        button.setTitle("Создать", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        button.setTitleColor(.whiteStatic, for: .normal)
+        button.titleLabel?.textAlignment = .center
+        
+        button.addTarget(
+            self,
+            action: #selector(createButtonTapped),
+            for: .touchUpInside
+        )
+        
+        return button
+    }()
+    
+    private lazy var limitLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Ограничение 38 символов"
+        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.textAlignment = .center
+        label.textColor = .redStatic
+        label.isHidden = true
+        return label
+    }()
+    
+    private lazy var mainStack: UIStackView = {
+        let mainStack = UIStackView()
+        mainStack.axis = .vertical
+        mainStack.alignment = .fill
+        mainStack.distribution = .fill
+        mainStack.spacing = 24
+        return mainStack
+    }()
+    
+    private lazy var tableViewContainer: UIView = {
+        let view = UIView()
+        view.backgroundColor = .backgroundYP
+        view.layer.cornerRadius = 16
+        view.layer.masksToBounds = true
+        return view
+    }()
+    
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .plain)
         return tableView
     }()
     
-    private var settingsTableView: TrackerSettingsTableView?
+    private lazy var settingsTableView =  TrackerSettingsTableView(tableView: tableView)
     
     private var selectedWeekdays = Set<Weekday>()
     
-    private let scrollView = UIScrollView()
-    private let contentView = UIView()
+    private lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        return scrollView
+    }()
+    
+    private lazy var contentView: UIView = {
+        let contentView = UIView()
+        return contentView
+    }()
     
     // MARK: - Lifecycle
     
@@ -45,15 +123,12 @@ final class AddTrackerViewController: UIViewController {
         addSubviews()
         configureAppearance()
         setupConstraints()
-        setupActions()
         setupTrackerSettingsTableView()
-        
+        setupDelegates()
         setupHideKeyboardGesture()
         
         updateLimitLayout(isTooLong: false)
-        
         updateCreateButtonState()
-        
     }
     
     // MARK: - Public Methods
@@ -82,7 +157,6 @@ final class AddTrackerViewController: UIViewController {
     func updateCreateButtonState() {
         
         let hasSchedule = !selectedWeekdays.isEmpty
-        
         let isFormValid = isTitleValid && hasSchedule
         
         createButton.isEnabled = isFormValid
@@ -119,12 +193,6 @@ final class AddTrackerViewController: UIViewController {
     private func configureAppearance() {
         view.backgroundColor = .whiteYP
         
-        //MainStack
-        mainStack.axis = .vertical
-        mainStack.alignment = .fill
-        mainStack.distribution = .fill
-        mainStack.spacing = 24
-        
         // NavBar Title
         title = "Новая привычка"
         if let navBar = navigationController?.navigationBar {
@@ -144,7 +212,7 @@ final class AddTrackerViewController: UIViewController {
             navBar.compactAppearance = appearance
         }
         
-        // TextField + textFieldContainer
+        // TextField
         let placeholder = NSAttributedString(
             string: "Введите название трекера",
             attributes: [
@@ -153,45 +221,6 @@ final class AddTrackerViewController: UIViewController {
             ]
         )
         textField.attributedPlaceholder = placeholder
-        textField.textAlignment = .left
-        textField.textColor = .blackYP
-        textField.clearButtonMode = .whileEditing
-        textField.returnKeyType = .go
-        textField.enablesReturnKeyAutomatically = true
-        
-        textFieldContainer.backgroundColor = .backgroundYP
-        textFieldContainer.layer.cornerRadius = 16
-        textFieldContainer.clipsToBounds = true
-        
-        // LimitLabel
-        limitLabel.text = "Ограничение 38 символов"
-        limitLabel.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        limitLabel.textAlignment = .center
-        limitLabel.textColor = .redStatic
-        limitLabel.isHidden = true
-        
-        // CancelButton
-        cancelButton.backgroundColor = .clear
-        cancelButton.layer.cornerRadius = 16
-        cancelButton.layer.borderWidth = 1
-        cancelButton.layer.borderColor = UIColor.redStatic.cgColor
-        cancelButton.setTitle("Отменить", for: .normal)
-        cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        cancelButton.setTitleColor(.redStatic, for: .normal)
-        cancelButton.titleLabel?.textAlignment = .center
-        
-        // CreateButton
-        createButton.backgroundColor = .grayStatic
-        createButton.layer.cornerRadius = 16
-        createButton.setTitle("Создать", for: .normal)
-        createButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        createButton.setTitleColor(.whiteStatic, for: .normal)
-        createButton.titleLabel?.textAlignment = .center
-        
-        // TableViewContainer
-        tableViewContainer.backgroundColor = .backgroundYP
-        tableViewContainer.layer.cornerRadius = 16
-        tableViewContainer.layer.masksToBounds = true
     }
     
     // MARK: - Setup Constraints
@@ -247,16 +276,8 @@ final class AddTrackerViewController: UIViewController {
     
     // MARK: - Setup Actions
     
-    private func setupActions() {
+    private func setupDelegates() {
         textField.delegate = self
-        
-        cancelButton.addTarget(
-            self,
-            action: #selector(cancelButtonTapped),
-            for: .touchUpInside
-        )
-        
-        createButton.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
     }
     
     @objc private func cancelButtonTapped() {
@@ -282,9 +303,7 @@ final class AddTrackerViewController: UIViewController {
     // MARK: - Setup TrackerSettingsTableView
     
     private func setupTrackerSettingsTableView() {
-        settingsTableView = TrackerSettingsTableView(tableView: tableView)
-        
-        settingsTableView?.onSelectRow = { [weak self ] index in
+        settingsTableView.onSelectRow = { [weak self ] index in
             guard let self else { return }
             
             switch index {
@@ -302,7 +321,7 @@ final class AddTrackerViewController: UIViewController {
             }
         }
         
-        settingsTableView?.updateCategorySubtitle(selectedCategory.title)
+        settingsTableView.updateCategorySubtitle(selectedCategory.title)
     }
     
     // MARK: - SetupHideKeyboardGesture
@@ -343,12 +362,12 @@ final class AddTrackerViewController: UIViewController {
         let weekdaysArray = Array(selectedWeekdays).sorted { $0.rawValue < $1.rawValue }
         
         if weekdaysArray.isEmpty {
-            settingsTableView?.updateScheduleSubtitle(nil)
+            settingsTableView.updateScheduleSubtitle(nil)
             return
         }
         
         if weekdaysArray.count == Weekday.allCases.count {
-            settingsTableView?.updateScheduleSubtitle("Каждый день")
+            settingsTableView.updateScheduleSubtitle("Каждый день")
             return
         }
         
@@ -356,6 +375,6 @@ final class AddTrackerViewController: UIViewController {
             .map { $0.shortTitle }
             .joined(separator: ", ")
         
-        settingsTableView?.updateScheduleSubtitle(subtitle)
+        settingsTableView.updateScheduleSubtitle(subtitle)
     }
 }

@@ -8,16 +8,36 @@ final class ScheduleViewController: UIViewController {
     
     // MARK: - Private Properties
     
-    private let doneButton = UIButton()
+    private lazy var doneButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .blackYP
+        button.layer.cornerRadius = 16
+        button.setTitle("Готово", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        button.setTitleColor(.whiteYP, for: .normal)
+        button.titleLabel?.textAlignment = .center
+        button.addTarget(
+            self,
+            action: #selector(doneButtonTapped),
+            for: .touchUpInside
+            )
+        return button
+    }()
     
-    private let tableViewContainer = UIView()
-    private let tableView: UITableView = {
+    private lazy var tableViewContainer: UIView = {
+        let view = UIView()
+        view.backgroundColor = .backgroundYP
+        view.layer.cornerRadius = 16
+        view.layer.masksToBounds = true
+        return view
+    }()
+    
+    private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
-        
         return tableView
     }()
     
-    private var scheduleTableView: ScheduleTableView?
+    private lazy var scheduleTableView = ScheduleTableView(tableView: tableView)
     
     // MARK: - Lifecycle
     
@@ -27,9 +47,6 @@ final class ScheduleViewController: UIViewController {
         addSubviews()
         configureAppearance()
         setupConstraints()
-        setupActions()
-        setupScheduleTableView()
-      
     }
     
     // MARK: - Private Methods
@@ -62,18 +79,6 @@ final class ScheduleViewController: UIViewController {
             navigationItem.hidesBackButton = true
             navigationItem.leftBarButtonItem = nil
         }
-        
-        tableViewContainer.backgroundColor = .backgroundYP
-        tableViewContainer.layer.cornerRadius = 16
-        tableViewContainer.layer.masksToBounds = true
-        
-        doneButton.backgroundColor = .blackYP
-        doneButton.layer.cornerRadius = 16
-        doneButton.setTitle("Готово", for: .normal)
-        doneButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        doneButton.setTitleColor(.whiteYP, for: .normal)
-        doneButton.titleLabel?.textAlignment = .center
-        
     }
     
     private func setupConstraints() {
@@ -98,21 +103,8 @@ final class ScheduleViewController: UIViewController {
         ])
     }
     
-    private func setupScheduleTableView() {
-        scheduleTableView = ScheduleTableView(tableView: tableView)
-    }
-    
-    private func setupActions() {
-        doneButton.addTarget(
-            self,
-            action: #selector(doneButtonTapped),
-            for: .touchUpInside
-            )
-    }
-    
     @objc private func doneButtonTapped() {
-        let selected = scheduleTableView?.getSelectedWeekdays() ?? []
-        
+        let selected = scheduleTableView.getSelectedWeekdays()
         onScheduleSelected?(selected)
         
         navigationController?.popViewController(animated: true)
