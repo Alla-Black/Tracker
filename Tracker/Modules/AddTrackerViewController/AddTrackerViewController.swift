@@ -116,7 +116,7 @@ final class AddTrackerViewController: UIViewController {
         return collectionView
     }()
     
-    private let params = CollectionLayoutParams(cellCount: 6, leftInset: 18, rightInset: 19, cellSpaсing: 5)
+    private let params = CollectionLayoutParams(cellCount: 6, leftInset: 2, rightInset: 3, cellSpaсing: 5)
     
     private lazy var emojiColorCollection = EmojiColorCollectionView(using: params, collectionView: collectionView)
     

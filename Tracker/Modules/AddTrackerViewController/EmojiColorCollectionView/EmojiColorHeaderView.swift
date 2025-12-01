@@ -27,7 +27,7 @@ final class EmojiColorHeaderView: UICollectionReusableView {
         NSLayoutConstraint.activate([
             
             categoryLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16),
-            categoryLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 28),
+            categoryLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             categoryLabel.topAnchor.constraint(equalTo: topAnchor),
             categoryLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
