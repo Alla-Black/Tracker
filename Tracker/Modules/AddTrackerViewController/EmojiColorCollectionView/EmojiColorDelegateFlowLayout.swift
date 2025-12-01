@@ -17,7 +17,7 @@ extension EmojiColorCollectionView: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         insetForSectionAt section: Int
     ) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 24, left: params.leftInset, bottom: 24, right: params.leftInset)
+        return UIEdgeInsets(top: 24, left: params.leftInset, bottom: 24, right: params.rightInset)
     }
     
     func collectionView(
@@ -55,6 +55,10 @@ extension EmojiColorCollectionView: UICollectionViewDelegateFlowLayout {
             if let old = oldIndexPath {
                 indexPathsToReload.append(old)
             }
+            
+            let emoji = EmojiColorMockData.emojis[indexPath.row]
+            selectionDelegate?.emojiColorCollectionView(self, didSelectEmoji: emoji)
+            
             collectionView.reloadItems(at: indexPathsToReload)
             
         case .color:
@@ -64,6 +68,10 @@ extension EmojiColorCollectionView: UICollectionViewDelegateFlowLayout {
             if let old = oldIndexPath {
                 indexPathsToReload.append(old)
             }
+            
+            let color = EmojiColorMockData.colors[indexPath.row]
+            selectionDelegate?.emojiColorCollectionView(self, didSelectColor: color)
+            
             collectionView.reloadItems(at: indexPathsToReload)
         }
     }

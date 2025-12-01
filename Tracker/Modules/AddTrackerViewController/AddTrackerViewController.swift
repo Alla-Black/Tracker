@@ -126,6 +126,9 @@ final class AddTrackerViewController: UIViewController {
     
     private var isTitleValid = false
     
+    private var selectedEmoji: String?
+    private var selectedColor: UIColor?
+    
     private let characterLimit = 38
     
     // MARK: - Lifecycle
@@ -269,6 +272,7 @@ final class AddTrackerViewController: UIViewController {
     
     private func setupDelegates() {
         textField.delegate = self
+        emojiColorCollection.selectionDelegate = self
     }
     
     @objc private func cancelButtonTapped() {
@@ -278,16 +282,21 @@ final class AddTrackerViewController: UIViewController {
     @objc private func createButtonTapped() {
         guard createButton.isEnabled else { return }
         
+        guard let emoji = selectedEmoji,
+              let color = selectedColor
+        else {
+            return
+        }
+        
         let tracker = Tracker(
             id: UUID(),
             name: textField.text?.trimmed ?? "",
-            color: .staticSelection5, //заглушка временно
-            emoji: "🙂", // заглушка временно
+            color: color,
+            emoji: emoji,
             schedule: Array(selectedWeekdays)
             )
         
         onCreateTracker?(tracker)
-        
         dismiss(animated: true)
     }
     
@@ -338,10 +347,12 @@ final class AddTrackerViewController: UIViewController {
     
     // MARK: - UpdateCreateButtonState
     
-   private func updateCreateButtonState() {
+    private func updateCreateButtonState() {
         
+        let hasEmoji = selectedEmoji != nil
+        let hasColor = selectedColor != nil
         let hasSchedule = !selectedWeekdays.isEmpty
-        let isFormValid = isTitleValid && hasSchedule
+        let isFormValid = isTitleValid && hasSchedule && hasColor && hasEmoji
         
         createButton.isEnabled = isFormValid
         
@@ -437,5 +448,19 @@ extension AddTrackerViewController: UITextFieldDelegate {
         
         return true
         
+    }
+}
+
+// MARK: - Extension EmojiColorSelectionDelegate
+
+extension AddTrackerViewController: EmojiColorSelectionDelegate {
+    func emojiColorCollectionView(_ manager: EmojiColorCollectionView, didSelectColor color: UIColor) {
+        selectedColor = color
+        updateCreateButtonState()
+    }
+    
+    func emojiColorCollectionView(_ manager: EmojiColorCollectionView, didSelectEmoji emoji: String) {
+        selectedEmoji = emoji
+        updateCreateButtonState()
     }
 }

@@ -1,5 +1,14 @@
 import UIKit
 
+// MARK: - EmojiColorSelectionDelegate Protocol
+
+protocol EmojiColorSelectionDelegate: AnyObject {
+    func emojiColorCollectionView(_ manager: EmojiColorCollectionView, didSelectEmoji emoji: String)
+    
+    func emojiColorCollectionView(_ manager: EmojiColorCollectionView, didSelectColor color: UIColor)
+}
+
+
 // MARK: - EmojiColorSection Enum
 
 enum EmojiColorSection: Int, CaseIterable {
@@ -11,6 +20,10 @@ enum EmojiColorSection: Int, CaseIterable {
 // MARK: - EmojiColorCollectionView
 
 final class EmojiColorCollectionView: NSObject {
+    
+    // MARK: - Public Properties
+    
+    weak var selectionDelegate: EmojiColorSelectionDelegate?
     
     // MARK: - Private Properties
     
