@@ -26,6 +26,12 @@
 		4DBF55DD2ED3ABCB00076E0F /* ScheduleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBF55DC2ED3ABCB00076E0F /* ScheduleCell.swift */; };
 		4DBF55E32ED5971B00076E0F /* TrackersCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBF55E22ED5971B00076E0F /* TrackersCollectionViewDelegate.swift */; };
 		4DBF55E52ED5D48C00076E0F /* DatePickerViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBF55E42ED5D48C00076E0F /* DatePickerViewDelegate.swift */; };
+		4DEEFE912EDA2FDA00EB43D7 /* EmojiColorCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEEFE902EDA2FDA00EB43D7 /* EmojiColorCollectionView.swift */; };
+		4DEEFE932EDA336100EB43D7 /* EmojiColorMockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEEFE922EDA336100EB43D7 /* EmojiColorMockData.swift */; };
+		4DEEFE952EDA3B3A00EB43D7 /* EmojiColorViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEEFE942EDA3B3A00EB43D7 /* EmojiColorViewCell.swift */; };
+		4DEEFF4F2EDA51DA00EB43D7 /* EmojiColorHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEEFF4E2EDA51DA00EB43D7 /* EmojiColorHeaderView.swift */; };
+		4DEEFF512EDDBCBE00EB43D7 /* EmojiColorDelegateFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEEFF502EDDBCBE00EB43D7 /* EmojiColorDelegateFlowLayout.swift */; };
+		4DEEFF532EDDC0A100EB43D7 /* EmojiColorDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEEFF522EDDC0A100EB43D7 /* EmojiColorDataSource.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +74,12 @@
 		4DBF55DC2ED3ABCB00076E0F /* ScheduleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleCell.swift; sourceTree = "<group>"; };
 		4DBF55E22ED5971B00076E0F /* TrackersCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersCollectionViewDelegate.swift; sourceTree = "<group>"; };
 		4DBF55E42ED5D48C00076E0F /* DatePickerViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerViewDelegate.swift; sourceTree = "<group>"; };
+		4DEEFE902EDA2FDA00EB43D7 /* EmojiColorCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiColorCollectionView.swift; sourceTree = "<group>"; };
+		4DEEFE922EDA336100EB43D7 /* EmojiColorMockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiColorMockData.swift; sourceTree = "<group>"; };
+		4DEEFE942EDA3B3A00EB43D7 /* EmojiColorViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiColorViewCell.swift; sourceTree = "<group>"; };
+		4DEEFF4E2EDA51DA00EB43D7 /* EmojiColorHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiColorHeaderView.swift; sourceTree = "<group>"; };
+		4DEEFF502EDDBCBE00EB43D7 /* EmojiColorDelegateFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiColorDelegateFlowLayout.swift; sourceTree = "<group>"; };
+		4DEEFF522EDDC0A100EB43D7 /* EmojiColorDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiColorDataSource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -231,6 +243,7 @@
 			isa = PBXGroup;
 			children = (
 				4DBF55B32ECFCE4A00076E0F /* TrackersMockData.swift */,
+				4DEEFE922EDA336100EB43D7 /* EmojiColorMockData.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -239,6 +252,7 @@
 			isa = PBXGroup;
 			children = (
 				4DBF55BB2ED07FA200076E0F /* AddTrackerViewController.swift */,
+				4DEEFE8F2EDA2D8700EB43D7 /* EmojiColorCollectionView */,
 				4DBF55C92ED0ED3000076E0F /* TrackerSettingsTableView */,
 			);
 			path = AddTrackerViewController;
@@ -269,6 +283,18 @@
 				4DBF55DC2ED3ABCB00076E0F /* ScheduleCell.swift */,
 			);
 			path = ScheduleTableView;
+			sourceTree = "<group>";
+		};
+		4DEEFE8F2EDA2D8700EB43D7 /* EmojiColorCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				4DEEFE902EDA2FDA00EB43D7 /* EmojiColorCollectionView.swift */,
+				4DEEFE942EDA3B3A00EB43D7 /* EmojiColorViewCell.swift */,
+				4DEEFF4E2EDA51DA00EB43D7 /* EmojiColorHeaderView.swift */,
+				4DEEFF502EDDBCBE00EB43D7 /* EmojiColorDelegateFlowLayout.swift */,
+				4DEEFF522EDDC0A100EB43D7 /* EmojiColorDataSource.swift */,
+			);
+			path = EmojiColorCollectionView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -419,12 +445,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				4DBF55DD2ED3ABCB00076E0F /* ScheduleCell.swift in Sources */,
+				4DEEFE952EDA3B3A00EB43D7 /* EmojiColorViewCell.swift in Sources */,
 				4D14D6532EC4B18400289E5F /* DatePickerView.swift in Sources */,
 				4DBF55CA2ED0ED3000076E0F /* TrackerSettingsCell.swift in Sources */,
+				4DEEFE912EDA2FDA00EB43D7 /* EmojiColorCollectionView.swift in Sources */,
 				4DBF55CB2ED0ED3000076E0F /* TrackerSettingsTableView.swift in Sources */,
 				4DBF55AE2ECF9C4700076E0F /* TrackerSectionHeaderView.swift in Sources */,
+				4DEEFF532EDDC0A100EB43D7 /* EmojiColorDataSource.swift in Sources */,
 				4DBF55AA2ECF474800076E0F /* CollectionDelegateFlowLayout.swift in Sources */,
 				4DBF55BD2ED07FA200076E0F /* AddTrackerViewController.swift in Sources */,
+				4DEEFF4F2EDA51DA00EB43D7 /* EmojiColorHeaderView.swift in Sources */,
+				4DEEFE932EDA336100EB43D7 /* EmojiColorMockData.swift in Sources */,
 				4DBF54F92ECB583A00076E0F /* UISearchBarDelegate.swift in Sources */,
 				4DBF55E32ED5971B00076E0F /* TrackersCollectionViewDelegate.swift in Sources */,
 				4DBF55A52ECF46E000076E0F /* TrackerCollectionViewCell.swift in Sources */,
@@ -435,6 +466,7 @@
 				4D6B5D3C2EC358F40060D37E /* StatisticViewController.swift in Sources */,
 				4DBF55B42ECFCE4A00076E0F /* TrackersMockData.swift in Sources */,
 				4D6B5D3D2EC358F40060D37E /* TabBarController.swift in Sources */,
+				4DEEFF512EDDBCBE00EB43D7 /* EmojiColorDelegateFlowLayout.swift in Sources */,
 				4DBF55DB2ED3ABB500076E0F /* ScheduleTableView.swift in Sources */,
 				4D6B5D3E2EC358F40060D37E /* TrackersViewController.swift in Sources */,
 			);

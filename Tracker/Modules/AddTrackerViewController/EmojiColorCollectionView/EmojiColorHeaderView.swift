@@ -1,10 +1,10 @@
 import UIKit
 
-final class TrackerSectionHeaderView: UICollectionReusableView {
+final class EmojiColorHeaderView: UICollectionReusableView {
     
     // MARK: - Static Properties
     
-    static let identifier = "TrackerSectionHeader"
+    static let identifier = "EmojiColorSectionHeader"
     
     // MARK: - Private Properties
     
@@ -25,11 +25,11 @@ final class TrackerSectionHeaderView: UICollectionReusableView {
         categoryLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-        
+            
             categoryLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16),
             categoryLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 28),
+            categoryLabel.topAnchor.constraint(equalTo: topAnchor),
             categoryLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
-            categoryLabel.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -12)
         ])
     }
     
