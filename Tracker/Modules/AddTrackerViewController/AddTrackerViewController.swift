@@ -370,13 +370,20 @@ final class AddTrackerViewController: UIViewController {
     private func setupHideKeyboardGesture() {
         let tap = UITapGestureRecognizer(
             target: self,
-            action: #selector(hideKeyboard)
+            action: #selector(hideKeyboard(_:))
         )
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
     }
     
-    @objc private func hideKeyboard() {
+    @objc private func hideKeyboard(_ gesture: UITapGestureRecognizer) {
+        let location = gesture.location(in: view)
+        let tappedView = view.hitTest(location, with: nil)
+        
+        if let tappedView, tappedView.isDescendant(of: textFieldContainer) {
+            return
+        }
+        
         view.endEditing(true)
     }
     
