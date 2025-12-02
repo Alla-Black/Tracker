@@ -32,6 +32,8 @@
 		4DEEFF4F2EDA51DA00EB43D7 /* EmojiColorHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEEFF4E2EDA51DA00EB43D7 /* EmojiColorHeaderView.swift */; };
 		4DEEFF512EDDBCBE00EB43D7 /* EmojiColorDelegateFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEEFF502EDDBCBE00EB43D7 /* EmojiColorDelegateFlowLayout.swift */; };
 		4DEEFF532EDDC0A100EB43D7 /* EmojiColorDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEEFF522EDDC0A100EB43D7 /* EmojiColorDataSource.swift */; };
+		4DEEFF802EDF711100EB43D7 /* TrackerCoreDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4DEEFF7E2EDF711100EB43D7 /* TrackerCoreDataModel.xcdatamodeld */; };
+		4DEEFF822EDF77FB00EB43D7 /* WeekdayValueTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEEFF812EDF77FB00EB43D7 /* WeekdayValueTransformer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +82,8 @@
 		4DEEFF4E2EDA51DA00EB43D7 /* EmojiColorHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiColorHeaderView.swift; sourceTree = "<group>"; };
 		4DEEFF502EDDBCBE00EB43D7 /* EmojiColorDelegateFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiColorDelegateFlowLayout.swift; sourceTree = "<group>"; };
 		4DEEFF522EDDC0A100EB43D7 /* EmojiColorDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiColorDataSource.swift; sourceTree = "<group>"; };
+		4DEEFF7F2EDF711100EB43D7 /* TrackerCoreDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrackerCoreDataModel.xcdatamodel; sourceTree = "<group>"; };
+		4DEEFF812EDF77FB00EB43D7 /* WeekdayValueTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekdayValueTransformer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -157,6 +161,7 @@
 			isa = PBXGroup;
 			children = (
 				4D6B5CB22EC227390060D37E /* Tracker */,
+				4DEEFF7D2EDF70AE00EB43D7 /* CoreData */,
 				4D6B5C8E2EC221B00060D37E /* TrackerTests */,
 				4D6B5C982EC221B00060D37E /* TrackerUITests */,
 				4D6B5C762EC221AE0060D37E /* Products */,
@@ -295,6 +300,15 @@
 				4DEEFF522EDDC0A100EB43D7 /* EmojiColorDataSource.swift */,
 			);
 			path = EmojiColorCollectionView;
+			sourceTree = "<group>";
+		};
+		4DEEFF7D2EDF70AE00EB43D7 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				4DEEFF7E2EDF711100EB43D7 /* TrackerCoreDataModel.xcdatamodeld */,
+				4DEEFF812EDF77FB00EB43D7 /* WeekdayValueTransformer.swift */,
+			);
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -456,6 +470,7 @@
 				4DBF55BD2ED07FA200076E0F /* AddTrackerViewController.swift in Sources */,
 				4DEEFF4F2EDA51DA00EB43D7 /* EmojiColorHeaderView.swift in Sources */,
 				4DEEFE932EDA336100EB43D7 /* EmojiColorMockData.swift in Sources */,
+				4DEEFF802EDF711100EB43D7 /* TrackerCoreDataModel.xcdatamodeld in Sources */,
 				4DBF54F92ECB583A00076E0F /* UISearchBarDelegate.swift in Sources */,
 				4DBF55E32ED5971B00076E0F /* TrackersCollectionViewDelegate.swift in Sources */,
 				4DBF55A52ECF46E000076E0F /* TrackerCollectionViewCell.swift in Sources */,
@@ -463,6 +478,7 @@
 				4DBF55E52ED5D48C00076E0F /* DatePickerViewDelegate.swift in Sources */,
 				4DBF55A72ECF46E000076E0F /* TrackersCollectionView.swift in Sources */,
 				4DBF55D72ED39A0800076E0F /* ScheduleViewController.swift in Sources */,
+				4DEEFF822EDF77FB00EB43D7 /* WeekdayValueTransformer.swift in Sources */,
 				4D6B5D3C2EC358F40060D37E /* StatisticViewController.swift in Sources */,
 				4DBF55B42ECFCE4A00076E0F /* TrackersMockData.swift in Sources */,
 				4D6B5D3D2EC358F40060D37E /* TabBarController.swift in Sources */,
@@ -819,6 +835,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		4DEEFF7E2EDF711100EB43D7 /* TrackerCoreDataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				4DEEFF7F2EDF711100EB43D7 /* TrackerCoreDataModel.xcdatamodel */,
+			);
+			currentVersion = 4DEEFF7F2EDF711100EB43D7 /* TrackerCoreDataModel.xcdatamodel */;
+			path = TrackerCoreDataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 4D6B5C6D2EC221AE0060D37E /* Project object */;
 }
