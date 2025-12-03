@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4D0B9D5B2EE09CA600C7BC48 /* ColorValueTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0B9D5A2EE09CA600C7BC48 /* ColorValueTransformer.swift */; };
 		4D14D6532EC4B18400289E5F /* DatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D14D6522EC4B18400289E5F /* DatePickerView.swift */; };
 		4D6B5D3C2EC358F40060D37E /* StatisticViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6B5D352EC358F40060D37E /* StatisticViewController.swift */; };
 		4D6B5D3D2EC358F40060D37E /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6B5D372EC358F40060D37E /* TabBarController.swift */; };
@@ -54,6 +55,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4D0B9D5A2EE09CA600C7BC48 /* ColorValueTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorValueTransformer.swift; sourceTree = "<group>"; };
 		4D14D6522EC4B18400289E5F /* DatePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerView.swift; sourceTree = "<group>"; };
 		4D6B5C752EC221AE0060D37E /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D6B5C8B2EC221B00060D37E /* TrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -307,6 +309,7 @@
 			children = (
 				4DEEFF7E2EDF711100EB43D7 /* TrackerCoreDataModel.xcdatamodeld */,
 				4DEEFF812EDF77FB00EB43D7 /* WeekdayValueTransformer.swift */,
+				4D0B9D5A2EE09CA600C7BC48 /* ColorValueTransformer.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -477,6 +480,7 @@
 				4DBF55A62ECF46E000076E0F /* CollectionDataSource.swift in Sources */,
 				4DBF55E52ED5D48C00076E0F /* DatePickerViewDelegate.swift in Sources */,
 				4DBF55A72ECF46E000076E0F /* TrackersCollectionView.swift in Sources */,
+				4D0B9D5B2EE09CA600C7BC48 /* ColorValueTransformer.swift in Sources */,
 				4DBF55D72ED39A0800076E0F /* ScheduleViewController.swift in Sources */,
 				4DEEFF822EDF77FB00EB43D7 /* WeekdayValueTransformer.swift in Sources */,
 				4D6B5D3C2EC358F40060D37E /* StatisticViewController.swift in Sources */,
