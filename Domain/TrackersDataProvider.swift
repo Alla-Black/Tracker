@@ -87,6 +87,19 @@ final class TrackersDataProvider: NSObject {
             print("TrackersDataProvider: failed to perform fetch – \(error)")
         }
     }
+    
+    // MARK: - Public Methods
+    
+    func getAllCategories() -> [TrackerCategory] {
+        let sections = fetchedResultsController.sections ?? []
+        
+        return sections.map { section in
+            let objects = section.objects as? [TrackerCoreData] ?? []
+            let trackers = objects.compactMap { trackerStore.makeTracker(from: $0) }
+            
+            return TrackerCategory(title: section.name, trackers: trackers)
+        }
+    }
 }
 
 // MARK: - TrackersDataProviderProtocol Extension
