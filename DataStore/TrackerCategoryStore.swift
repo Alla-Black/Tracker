@@ -8,5 +8,5 @@ final class TrackerCategoryStore {
         self.context = context
     }
     
-    
+    // TODO: реализовать работу с категориями после появления экрана категорий
 }

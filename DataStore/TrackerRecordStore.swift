@@ -6,6 +6,7 @@ import CoreData
 protocol TrackerRecordStoreProtocol {
     func add(_ record: TrackerRecord) throws
     func deleteRecord(trackerId: UUID, date: Date) throws
+    func hasRecord(trackerId: UUID, date: Date) -> Bool
     func makeRecord(from object: TrackerRecordCoreData) -> TrackerRecord
 }
 
@@ -61,6 +62,24 @@ final class TrackerRecordStore: TrackerRecordStoreProtocol {
             try context.save()
         }
     }
+    
+    func hasRecord(trackerId: UUID, date: Date) -> Bool {
+        let request = TrackerRecordCoreData.fetchRequest()
+        request.predicate = NSPredicate(
+            format: "%K == %@ AND %K == %@",
+            "tracker.id", trackerId as CVarArg,
+            #keyPath(TrackerRecordCoreData.date), date as CVarArg
+        )
+        
+        do {
+            let count = try context.count(for: request)
+            return count > 0
+        } catch {
+            assertionFailure("TrackerRecordStore error: failed to check record existence: \(error)")
+            return false
+        }
+    }
+    
     
     func makeRecord(from object: TrackerRecordCoreData) -> TrackerRecord {
         guard
