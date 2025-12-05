@@ -12,6 +12,8 @@ final class TrackersViewController: UIViewController {
     }()
     
     var completedTrackers: [TrackerRecord] = []
+    
+    var visibleCategories: [TrackerCategory] = []
  
     // MARK: - Private Properties
     
@@ -278,7 +280,7 @@ final class TrackersViewController: UIViewController {
     }
     
     func applyFilter(for date: Date) {
-        let visibleCategories = filteredCategories(for: date)
+        visibleCategories = filteredCategories(for: date)
         
         trackersCollectionView.update(with: visibleCategories)
         

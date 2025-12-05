@@ -41,4 +41,31 @@ extension TrackersViewController: TrackersCollectionViewDelegate {
         
         return isTrackerCompleted(tracker, on: date)
     }
+    
+    func numberOfSections(in collectionView: TrackersCollectionView) -> Int {
+        return visibleCategories.count
+    }
+    
+    func trackersCollectionView(
+        _ collectionView: TrackersCollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int {
+        guard visibleCategories.indices.contains(section) else { return 0 }
+        return visibleCategories[section].trackers.count
+    }
+    
+    func trackersCollectionView(
+        _ collectionView: TrackersCollectionView,
+        trackerAt indexPath: IndexPath
+    ) -> Tracker {
+        return visibleCategories[indexPath.section].trackers[indexPath.item]
+    }
+    
+    func trackersCollectionView(
+        _ collectionView: TrackersCollectionView,
+        titleForSection section: Int
+    ) -> String {
+        guard visibleCategories.indices.contains(section) else { return "" }
+        return visibleCategories[section].title
+    }
 }
