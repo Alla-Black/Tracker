@@ -27,6 +27,7 @@ protocol TrackersDataProviderProtocol: AnyObject {
     
     func isTrackerCompleted(_ tracker: Tracker, on date: Date) -> Bool
     func toggleRecord(for tracker: Tracker, on date: Date) throws
+    func getAllCategories() -> [TrackerCategory]
 }
 
 // MARK: - TrackersDataProvider

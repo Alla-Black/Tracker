@@ -106,7 +106,7 @@ final class TrackersViewController: UIViewController {
         setupConstraints()
         setupDelegates()
         
-        applyFilter(for: datePickerView.selectedDate)
+        reloadFromStore()
     }
     
     // MARK: - Tracker completion helpers
@@ -288,6 +288,20 @@ final class TrackersViewController: UIViewController {
         
         stubContainer.isHidden = hasTrackers
         collectionView.isHidden = !hasTrackers
+    }
+    
+    private func reloadFromStore() {
+        let currentDate = datePickerView.selectedDate
+        
+        let storedCategories = dataProvider.getAllCategories()
+        
+        if storedCategories.isEmpty {
+            categories = [TrackerCategory(title: "Важное", trackers: [])]
+        } else {
+            categories = storedCategories
+        }
+        
+        applyFilter(for: currentDate)
     }
 }
 
