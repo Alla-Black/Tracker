@@ -35,16 +35,17 @@ final class TrackersDataProvider: NSObject {
     
     // MARK: - Public Properties
     
-    weak var delegate: TrackersDataProviderDelegate?
+    var context: NSManagedObjectContext
     
     // MARK: - Private Properties
     
     private let trackerStore: TrackerStoreProtocol
     private let recordStore: TrackerRecordStoreProtocol
-    private let context: NSManagedObjectContext
     
     private var insertedIndexes: IndexSet?
     private var deletedIndexes: IndexSet?
+    
+    private weak var delegate: TrackersDataProviderDelegate?
     
     // MARK: - FetchedResultsController
     
@@ -72,12 +73,11 @@ final class TrackersDataProvider: NSObject {
     init(
         trackerStore: TrackerStoreProtocol,
         recordStore: TrackerRecordStoreProtocol,
-        context: NSManagedObjectContext,
         delegate: TrackersDataProviderDelegate?
     ) {
         self.trackerStore = trackerStore
         self.recordStore = recordStore
-        self.context = context
+        self.context = trackerStore.context
         self.delegate = delegate
         super.init()
         

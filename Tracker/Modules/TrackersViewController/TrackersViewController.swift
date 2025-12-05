@@ -15,6 +15,21 @@ final class TrackersViewController: UIViewController {
  
     // MARK: - Private Properties
     
+    private lazy var dataProvider: TrackersDataProviderProtocol = {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            preconditionFailure("TrackersViewController error: failed to get AppDelegate")
+        }
+        
+        let trackerStore = appDelegate.trackerStore
+        let recordStore = appDelegate.trackerRecordStore
+        
+        return TrackersDataProvider(
+            trackerStore: trackerStore,
+            recordStore: recordStore,
+            delegate: self
+        )
+    }()
+    
     private lazy var titleNameLabel: UILabel = {
         let label = UILabel()
         label.text = "Трекеры"
@@ -264,5 +279,13 @@ final class TrackersViewController: UIViewController {
         
         stubContainer.isHidden = hasTrackers
         collectionView.isHidden = !hasTrackers
+    }
+}
+
+// MARK: - TrackersDataProviderDelegate Extension
+
+extension TrackersViewController: TrackersDataProviderDelegate {
+    func didUpdate(_ update: TrackersStoreUpdate) {
+        // пока пусто, потом сделаем анимацию коллекции
     }
 }

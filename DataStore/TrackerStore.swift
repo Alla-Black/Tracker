@@ -4,6 +4,7 @@ import CoreData
 // MARK: - TrackerStoreProtocol
 
 protocol TrackerStoreProtocol {
+    var context: NSManagedObjectContext { get }
     func add(_ tracker: Tracker) throws
     func delete(_ trackerCoreData: TrackerCoreData) throws
     func makeTracker(from object: TrackerCoreData) -> Tracker
@@ -13,9 +14,9 @@ protocol TrackerStoreProtocol {
 
 final class TrackerStore: TrackerStoreProtocol {
     
-    // MARK: - Private Properties
+    // MARK: - Public Properties
     
-    private let context: NSManagedObjectContext
+    let context: NSManagedObjectContext
     
     // MARK: - Initializers
     

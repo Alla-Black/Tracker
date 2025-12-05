@@ -16,6 +16,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return container
     }()
     
+    // MARK: - Store Setup
+    
+    lazy var trackerStore: TrackerStoreProtocol = {
+        let context = persistentContainer.viewContext
+        return TrackerStore(context: context)
+    }()
+    
+    lazy var trackerRecordStore: TrackerRecordStoreProtocol = {
+        let context = persistentContainer.viewContext
+        return TrackerRecordStore(context: context)
+    }()
+    
     // MARK: - Core Data Saving support
     
     func saveContext() {
