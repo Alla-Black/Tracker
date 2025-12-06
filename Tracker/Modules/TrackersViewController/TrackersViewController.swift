@@ -14,10 +14,8 @@ final class TrackersViewController: UIViewController {
     var completedTrackers: [TrackerRecord] = []
     
     var visibleCategories: [TrackerCategory] = []
- 
-    // MARK: - Private Properties
     
-    private lazy var dataProvider: TrackersDataProviderProtocol = {
+    lazy var dataProvider: TrackersDataProviderProtocol = {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             preconditionFailure("TrackersViewController error: failed to get AppDelegate")
         }
@@ -31,6 +29,8 @@ final class TrackersViewController: UIViewController {
             delegate: self
         )
     }()
+ 
+    // MARK: - Private Properties
     
     private lazy var titleNameLabel: UILabel = {
         let label = UILabel()
@@ -126,7 +126,7 @@ final class TrackersViewController: UIViewController {
     }
     
     func completedCount(for tracker: Tracker) -> Int {
-        return completedTrackers.filter { $0.trackerId == tracker.id }.count
+        return dataProvider.completedCount(for: tracker)
     }
     
     // MARK: - Setup UI
@@ -277,7 +277,7 @@ final class TrackersViewController: UIViewController {
         collectionView.isHidden = !hasTrackers
     }
     
-    private func reloadFromStore() {
+    func reloadFromStore() {
         let currentDate = datePickerView.selectedDate
         
         let storedCategories = dataProvider.getAllCategories()

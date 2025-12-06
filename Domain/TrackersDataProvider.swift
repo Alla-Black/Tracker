@@ -28,6 +28,7 @@ protocol TrackersDataProviderProtocol: AnyObject {
     func isTrackerCompleted(_ tracker: Tracker, on date: Date) -> Bool
     func toggleRecord(for tracker: Tracker, on date: Date) throws
     func getAllCategories() -> [TrackerCategory]
+    func completedCount(for tracker: Tracker) -> Int
 }
 
 // MARK: - TrackersDataProvider
@@ -137,6 +138,10 @@ extension TrackersDataProvider: TrackersDataProviderProtocol {
             let record = TrackerRecord(trackerId: tracker.id, date: date)
             try recordStore.add(record)
         }
+    }
+    
+    func completedCount(for tracker: Tracker) -> Int {
+        recordStore.completedCount(for: tracker.id)
     }
 }
 

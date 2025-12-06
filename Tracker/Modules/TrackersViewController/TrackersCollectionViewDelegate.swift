@@ -13,20 +13,12 @@ extension TrackersViewController: TrackersCollectionViewDelegate {
             return
         }
         
-        if isTrackerCompleted(tracker, on: selectedDate) {
-            
-            completedTrackers.removeAll { record in
-                let sameTracker = record.trackerId == tracker.id
-                let sameDate = Calendar.current.isDate(normalizedDate(record.date), inSameDayAs: normalizedSelected)
-                
-                return sameTracker && sameDate
-            }
-        } else {
-            let record = TrackerRecord(trackerId: tracker.id, date: selectedDate)
-            completedTrackers.append(record)
+        do {
+            try dataProvider.toggleRecord(for: tracker, on: selectedDate)
+            reloadFromStore()
+        } catch {
+            assertionFailure("Не удалось изменить запись трекера: \(error)")
         }
-        
-        collectionView.reloadItems(at: [indexPath])
     }
     
     func trackersCollectionView(_ collectionView: TrackersCollectionView,
@@ -39,7 +31,7 @@ extension TrackersViewController: TrackersCollectionViewDelegate {
         isCompleted tracker: Tracker) -> Bool {
         let date = datePickerView.selectedDate
         
-        return isTrackerCompleted(tracker, on: date)
+        return dataProvider.isTrackerCompleted(tracker, on: date)
     }
     
     func numberOfSections(in collectionView: TrackersCollectionView) -> Int {
