@@ -92,14 +92,12 @@ final class TrackersDataProvider: NSObject {
     // MARK: - Public Methods
     
     func getAllCategories() -> [TrackerCategory] {
-        let sections = fetchedResultsController.sections ?? []
+        let objects = fetchedResultsController.fetchedObjects ?? []
+        let trackers = objects.compactMap { trackerStore.makeTracker(from: $0) }
         
-        return sections.map { section in
-            let objects = section.objects as? [TrackerCoreData] ?? []
-            let trackers = objects.compactMap { trackerStore.makeTracker(from: $0) }
-            
-            return TrackerCategory(title: section.name, trackers: trackers)
-        }
+        guard !trackers.isEmpty else { return [] }
+        
+        return [TrackerCategory(title: "Важное", trackers: trackers)]
     }
 }
 

@@ -244,19 +244,6 @@ final class TrackersViewController: UIViewController {
             } catch {
                 assertionFailure("Не удалось сохранить трекер: \(error)")
             }
-            
-            // временно, до момента добавления экрана категорий
-            guard !self.categories.isEmpty else { return }
-            
-            let oldCategory = self.categories[0]
-            let newCategory = TrackerCategory(
-                title: oldCategory.title,
-                trackers: oldCategory.trackers + [tracker]
-            )
-            self.categories[0] = newCategory
-            
-            let currentDate = self.datePickerView.selectedDate
-            self.applyFilter(for: currentDate)
         }
         
         let navigationController = UINavigationController(rootViewController: addTracker)
@@ -309,21 +296,6 @@ final class TrackersViewController: UIViewController {
 
 extension TrackersViewController: TrackersDataProviderDelegate {
     func didUpdate(_ update: TrackersStoreUpdate) {
-        let insertedIndexPaths = update.insertedIndexes.map {
-            IndexPath(item: $0, section: 0)
-        }
-        
-        let deletedIndexPaths = update.deletedIndexes.map {
-            IndexPath(item: $0, section: 0)
-        }
-        
-        collectionView.performBatchUpdates {
-            if !deletedIndexPaths.isEmpty {
-                collectionView.deleteItems(at: deletedIndexPaths)
-            }
-            if !insertedIndexPaths.isEmpty {
-                collectionView.insertItems(at: insertedIndexPaths)
-            }
-        }
+        reloadFromStore()
     }
 }
