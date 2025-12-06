@@ -4,12 +4,12 @@ extension TrackersCollectionView: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         
-        return categories.count
+        return delegate?.numberOfSections(in: self) ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        return categories[section].trackers.count
+        return delegate?.trackersCollectionView(self, numberOfItemsInSection: section) ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -18,8 +18,9 @@ extension TrackersCollectionView: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         
-        let category = categories[indexPath.section]
-        let tracker = category.trackers[indexPath.row]
+        guard let tracker = delegate?.trackersCollectionView(self, trackerAt: indexPath) else {
+            return cell
+        }
         
         let days = delegate?.trackersCollectionView(self, completedCountFor: tracker) ?? 0
         let isCompleted = delegate?.trackersCollectionView(self, isCompleted: tracker) ?? false
@@ -43,7 +44,7 @@ extension TrackersCollectionView: UICollectionViewDataSource {
         
         guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as?  TrackerSectionHeaderView else { return UICollectionReusableView() }
         
-        let title = categories[indexPath.section].title
+        let title = delegate?.trackersCollectionView(self, titleForSection: indexPath.section) ?? ""
         view.configure(with: title)
         
         return view

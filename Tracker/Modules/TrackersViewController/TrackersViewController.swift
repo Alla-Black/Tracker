@@ -12,6 +12,23 @@ final class TrackersViewController: UIViewController {
     }()
     
     var completedTrackers: [TrackerRecord] = []
+    
+    var visibleCategories: [TrackerCategory] = []
+    
+    lazy var dataProvider: TrackersDataProviderProtocol = {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            preconditionFailure("TrackersViewController error: failed to get AppDelegate")
+        }
+        
+        let trackerStore = appDelegate.trackerStore
+        let recordStore = appDelegate.trackerRecordStore
+        
+        return TrackersDataProvider(
+            trackerStore: trackerStore,
+            recordStore: recordStore,
+            delegate: self
+        )
+    }()
  
     // MARK: - Private Properties
     
@@ -89,7 +106,7 @@ final class TrackersViewController: UIViewController {
         setupConstraints()
         setupDelegates()
         
-        applyFilter(for: datePickerView.selectedDate)
+        reloadFromStore()
     }
     
     // MARK: - Tracker completion helpers
@@ -109,7 +126,7 @@ final class TrackersViewController: UIViewController {
     }
     
     func completedCount(for tracker: Tracker) -> Int {
-        return completedTrackers.filter { $0.trackerId == tracker.id }.count
+        return dataProvider.completedCount(for: tracker)
     }
     
     // MARK: - Setup UI
@@ -222,17 +239,11 @@ final class TrackersViewController: UIViewController {
         addTracker.onCreateTracker = { [weak self] tracker in
             guard let self else { return }
             
-            guard !self.categories.isEmpty else { return }
-            
-            let oldCategory = self.categories[0]
-            let newCategory = TrackerCategory(
-                title: oldCategory.title,
-                trackers: oldCategory.trackers + [tracker]
-            )
-            self.categories[0] = newCategory
-            
-            let currentDate = self.datePickerView.selectedDate
-            self.applyFilter(for: currentDate)
+            do {
+                try self.dataProvider.add(tracker)
+            } catch {
+                assertionFailure("Не удалось сохранить трекер: \(error)")
+            }
         }
         
         let navigationController = UINavigationController(rootViewController: addTracker)
@@ -256,7 +267,7 @@ final class TrackersViewController: UIViewController {
     }
     
     func applyFilter(for date: Date) {
-        let visibleCategories = filteredCategories(for: date)
+        visibleCategories = filteredCategories(for: date)
         
         trackersCollectionView.update(with: visibleCategories)
         
@@ -264,5 +275,27 @@ final class TrackersViewController: UIViewController {
         
         stubContainer.isHidden = hasTrackers
         collectionView.isHidden = !hasTrackers
+    }
+    
+    func reloadFromStore() {
+        let currentDate = datePickerView.selectedDate
+        
+        let storedCategories = dataProvider.getAllCategories()
+        
+        if storedCategories.isEmpty {
+            categories = [TrackerCategory(title: "Важное", trackers: [])]
+        } else {
+            categories = storedCategories
+        }
+        
+        applyFilter(for: currentDate)
+    }
+}
+
+// MARK: - TrackersDataProviderDelegate Extension
+
+extension TrackersViewController: TrackersDataProviderDelegate {
+    func didUpdate(_ update: TrackersStoreUpdate) {
+        reloadFromStore()
     }
 }

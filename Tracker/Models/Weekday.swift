@@ -1,6 +1,6 @@
 import UIKit
 
-enum Weekday: Int, CaseIterable {
+enum Weekday: Int, CaseIterable, Codable {
     case monday
     case tuesday
     case wednesday

@@ -14,6 +14,23 @@ protocol TrackersCollectionViewDelegate: AnyObject {
         _ collectionView: TrackersCollectionView,
         isCompleted tracker: Tracker
     ) -> Bool
+    
+    func numberOfSections(in collectionView: TrackersCollectionView) -> Int
+    
+    func trackersCollectionView(
+        _ collectionView: TrackersCollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int
+    
+    func trackersCollectionView(
+        _ collectionView: TrackersCollectionView,
+        trackerAt indexPath: IndexPath
+    ) -> Tracker
+    
+    func trackersCollectionView(
+        _ collectionView: TrackersCollectionView,
+        titleForSection section: Int
+    ) -> String
 }
 
 // MARK: TrackersCollectionView
@@ -105,9 +122,9 @@ extension TrackersCollectionView: TrackerCellDelegate {
     
     func trackerCellDidTapPlus(_ cell: TrackerCollectionViewCell) {
         
-        guard let indexPath = collectionView.indexPath(for: cell) else { return }
-        
-        let tracker = categories[indexPath.section].trackers[indexPath.item]
+        guard let indexPath = collectionView.indexPath(for: cell),
+        let tracker = delegate?.trackersCollectionView(self, trackerAt: indexPath)
+        else { return }
         
         delegate?.trackersCollectionView(self, didTapPlusFor: tracker, at: indexPath)
     }
