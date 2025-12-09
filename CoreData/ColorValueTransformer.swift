@@ -1,10 +1,17 @@
 import UIKit
 
+// MARK: - ColorValueTransformer
+
 @objc
 final class ColorValueTransformer: ValueTransformer {
+    
+    // MARK: - ValueTransformer Overrides
+    
     override class func transformedValueClass() -> AnyClass { NSData.self }
     
     override class func allowsReverseTransformation() -> Bool { true }
+    
+    // MARK: - Forward Transform (UIColor → Data)
     
     override func transformedValue(_ value: Any?) -> Any? {
         guard let color = value as? UIColor else { return nil }
@@ -21,6 +28,8 @@ final class ColorValueTransformer: ValueTransformer {
         }
     }
     
+    // MARK: - Reverse Transform (Data → UIColor)
+    
     override func reverseTransformedValue(_ value: Any?) -> Any? {
         guard let data = value as? Data else { return nil }
         do {
@@ -34,6 +43,8 @@ final class ColorValueTransformer: ValueTransformer {
             return nil
         }
     }
+    
+    // MARK: - Registration
     
     static func register() {
         ValueTransformer.setValueTransformer(
