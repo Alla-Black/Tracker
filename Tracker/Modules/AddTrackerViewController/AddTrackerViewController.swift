@@ -110,9 +110,24 @@ final class AddTrackerViewController: UIViewController {
         return contentView
     }()
     
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        return collectionView
+    }()
+    
+    private let params = CollectionLayoutParams(cellCount: 6, leftInset: 2, rightInset: 3, cellSpaсing: 5)
+    
+    private lazy var emojiColorCollection = EmojiColorCollectionView(using: params, collectionView: collectionView)
+    
+    private var collectionHeightConstraint: NSLayoutConstraint?
+    
     private var selectedWeekdays = Set<Weekday>()
     
     private var isTitleValid = false
+    
+    private var selectedEmoji: String?
+    private var selectedColor: UIColor?
     
     private let characterLimit = 38
     
@@ -128,8 +143,18 @@ final class AddTrackerViewController: UIViewController {
         setupDelegates()
         setupHideKeyboardGesture()
         
+        _ = emojiColorCollection
+        
         updateLimitLayout(isTooLong: false)
         updateCreateButtonState()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        collectionView.layoutIfNeeded()
+        let contentHeight = collectionView.collectionViewLayout.collectionViewContentSize.height
+        collectionHeightConstraint?.constant = contentHeight
     }
     
     // MARK: - Private Methods
@@ -145,6 +170,7 @@ final class AddTrackerViewController: UIViewController {
         mainStack.addArrangedSubview(textFieldContainer)
         mainStack.addArrangedSubview(limitLabel)
         mainStack.addArrangedSubview(tableViewContainer)
+        mainStack.addArrangedSubview(collectionView)
         
         textFieldContainer.addSubview(textField)
         tableViewContainer.addSubview(tableView)
@@ -183,13 +209,16 @@ final class AddTrackerViewController: UIViewController {
             ]
         )
         textField.attributedPlaceholder = placeholder
+        
+        // CollectionView
+        collectionView.isScrollEnabled = false
     }
     
     // MARK: - Setup Constraints
     
     private func setupConstraints() {
         [scrollView, contentView, mainStack, textField,
-         textFieldContainer, limitLabel, cancelButton, createButton, tableView, tableViewContainer].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+         textFieldContainer, limitLabel, cancelButton, createButton, tableView, tableViewContainer, collectionView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         
         NSLayoutConstraint.activate([
             
@@ -207,7 +236,7 @@ final class AddTrackerViewController: UIViewController {
             mainStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
             mainStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             mainStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            mainStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24),
+            mainStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
             textFieldContainer.heightAnchor.constraint(equalToConstant: 75),
             
@@ -234,12 +263,16 @@ final class AddTrackerViewController: UIViewController {
             tableView.leadingAnchor.constraint(equalTo: tableViewContainer.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: tableViewContainer.trailingAnchor)
         ])
+        
+        collectionHeightConstraint = collectionView.heightAnchor.constraint(equalToConstant: 0)
+        collectionHeightConstraint?.isActive = true
     }
     
     // MARK: - Setup Actions
     
     private func setupDelegates() {
         textField.delegate = self
+        emojiColorCollection.selectionDelegate = self
     }
     
     @objc private func cancelButtonTapped() {
@@ -249,16 +282,21 @@ final class AddTrackerViewController: UIViewController {
     @objc private func createButtonTapped() {
         guard createButton.isEnabled else { return }
         
+        guard let emoji = selectedEmoji,
+              let color = selectedColor
+        else {
+            return
+        }
+        
         let tracker = Tracker(
             id: UUID(),
             name: textField.text?.trimmed ?? "",
-            color: .staticSelection5, //заглушка временно
-            emoji: "🙂", // заглушка временно
+            color: color,
+            emoji: emoji,
             schedule: Array(selectedWeekdays)
             )
         
         onCreateTracker?(tracker)
-        
         dismiss(animated: true)
     }
     
@@ -289,6 +327,8 @@ final class AddTrackerViewController: UIViewController {
     // MARK: - UpdateLimitLayout
     
     private func updateLimitLayout(isTooLong: Bool) {
+        mainStack.setCustomSpacing(16, after: tableViewContainer)
+        
         if isTooLong {
             
             limitLabel.isHidden = false
@@ -307,10 +347,12 @@ final class AddTrackerViewController: UIViewController {
     
     // MARK: - UpdateCreateButtonState
     
-   private func updateCreateButtonState() {
+    private func updateCreateButtonState() {
         
+        let hasEmoji = selectedEmoji != nil
+        let hasColor = selectedColor != nil
         let hasSchedule = !selectedWeekdays.isEmpty
-        let isFormValid = isTitleValid && hasSchedule
+        let isFormValid = isTitleValid && hasSchedule && hasColor && hasEmoji
         
         createButton.isEnabled = isFormValid
         
@@ -328,13 +370,20 @@ final class AddTrackerViewController: UIViewController {
     private func setupHideKeyboardGesture() {
         let tap = UITapGestureRecognizer(
             target: self,
-            action: #selector(hideKeyboard)
+            action: #selector(hideKeyboard(_:))
         )
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
     }
     
-    @objc private func hideKeyboard() {
+    @objc private func hideKeyboard(_ gesture: UITapGestureRecognizer) {
+        let location = gesture.location(in: view)
+        let tappedView = view.hitTest(location, with: nil)
+        
+        if let tappedView, tappedView.isDescendant(of: textFieldContainer) {
+            return
+        }
+        
         view.endEditing(true)
     }
     
@@ -406,5 +455,19 @@ extension AddTrackerViewController: UITextFieldDelegate {
         
         return true
         
+    }
+}
+
+// MARK: - Extension EmojiColorSelectionDelegate
+
+extension AddTrackerViewController: EmojiColorSelectionDelegate {
+    func emojiColorCollectionView(_ manager: EmojiColorCollectionView, didSelectColor color: UIColor) {
+        selectedColor = color
+        updateCreateButtonState()
+    }
+    
+    func emojiColorCollectionView(_ manager: EmojiColorCollectionView, didSelectEmoji emoji: String) {
+        selectedEmoji = emoji
+        updateCreateButtonState()
     }
 }
