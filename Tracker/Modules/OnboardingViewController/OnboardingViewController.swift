@@ -2,6 +2,10 @@ import UIKit
 
 final class OnboardingViewController: UIPageViewController {
     
+    // MARK: - Public Properties
+    
+    var onFinish: (() -> Void)?
+    
     // MARK: - Private Properties
     
     private lazy var pages: [UIViewController] = {
@@ -108,7 +112,8 @@ final class OnboardingViewController: UIPageViewController {
     
     @objc
     private func didTapActionButton() {
-        
+        UserDefaults.standard.set(true, forKey: "hasViewedOnboarding")
+        onFinish?()
     }
 }
 
@@ -156,9 +161,5 @@ extension OnboardingViewController: UIPageViewControllerDelegate {
             pageControl.currentPage = currentIndex
         }
     }
-}
-
-#Preview {
-    OnboardingViewController()
 }
 
