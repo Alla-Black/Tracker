@@ -309,9 +309,7 @@ final class AddTrackerViewController: UIViewController {
             switch index {
                 
             case 0:
-                print("Тап по строке Категория")
-                // TODO: открыть экран категорий
-                // self.openCategoryScreen()
+                self.openCategoryScreen()
                 
             case 1:
                 self.openScheduleScreen()
@@ -402,6 +400,14 @@ final class AddTrackerViewController: UIViewController {
         }
         
         navigationController?.pushViewController(scheduleViewController, animated: true)
+    }
+    
+    // MARK: - OpenCategoryScreen
+    
+    private func openCategoryScreen() {
+        let categoryListViewController = CategoryListViewController()
+        
+        navigationController?.pushViewController(categoryListViewController, animated: true)
     }
     
     // MARK: - UpdateScheduleSubtitle
