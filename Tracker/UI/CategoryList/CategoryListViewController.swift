@@ -48,6 +48,22 @@ final class CategoryListViewController: UIViewController {
         return button
     }()
     
+    private lazy var tableViewContainer: UIView = {
+        let view = UIView()
+        view.backgroundColor = .backgroundYP
+        view.layer.cornerRadius = 16
+        view.layer.masksToBounds = true
+        return view
+    }()
+    
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .plain)
+        return tableView
+    }()
+    
+    private var viewModel: CategoryListViewModel?
+    
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -56,15 +72,19 @@ final class CategoryListViewController: UIViewController {
         setupUI()
         configureAppearance()
         setupConstraints()
-        setStub()
+        
+        viewModel = CategoryListViewModel()
+        bindViewModel()
+        viewModel?.viewDidLoad()
     }
     
     // MARK: - Private Methods
     
     private func setupUI() {
-        view.addSubviews([stubStack, addCategoryButton])
+        view.addSubviews([tableViewContainer, stubStack, addCategoryButton])
         stubStack.addArrangedSubview(stubImage)
         stubStack.addArrangedSubview(stubLabel)
+        tableViewContainer.addSubview(tableView)
     }
     
     private func configureAppearance() {
@@ -94,11 +114,21 @@ final class CategoryListViewController: UIViewController {
     }
     
     private func setupConstraints() {
-        [stubStack, stubImage, stubLabel, addCategoryButton].forEach {
+        [tableViewContainer, tableView, stubStack, stubImage, stubLabel, addCategoryButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         NSLayoutConstraint.activate([
+            tableViewContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
+            tableViewContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            tableViewContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            tableViewContainer.bottomAnchor.constraint(equalTo: addCategoryButton.topAnchor, constant: -114),
+            
+            tableView.topAnchor.constraint(equalTo: tableViewContainer.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: tableViewContainer.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: tableViewContainer.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: tableViewContainer.trailingAnchor),
+            
             stubImage.widthAnchor.constraint(equalToConstant: 80),
             stubImage.heightAnchor.constraint(equalToConstant: 80),
             
@@ -114,8 +144,20 @@ final class CategoryListViewController: UIViewController {
         ])
     }
     
-    private func setStub() {
+    private func setStub(isEmpty: Bool) {
+        stubStack.isHidden = !isEmpty
+        tableViewContainer.isHidden = isEmpty
+    }
+    
+    private func bindViewModel() {
+        viewModel?.isEmptyBinding = { [weak self] isEmpty in
+            self?.setStub(isEmpty: isEmpty)
+        }
         
+        viewModel?.onCategoriesChanged = { [weak self] _ in
+            guard let self else { return }
+            self.tableView.reloadData()
+        }
     }
     
     @objc
