@@ -1,6 +1,9 @@
 import UIKit
 
 final class CategoryListViewController: UIViewController {
+    // MARK: - Public Properties
+    
+    
     
     // MARK: - Private Properties
     
@@ -44,7 +47,7 @@ final class CategoryListViewController: UIViewController {
             self,
             action: #selector(addCategoryButtonTapped),
             for: .touchUpInside
-            )
+        )
         return button
     }()
     
@@ -61,8 +64,13 @@ final class CategoryListViewController: UIViewController {
         return tableView
     }()
     
-    private var viewModel: CategoryListViewModel?
+    private lazy var categoryListTableView: CategoryListTableView = {
+        CategoryListTableView(tableView: tableView, viewModel: viewModel)
+    }()
     
+    private let viewModel = CategoryListViewModel()
+    
+    private var tableContainerHeightConstraint: NSLayoutConstraint?
     
     // MARK: - Lifecycle
     
@@ -72,10 +80,11 @@ final class CategoryListViewController: UIViewController {
         setupUI()
         configureAppearance()
         setupConstraints()
-        
-        viewModel = CategoryListViewModel()
+        view.layoutIfNeeded()
+    
         bindViewModel()
-        viewModel?.viewDidLoad()
+        _ = categoryListTableView
+        viewModel.viewDidLoad()
     }
     
     // MARK: - Private Methods
@@ -118,11 +127,18 @@ final class CategoryListViewController: UIViewController {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
+        let heightConstraint =
+                tableViewContainer.heightAnchor.constraint(equalToConstant: 0)
+        heightConstraint.priority = .defaultHigh
+        tableContainerHeightConstraint = heightConstraint
+        
         NSLayoutConstraint.activate([
             tableViewContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
             tableViewContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             tableViewContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            tableViewContainer.bottomAnchor.constraint(equalTo: addCategoryButton.topAnchor, constant: -114),
+            tableViewContainer.bottomAnchor.constraint(lessThanOrEqualTo: addCategoryButton.topAnchor, constant: -114),
+            
+            heightConstraint,
             
             tableView.topAnchor.constraint(equalTo: tableViewContainer.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: tableViewContainer.bottomAnchor),
@@ -132,7 +148,6 @@ final class CategoryListViewController: UIViewController {
             stubImage.widthAnchor.constraint(equalToConstant: 80),
             stubImage.heightAnchor.constraint(equalToConstant: 80),
             
-            stubStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             stubStack.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             stubStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             stubStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
@@ -150,13 +165,28 @@ final class CategoryListViewController: UIViewController {
     }
     
     private func bindViewModel() {
-        viewModel?.isEmptyBinding = { [weak self] isEmpty in
+        viewModel.isEmptyBinding = { [weak self] isEmpty in
             self?.setStub(isEmpty: isEmpty)
         }
         
-        viewModel?.onCategoriesChanged = { [weak self] _ in
+        viewModel.onCategoriesChanged = { [weak self] _ in
             guard let self else { return }
+            
             self.tableView.reloadData()
+            
+            self.tableView.layoutIfNeeded()
+            self.view.layoutIfNeeded()
+            
+            let rows = self.viewModel.numberOfCategories()
+            let rowHeight: CGFloat = 75
+            let contentHeight = CGFloat(rows) * rowHeight
+
+            let maxHeight = (self.addCategoryButton.frame.minY - 114) - (self.view.safeAreaInsets.top + 24)
+            let newHeight = max(0, min(contentHeight, maxHeight))
+            
+            self.tableContainerHeightConstraint?.constant = newHeight
+            
+            self.view.layoutIfNeeded()
         }
     }
     
@@ -164,8 +194,4 @@ final class CategoryListViewController: UIViewController {
     private func addCategoryButtonTapped() {
         
     }
-}
-
-#Preview {
-    UINavigationController(rootViewController: CategoryListViewController())
 }
