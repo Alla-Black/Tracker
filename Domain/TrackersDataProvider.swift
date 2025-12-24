@@ -98,7 +98,7 @@ final class TrackersDataProvider: NSObject {
         
         guard !trackers.isEmpty else { return [] }
         
-        return [TrackerCategory(title: "Важное", trackers: trackers)]
+        return [TrackerCategory(title: "", trackers: trackers)]
     }
 }
 

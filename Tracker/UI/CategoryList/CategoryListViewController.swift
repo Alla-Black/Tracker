@@ -1,6 +1,11 @@
 import UIKit
 
 final class CategoryListViewController: UIViewController {
+    // MARK: - Public Properties
+    
+    var onCategoryPicked: Binding<String>?
+    var preselectedCategoryTitle: String?
+    
     // MARK: - Private Properties
     
     private lazy var stubImage: UIImageView = {
@@ -81,6 +86,7 @@ final class CategoryListViewController: UIViewController {
         bindViewModel()
         _ = categoryListTableView
         viewModel.viewDidLoad()
+        viewModel.setSelectedCategory(with: preselectedCategoryTitle)
     }
     
     // MARK: - Private Methods
@@ -183,6 +189,13 @@ final class CategoryListViewController: UIViewController {
             self.tableContainerHeightConstraint?.constant = newHeight
             
             self.view.layoutIfNeeded()
+        }
+        
+        viewModel.onCategorySelected = { [weak self] title in
+            guard let self else { return }
+            
+            self.onCategoryPicked?(title)
+            self.navigationController?.popViewController(animated: true)
         }
     }
     

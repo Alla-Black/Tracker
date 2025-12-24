@@ -5,6 +5,7 @@ final class CategoryListViewModel {
     
     var isEmptyBinding: Binding<Bool>?
     var onCategoriesChanged: Binding<[String]>?
+    var onCategorySelected: Binding<String>?
     
     // MARK: - Private Properties
     
@@ -39,9 +40,23 @@ final class CategoryListViewModel {
         categories.append(title)
     }
     
-    func selectCategory(at index: Int) {
+    func setSelectedCategory(with title: String?) {
+        guard let title, !title.isEmpty else { return }
+        guard let index = categories.firstIndex(of: title) else { return }
+        
         selectedCategoryIndex = index
         onCategoriesChanged?(categories)
+    }
+    
+    func selectCategory(at index: Int) {
+        guard (0..<categories.count).contains(index) else {
+            return
+        }
+        selectedCategoryIndex = index
+        onCategoriesChanged?(categories)
+        
+        let title = categories[index]
+        onCategorySelected?(title)
     }
     
     func isSelectedCategory(at index: Int) -> Bool {

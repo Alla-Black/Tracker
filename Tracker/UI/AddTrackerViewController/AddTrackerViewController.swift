@@ -6,7 +6,7 @@ final class AddTrackerViewController: UIViewController {
     
     var onCreateTracker: ((Tracker) -> Void)?
     
-    var selectedCategory: TrackerCategory = TrackerCategory(title: "Важное", trackers: [])
+    var selectedCategory: TrackerCategory = TrackerCategory(title: "", trackers: [])
     
     // MARK: - Private Properties
     
@@ -406,6 +406,16 @@ final class AddTrackerViewController: UIViewController {
     
     private func openCategoryScreen() {
         let categoryListViewController = CategoryListViewController()
+        
+        categoryListViewController.preselectedCategoryTitle = selectedCategory.title
+        
+        categoryListViewController.onCategoryPicked = { [weak self] title in
+            guard let self else { return }
+            
+            self.selectedCategory = TrackerCategory(title: title, trackers: [])
+            self.settingsTableView.updateCategorySubtitle(title)
+            self.updateCreateButtonState()
+        }
         
         navigationController?.pushViewController(categoryListViewController, animated: true)
     }

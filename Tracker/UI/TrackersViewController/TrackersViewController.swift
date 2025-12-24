@@ -93,7 +93,7 @@ final class TrackersViewController: UIViewController {
     private lazy var trackersCollectionView = TrackersCollectionView(using: params, collectionView: collectionView)
     
     private var categories: [TrackerCategory] = [
-        TrackerCategory(title: "Важное", trackers: [])
+        TrackerCategory(title: "", trackers: [])
     ]
     
     // MARK: - Lifecycle
@@ -283,7 +283,7 @@ final class TrackersViewController: UIViewController {
         let storedCategories = dataProvider.getAllCategories()
         
         if storedCategories.isEmpty {
-            categories = [TrackerCategory(title: "Важное", trackers: [])]
+            categories = [TrackerCategory(title: "", trackers: [])]
         } else {
             categories = storedCategories
         }
