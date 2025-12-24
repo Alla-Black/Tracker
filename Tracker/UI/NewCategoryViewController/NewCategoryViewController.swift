@@ -1,6 +1,10 @@
 import UIKit
 
 final class NewCategoryViewController: UIViewController {
+    // MARK: - Public Properties
+    
+    var onCategoryCreated: Binding<String>?
+    
     // MARK: - Private Properties
     
     private lazy var textField: UITextField = {
@@ -91,6 +95,9 @@ final class NewCategoryViewController: UIViewController {
             ]
         )
         textField.attributedPlaceholder = placeholder
+        
+        navigationItem.hidesBackButton = true
+        navigationItem.leftBarButtonItem = nil
     }
     
     private func setupConstraints() {
@@ -115,7 +122,7 @@ final class NewCategoryViewController: UIViewController {
     }
     
     @objc private func doneButtonTapped() {
-
+        viewModel.doneButtonTapped()
     }
     
     @objc private func textDidChange() {
@@ -139,6 +146,13 @@ final class NewCategoryViewController: UIViewController {
             guard let self else { return }
             
             self.applyButtonState(isEnabled: isValid)
+        }
+        
+        viewModel.onCategoryCreated = { [weak self] categoryTitle in
+            guard let self else { return }
+            
+            self.onCategoryCreated?(categoryTitle)
+            navigationController?.popViewController(animated: true)
         }
     }
 }

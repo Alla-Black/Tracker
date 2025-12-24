@@ -188,6 +188,17 @@ final class CategoryListViewController: UIViewController {
     
     @objc
     private func addCategoryButtonTapped() {
+        openNewCategoryScreen()
+    }
+    
+    private func openNewCategoryScreen() {
+        let newCategoryViewController = NewCategoryViewController()
         
+        newCategoryViewController.onCategoryCreated = { [weak self] title in
+            guard let self else { return }
+            self.viewModel.addCategory(with: title)
+        }
+        
+        navigationController?.pushViewController(newCategoryViewController, animated: true)
     }
 }

@@ -3,8 +3,12 @@ import Foundation
 final class NewCategoryViewModel {
     // MARK: - Public Properties
     
-    private(set) var categoryTitle: String = ""
     var onFormValidChanged: Binding<Bool>?
+    var onCategoryCreated: Binding<String>?
+    
+    // MARK: - Private Properties
+    
+    private(set) var categoryTitle: String = ""
     
     // MARK: - Public Methods
     
@@ -15,4 +19,8 @@ final class NewCategoryViewModel {
         onFormValidChanged?(isValid)
     }
     
+    func doneButtonTapped() {
+        guard !categoryTitle.isEmpty else { return }
+            onCategoryCreated?(categoryTitle)
+    }
 }

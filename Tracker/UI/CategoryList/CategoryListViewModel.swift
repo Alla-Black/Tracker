@@ -32,4 +32,8 @@ final class CategoryListViewModel {
     func categoryTitle(at index: Int) -> String {
         categories[index]
     }
+    
+    func addCategory(with title: String) {
+        categories.append(title)
+    }
 }
