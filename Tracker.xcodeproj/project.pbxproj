@@ -23,6 +23,7 @@
 		4D9B6FA12EF9F28C00740CCE /* CategoryListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9B6FA02EF9F28C00740CCE /* CategoryListViewModel.swift */; };
 		4D9B6FA32EF9F74500740CCE /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9B6FA22EF9F74500740CCE /* Binding.swift */; };
 		4D9B6FA52EFABDBC00740CCE /* CategoryListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9B6FA42EFABDBC00740CCE /* CategoryListCell.swift */; };
+		4D9B6FA92EFC412D00740CCE /* NewCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9B6FA82EFC412D00740CCE /* NewCategoryViewController.swift */; };
 		4DBF54F92ECB583A00076E0F /* UISearchBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBF54F32ECB583A00076E0F /* UISearchBarDelegate.swift */; };
 		4DBF55A52ECF46E000076E0F /* TrackerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBF55A12ECF46E000076E0F /* TrackerCollectionViewCell.swift */; };
 		4DBF55A62ECF46E000076E0F /* CollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBF55A22ECF46E000076E0F /* CollectionDataSource.swift */; };
@@ -85,6 +86,7 @@
 		4D9B6FA02EF9F28C00740CCE /* CategoryListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryListViewModel.swift; sourceTree = "<group>"; };
 		4D9B6FA22EF9F74500740CCE /* Binding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
 		4D9B6FA42EFABDBC00740CCE /* CategoryListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryListCell.swift; sourceTree = "<group>"; };
+		4D9B6FA82EFC412D00740CCE /* NewCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCategoryViewController.swift; sourceTree = "<group>"; };
 		4DBF54F32ECB583A00076E0F /* UISearchBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UISearchBarDelegate.swift; sourceTree = "<group>"; };
 		4DBF55A12ECF46E000076E0F /* TrackerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCollectionViewCell.swift; sourceTree = "<group>"; };
 		4DBF55A22ECF46E000076E0F /* CollectionDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDataSource.swift; sourceTree = "<group>"; };
@@ -268,6 +270,7 @@
 			isa = PBXGroup;
 			children = (
 				4D9B6FA22EF9F74500740CCE /* Binding.swift */,
+				4D9B6FA72EFC411800740CCE /* NewCategoryViewController */,
 				4D9B6F952EF442C100740CCE /* CategoryList */,
 				4D9B6F7C2EF2FF5100740CCE /* OnboardingViewController */,
 				4DBF55D62ED39A0800076E0F /* ScheduleViewController */,
@@ -305,6 +308,14 @@
 				4D9B6FA42EFABDBC00740CCE /* CategoryListCell.swift */,
 			);
 			path = CategoryListTableView;
+			sourceTree = "<group>";
+		};
+		4D9B6FA72EFC411800740CCE /* NewCategoryViewController */ = {
+			isa = PBXGroup;
+			children = (
+				4D9B6FA82EFC412D00740CCE /* NewCategoryViewController.swift */,
+			);
+			path = NewCategoryViewController;
 			sourceTree = "<group>";
 		};
 		4DBF55A42ECF46E000076E0F /* TrackersCollectionView */ = {
@@ -537,6 +548,7 @@
 				4DBF55DD2ED3ABCB00076E0F /* ScheduleCell.swift in Sources */,
 				4D9B6F9F2EF9D97A00740CCE /* CategoryListTableView.swift in Sources */,
 				4D9B6FA52EFABDBC00740CCE /* CategoryListCell.swift in Sources */,
+				4D9B6FA92EFC412D00740CCE /* NewCategoryViewController.swift in Sources */,
 				4DEEFE952EDA3B3A00EB43D7 /* EmojiColorViewCell.swift in Sources */,
 				4D14D6532EC4B18400289E5F /* DatePickerView.swift in Sources */,
 				4DBF55CA2ED0ED3000076E0F /* TrackerSettingsCell.swift in Sources */,

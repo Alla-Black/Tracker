@@ -1,10 +1,6 @@
 import UIKit
 
 final class CategoryListViewController: UIViewController {
-    // MARK: - Public Properties
-    
-    
-    
     // MARK: - Private Properties
     
     private lazy var stubImage: UIImageView = {
