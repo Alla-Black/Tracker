@@ -39,6 +39,8 @@ final class NewCategoryViewController: UIViewController {
         return button
     }()
     
+    private let viewModel = NewCategoryViewModel()
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -47,7 +49,8 @@ final class NewCategoryViewController: UIViewController {
         addSubviews()
         configureAppearance()
         setupConstraints()
-        updateCreateButtonState()
+        bindViewModel()
+        textDidChange()
     }
     
     // MARK: - Private Methods
@@ -90,8 +93,6 @@ final class NewCategoryViewController: UIViewController {
         textField.attributedPlaceholder = placeholder
     }
     
-    // MARK: - Setup Constraints
-    
     private func setupConstraints() {
         [textField, textFieldContainer, doneButton].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         
@@ -118,23 +119,26 @@ final class NewCategoryViewController: UIViewController {
     }
     
     @objc private func textDidChange() {
-        updateCreateButtonState()
+        viewModel.updateCategoryTitle(with: textField.text)
     }
     
-    // MARK: - UpdateCreateButtonState
-    
-    private func updateCreateButtonState() {
-        let text = textField.text?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) ?? "" // берем текст из поля, убираем по бокам пробелы и переносы
-        let isFormValid = !text.isEmpty
+    private func applyButtonState(isEnabled: Bool) {
+        doneButton.isEnabled = isEnabled
         
-        doneButton.isEnabled = isFormValid
-        
-        if isFormValid {
+        if isEnabled {
             doneButton.backgroundColor = .blackYP
             doneButton.setTitleColor(.whiteYP, for: .normal)
         } else {
             doneButton.backgroundColor = .grayStatic
             doneButton.setTitleColor(.whiteStatic, for: .normal)
+        }
+    }
+    
+    private func bindViewModel() {
+        viewModel.onFormValidChanged = { [weak self] isValid in
+            guard let self else { return }
+            
+            self.applyButtonState(isEnabled: isValid)
         }
     }
 }

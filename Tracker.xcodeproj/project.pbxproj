@@ -47,6 +47,7 @@
 		4DEEFF532EDDC0A100EB43D7 /* EmojiColorDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEEFF522EDDC0A100EB43D7 /* EmojiColorDataSource.swift */; };
 		4DEEFF802EDF711100EB43D7 /* TrackerCoreDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4DEEFF7E2EDF711100EB43D7 /* TrackerCoreDataModel.xcdatamodeld */; };
 		4DEEFF822EDF77FB00EB43D7 /* WeekdayValueTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEEFF812EDF77FB00EB43D7 /* WeekdayValueTransformer.swift */; };
+		4DFB94932EFC6BCF00E8CC55 /* NewCategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFB94922EFC6BCF00E8CC55 /* NewCategoryViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -110,6 +111,7 @@
 		4DEEFF522EDDC0A100EB43D7 /* EmojiColorDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiColorDataSource.swift; sourceTree = "<group>"; };
 		4DEEFF7F2EDF711100EB43D7 /* TrackerCoreDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrackerCoreDataModel.xcdatamodel; sourceTree = "<group>"; };
 		4DEEFF812EDF77FB00EB43D7 /* WeekdayValueTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekdayValueTransformer.swift; sourceTree = "<group>"; };
+		4DFB94922EFC6BCF00E8CC55 /* NewCategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCategoryViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -314,6 +316,7 @@
 			isa = PBXGroup;
 			children = (
 				4D9B6FA82EFC412D00740CCE /* NewCategoryViewController.swift */,
+				4DFB94922EFC6BCF00E8CC55 /* NewCategoryViewModel.swift */,
 			);
 			path = NewCategoryViewController;
 			sourceTree = "<group>";
@@ -575,6 +578,7 @@
 				4D0B9D5B2EE09CA600C7BC48 /* ColorValueTransformer.swift in Sources */,
 				4D0B9D632EE0A23600C7BC48 /* TrackerRecordStore.swift in Sources */,
 				4D9B6FA12EF9F28C00740CCE /* CategoryListViewModel.swift in Sources */,
+				4DFB94932EFC6BCF00E8CC55 /* NewCategoryViewModel.swift in Sources */,
 				4DBF55D72ED39A0800076E0F /* ScheduleViewController.swift in Sources */,
 				4D9B6F7F2EF3346200740CCE /* PageViewController.swift in Sources */,
 				4DEEFF822EDF77FB00EB43D7 /* WeekdayValueTransformer.swift in Sources */,
