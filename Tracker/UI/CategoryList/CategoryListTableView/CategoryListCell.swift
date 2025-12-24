@@ -9,6 +9,7 @@ final class CategoryListCell: UITableViewCell {
     
     private let categoryLabel = UILabel()
     private let separatorView = UIView()
+    private let checkMark = UIImageView(image: UIImage(resource: .checkMark))
     
     // MARK: - Initializers
     
@@ -34,10 +35,15 @@ final class CategoryListCell: UITableViewCell {
         separatorView.isHidden = !isVisible
     }
     
+    func setSelectedState(_ isSelected: Bool) {
+        checkMark.isHidden = !isSelected
+        
+    }
+    
     // MARK: - Private Methods
     
     private func setupUI() {
-        contentView.addSubviews([categoryLabel, separatorView])
+        contentView.addSubviews([categoryLabel, separatorView, checkMark])
         
         backgroundColor = .clear
         contentView.backgroundColor = .clear
@@ -47,16 +53,24 @@ final class CategoryListCell: UITableViewCell {
         categoryLabel.textAlignment = .left
         
         separatorView.backgroundColor = .grayStatic
+        
+        checkMark.tintColor = .blueStatic
+        checkMark.isHidden = true
     }
     
     private func setupLayout() {
-        [categoryLabel, separatorView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        [categoryLabel, separatorView, checkMark].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         
         NSLayoutConstraint.activate([
             
             categoryLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            categoryLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            categoryLabel.trailingAnchor.constraint(lessThanOrEqualTo:  checkMark.leadingAnchor, constant: -1),
             categoryLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            
+            checkMark.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            checkMark.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            checkMark.heightAnchor.constraint(equalToConstant: 24),
+            checkMark.widthAnchor.constraint(equalToConstant: 24),
             
             separatorView.heightAnchor.constraint(equalToConstant: 0.5),
             separatorView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),

@@ -19,6 +19,8 @@ final class CategoryListViewModel {
         }
     }
     
+    private var selectedCategoryIndex: Int?
+    
     // MARK: - Public Methods
     
     func viewDidLoad() {
@@ -35,5 +37,14 @@ final class CategoryListViewModel {
     
     func addCategory(with title: String) {
         categories.append(title)
+    }
+    
+    func selectCategory(at index: Int) {
+        selectedCategoryIndex = index
+        onCategoriesChanged?(categories)
+    }
+    
+    func isSelectedCategory(at index: Int) -> Bool {
+        selectedCategoryIndex == index
     }
 }

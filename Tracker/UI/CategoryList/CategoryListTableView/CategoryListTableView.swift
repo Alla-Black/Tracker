@@ -42,7 +42,10 @@ extension CategoryListTableView: UITableViewDataSource {
         cell.configure(with: title)
         
         let isLastRow = indexPath.row == viewModel.numberOfCategories() - 1 // текущая строка — последняя?
+        let isSelected = viewModel.isSelectedCategory(at: index)
+        
         cell.setSeparatorVisible(!isLastRow)
+        cell.setSelectedState(isSelected)
         
         return cell
     }
@@ -54,5 +57,12 @@ extension CategoryListTableView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
         return 75
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedIndex = indexPath.row
+        viewModel.selectCategory(at: selectedIndex)
+        
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
