@@ -5,7 +5,7 @@ import CoreData
 
 protocol TrackerStoreProtocol {
     var context: NSManagedObjectContext { get }
-    func add(_ tracker: Tracker) throws
+    func add(_ tracker: Tracker, categoryTitle: String) throws
     func delete(_ trackerCoreData: TrackerCoreData) throws
     func makeTracker(from object: TrackerCoreData) -> Tracker
 }
@@ -26,7 +26,7 @@ final class TrackerStore: TrackerStoreProtocol {
     
     // MARK: - Public Methods
     
-    func add(_ tracker: Tracker) throws {
+    func add(_ tracker: Tracker, categoryTitle: String) throws {
         let object = TrackerCoreData(context: context)
         
         object.id = tracker.id
@@ -35,6 +35,22 @@ final class TrackerStore: TrackerStoreProtocol {
         object.color = tracker.color
         object.schedule = tracker.schedule as NSObject
         
+        let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
+        request.predicate = NSPredicate(format: "title == %@", categoryTitle)
+        request.fetchLimit = 1
+        
+        let fetchedCategories = try context.fetch(request)
+       
+        let category: TrackerCategoryCoreData
+        if let existingCategory = fetchedCategories.first {
+            category = existingCategory
+        } else {
+            let newCategory = TrackerCategoryCoreData(context: context)
+            newCategory.title = categoryTitle
+            category = newCategory
+        }
+        
+        object.category = category
         try context.save()
     }
     

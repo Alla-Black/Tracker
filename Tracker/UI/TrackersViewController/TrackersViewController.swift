@@ -239,8 +239,10 @@ final class TrackersViewController: UIViewController {
         addTracker.onCreateTracker = { [weak self] tracker in
             guard let self else { return }
             
+            let categoryTitle = addTracker.selectedCategory.title
+            
             do {
-                try self.dataProvider.add(tracker)
+                try self.dataProvider.add(tracker, categoryTitle: categoryTitle)
             } catch {
                 assertionFailure("Не удалось сохранить трекер: \(error)")
             }

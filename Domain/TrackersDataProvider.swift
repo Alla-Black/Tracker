@@ -22,7 +22,7 @@ protocol TrackersDataProviderProtocol: AnyObject {
     
     func tracker(at indexPath: IndexPath) -> Tracker
     
-    func add(_ tracker: Tracker) throws
+    func add(_ tracker: Tracker, categoryTitle: String) throws
     func delete(at indexPath: IndexPath) throws
     
     func isTrackerCompleted(_ tracker: Tracker, on date: Date) -> Bool
@@ -118,8 +118,8 @@ extension TrackersDataProvider: TrackersDataProviderProtocol {
         return trackerStore.makeTracker(from: object)
     }
     
-    func add(_ tracker: Tracker) throws {
-        try trackerStore.add(tracker)
+    func add(_ tracker: Tracker, categoryTitle: String) throws {
+        try trackerStore.add(tracker, categoryTitle: categoryTitle)
     }
     
     func delete(at indexPath: IndexPath) throws {
