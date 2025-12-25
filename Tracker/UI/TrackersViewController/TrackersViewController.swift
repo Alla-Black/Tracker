@@ -92,9 +92,7 @@ final class TrackersViewController: UIViewController {
     
     private lazy var trackersCollectionView = TrackersCollectionView(using: params, collectionView: collectionView)
     
-    private var categories: [TrackerCategory] = [
-        TrackerCategory(title: "", trackers: [])
-    ]
+    private var categories: [TrackerCategory] = []
     
     // MARK: - Lifecycle
     
@@ -283,13 +281,7 @@ final class TrackersViewController: UIViewController {
         let currentDate = datePickerView.selectedDate
         
         let storedCategories = dataProvider.getAllCategories()
-        
-        if storedCategories.isEmpty {
-            categories = [TrackerCategory(title: "", trackers: [])]
-        } else {
-            categories = storedCategories
-        }
-        
+        categories = storedCategories
         applyFilter(for: currentDate)
     }
 }

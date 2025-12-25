@@ -4,8 +4,8 @@ import CoreData
 // MARK: - TrackersStoreUpdate
 
 struct TrackersStoreUpdate {
-    let insertedIndexes: IndexSet
-    let deletedIndexes: IndexSet
+    let insertedIndexPaths: [IndexPath]
+    let deletedIndexPaths: [IndexPath]
 }
 
 // MARK: - TrackersDataProviderDelegate
@@ -44,8 +44,8 @@ final class TrackersDataProvider: NSObject {
     private let trackerStore: TrackerStoreProtocol
     private let recordStore: TrackerRecordStoreProtocol
     
-    private var insertedIndexes: IndexSet?
-    private var deletedIndexes: IndexSet?
+    private var insertedIndexPaths: [IndexPath]?
+    private var deletedIndexPaths: [IndexPath]?
     
     private weak var delegate: TrackersDataProviderDelegate?
     
@@ -94,32 +94,16 @@ final class TrackersDataProvider: NSObject {
     // MARK: - Public Methods
     
     func getAllCategories() -> [TrackerCategory] {
-        let objects = fetchedResultsController.fetchedObjects ?? []
-        guard !objects.isEmpty else { return [] }
+        let sections = fetchedResultsController.sections ?? []
+        guard !sections.isEmpty else { return [] }
         
-        // Группируем трекеры по названию категории
-        var grouped: [String: [Tracker]] = [:]
-        
-        for object in objects {
-            // Берём title категории из relationship
-            let title = (object.category?.title?.isEmpty == false)
-            ? object.category!.title!
-            : "Без категории"
+        return sections.map { section in
+            let title = section.name
             
-            // Преобразуем CoreData-объект в доменную модель Tracker
-            let tracker = trackerStore.makeTracker(from: object)
+            let objects = section.objects as? [TrackerCoreData] ?? []
+            let trackers = objects.map { trackerStore.makeTracker(from: $0) }
             
-            // Кладём в словарь
-            grouped[title, default: []].append(tracker)
-        }
-        
-        // Превращаем словарь в массив доменных категорий
-        let categories = grouped.map { (title, trackers) in
-            TrackerCategory(title: title, trackers: trackers)
-        }
-        
-        // Сортируем категории по title, чтобы секции были стабильны
-        return categories.sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending
+            return TrackerCategory(title: title, trackers: trackers)
         }
     }
 }
@@ -174,8 +158,8 @@ extension TrackersDataProvider: NSFetchedResultsControllerDelegate {
     func controllerWillChangeContent(
         _ controller: NSFetchedResultsController<NSFetchRequestResult>
     ) {
-        insertedIndexes = IndexSet()
-        deletedIndexes = IndexSet()
+        insertedIndexPaths = []
+        deletedIndexPaths = []
     }
     
     func controller(
@@ -188,11 +172,11 @@ extension TrackersDataProvider: NSFetchedResultsControllerDelegate {
         switch type {
         case .insert:
             if let newIndexPath = newIndexPath {
-                insertedIndexes?.insert(newIndexPath.item)
+                insertedIndexPaths?.append(newIndexPath)
             }
         case .delete:
             if let indexPath = indexPath {
-                deletedIndexes?.insert(indexPath.item)
+                deletedIndexPaths?.append(indexPath)
             }
         default:
             break
@@ -203,21 +187,21 @@ extension TrackersDataProvider: NSFetchedResultsControllerDelegate {
         _ controller: NSFetchedResultsController<NSFetchRequestResult>
     ) {
         guard
-            let inserted = insertedIndexes,
-            let deleted = deletedIndexes
+            let inserted = insertedIndexPaths,
+            let deleted = deletedIndexPaths
         else {
-            insertedIndexes = nil
-            deletedIndexes = nil
+            insertedIndexPaths = nil
+            deletedIndexPaths = nil
             return
         }
         
         let update = TrackersStoreUpdate(
-            insertedIndexes: inserted,
-            deletedIndexes: deleted
+            insertedIndexPaths: inserted,
+            deletedIndexPaths: deleted
         )
         delegate?.didUpdate(update)
         
-        insertedIndexes = nil
-        deletedIndexes = nil
+        insertedIndexPaths = nil
+        deletedIndexPaths = nil
     }
 }

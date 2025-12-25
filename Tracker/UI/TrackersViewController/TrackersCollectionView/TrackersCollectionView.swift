@@ -82,38 +82,6 @@ final class TrackersCollectionView: NSObject {
     func reloadItems(at indexPaths: [IndexPath]) {
         collectionView.reloadItems(at: indexPaths)
     }
-    
-    // Сейчас не используется: коллекция обновляется через applyFilter в контроллере.
-    // Оставлено временно на всякий случай
-    
-    /*
-    func addTracker(_ tracker: Tracker, to categoryIndex: Int) {
-        
-        guard categories.indices.contains(categoryIndex) else { return }
-        
-        let oldCategory = categories[categoryIndex]
-        let newTrackers = oldCategory.trackers + [tracker]
-        
-        let updatedCategory = TrackerCategory(
-            title: oldCategory.title,
-            trackers: newTrackers
-            )
-        
-        categories[categoryIndex] = updatedCategory
-        
-        let itemIndex = newTrackers.count - 1
-        let indexPath = IndexPath(item: itemIndex, section: categoryIndex)
-        
-        collectionView.performBatchUpdates({
-            collectionView.insertItems(at: [indexPath])
-        }, completion: nil)
-    }
-     */
-    
-    func addCategory(_ category: TrackerCategory) {
-        // TODO: в след. спринте реализовать функцию добавления новых категорий (категории)
-    }
-    
 }
 
 // MARK: - Extension TrackerCellDelegate
