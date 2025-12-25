@@ -21,6 +21,7 @@ final class NewCategoryViewModel {
     
     func doneButtonTapped() {
         guard !categoryTitle.isEmpty else { return }
-            onCategoryCreated?(categoryTitle)
+        
+        onCategoryCreated?(categoryTitle)
     }
 }

@@ -350,7 +350,8 @@ final class AddTrackerViewController: UIViewController {
         let hasEmoji = selectedEmoji != nil
         let hasColor = selectedColor != nil
         let hasSchedule = !selectedWeekdays.isEmpty
-        let isFormValid = isTitleValid && hasSchedule && hasColor && hasEmoji
+        let hasCategory = !selectedCategory.title.isEmpty
+        let isFormValid = isTitleValid && hasSchedule && hasColor && hasEmoji && hasCategory
         
         createButton.isEnabled = isFormValid
         
@@ -409,7 +410,9 @@ final class AddTrackerViewController: UIViewController {
         
         let trackerCategoryStore = appDelegate.trackerCategoryStore
         
-        let categoryListViewController = CategoryListViewController()
+        let viewModel = CategoryListViewModel(trackerCategoryStore: trackerCategoryStore)
+        
+        let categoryListViewController = CategoryListViewController(viewModel: viewModel)
         
         categoryListViewController.preselectedCategoryTitle = selectedCategory.title
         
