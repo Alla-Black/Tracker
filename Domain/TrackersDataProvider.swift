@@ -54,20 +54,21 @@ final class TrackersDataProvider: NSObject {
     private lazy var fetchedResultsController: NSFetchedResultsController<TrackerCoreData> = {
         let request = TrackerCoreData.fetchRequest()
         request.sortDescriptors = [
+            NSSortDescriptor(key: "category.title", ascending: true),
             NSSortDescriptor(key: "name", ascending: true)
         ]
         
         let fetchedResultsController = NSFetchedResultsController(
             fetchRequest: request,
             managedObjectContext: context,
-            sectionNameKeyPath: nil,
+            sectionNameKeyPath: "category.title",
             cacheName: nil
         )
         
         fetchedResultsController.delegate = self
         
         return fetchedResultsController
-            
+        
     }()
     
     // MARK: - Initializers
@@ -94,11 +95,32 @@ final class TrackersDataProvider: NSObject {
     
     func getAllCategories() -> [TrackerCategory] {
         let objects = fetchedResultsController.fetchedObjects ?? []
-        let trackers = objects.compactMap { trackerStore.makeTracker(from: $0) }
+        guard !objects.isEmpty else { return [] }
         
-        guard !trackers.isEmpty else { return [] }
+        // Группируем трекеры по названию категории
+        var grouped: [String: [Tracker]] = [:]
         
-        return [TrackerCategory(title: "", trackers: trackers)]
+        for object in objects {
+            // Берём title категории из relationship
+            let title = (object.category?.title?.isEmpty == false)
+            ? object.category!.title!
+            : "Без категории"
+            
+            // Преобразуем CoreData-объект в доменную модель Tracker
+            let tracker = trackerStore.makeTracker(from: object)
+            
+            // Кладём в словарь
+            grouped[title, default: []].append(tracker)
+        }
+        
+        // Превращаем словарь в массив доменных категорий
+        let categories = grouped.map { (title, trackers) in
+            TrackerCategory(title: title, trackers: trackers)
+        }
+        
+        // Сортируем категории по title, чтобы секции были стабильны
+        return categories.sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending
+        }
     }
 }
 
