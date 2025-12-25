@@ -405,6 +405,10 @@ final class AddTrackerViewController: UIViewController {
     // MARK: - OpenCategoryScreen
     
     private func openCategoryScreen() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        
+        let trackerCategoryStore = appDelegate.trackerCategoryStore
+        
         let categoryListViewController = CategoryListViewController()
         
         categoryListViewController.preselectedCategoryTitle = selectedCategory.title

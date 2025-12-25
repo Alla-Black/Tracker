@@ -1,8 +1,16 @@
 import CoreData
 
+// MARK: - TrackerCategoryStoreProtocol
+
+protocol TrackerCategoryStoreProtocol {
+    func addCategory(title: String) throws
+    func delete(_ trackerCategoryCoreData: TrackerCategoryCoreData) throws
+    func fetchCategoryTitles() -> [String]
+}
+
 // MARK: - TrackerCategoryStore
 
-final class TrackerCategoryStore {
+final class TrackerCategoryStore: TrackerCategoryStoreProtocol {
     // MARK: - Private Properties
     
     private let context: NSManagedObjectContext

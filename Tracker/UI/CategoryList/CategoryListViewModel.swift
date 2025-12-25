@@ -22,10 +22,18 @@ final class CategoryListViewModel {
     
     private var selectedCategoryIndex: Int?
     
+    private let store: TrackerCategoryStoreProtocol
+    
+    // MARK: - Initializers
+    
+    init(trackerCategoryStore: TrackerCategoryStoreProtocol) {
+        self.store = trackerCategoryStore
+    }
+    
     // MARK: - Public Methods
     
     func viewDidLoad() {
-        categories = ["Дом", "Работа", "Привычки", "Спорт", "Самочувствие", "Животные", "Питание", "Сон", "Обучение"]
+        categories = store.fetchCategoryTitles()
     }
     
     func numberOfCategories() -> Int {
@@ -37,7 +45,12 @@ final class CategoryListViewModel {
     }
     
     func addCategory(with title: String) {
-        categories.append(title)
+        do {
+            try store.addCategory(title: title)
+            categories = store.fetchCategoryTitles()
+        } catch {
+            print(error)
+        }
     }
     
     func setSelectedCategory(with title: String?) {

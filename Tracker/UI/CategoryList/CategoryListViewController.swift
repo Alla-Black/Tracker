@@ -69,9 +69,20 @@ final class CategoryListViewController: UIViewController {
         CategoryListTableView(tableView: tableView, viewModel: viewModel)
     }()
     
-    private let viewModel = CategoryListViewModel()
+    private let viewModel: CategoryListViewModel
     
     private var tableContainerHeightConstraint: NSLayoutConstraint?
+    
+    // MARK: - Initializers
+    
+    init(viewModel: CategoryListViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Lifecycle
     
