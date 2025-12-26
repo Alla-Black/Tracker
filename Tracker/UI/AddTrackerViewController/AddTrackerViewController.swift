@@ -11,7 +11,7 @@ final class AddTrackerViewController: UIViewController {
     // MARK: - Private Properties
     
     private lazy var textField: UITextField = {
-        let textField = UITextField()
+        let textField = ClearButtonInsetTextField()
         textField.textAlignment = .left
         textField.textColor = .blackYP
         textField.clearButtonMode = .whileEditing
@@ -241,7 +241,7 @@ final class AddTrackerViewController: UIViewController {
             textFieldContainer.heightAnchor.constraint(equalToConstant: 75),
             
             textField.leadingAnchor.constraint(equalTo: textFieldContainer.leadingAnchor, constant: 16),
-            textField.trailingAnchor.constraint(equalTo: textFieldContainer.trailingAnchor, constant: -16),
+            textField.trailingAnchor.constraint(equalTo: textFieldContainer.trailingAnchor),
             textField.centerYAnchor.constraint(equalTo: textFieldContainer.centerYAnchor),
             
             limitLabel.centerXAnchor.constraint(equalTo: textFieldContainer.centerXAnchor),
