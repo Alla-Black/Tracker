@@ -92,9 +92,7 @@ final class TrackersViewController: UIViewController {
     
     private lazy var trackersCollectionView = TrackersCollectionView(using: params, collectionView: collectionView)
     
-    private var categories: [TrackerCategory] = [
-        TrackerCategory(title: "Важное", trackers: [])
-    ]
+    private var categories: [TrackerCategory] = []
     
     // MARK: - Lifecycle
     
@@ -239,8 +237,10 @@ final class TrackersViewController: UIViewController {
         addTracker.onCreateTracker = { [weak self] tracker in
             guard let self else { return }
             
+            let categoryTitle = addTracker.selectedCategory.title
+            
             do {
-                try self.dataProvider.add(tracker)
+                try self.dataProvider.add(tracker, categoryTitle: categoryTitle)
             } catch {
                 assertionFailure("Не удалось сохранить трекер: \(error)")
             }
@@ -281,13 +281,7 @@ final class TrackersViewController: UIViewController {
         let currentDate = datePickerView.selectedDate
         
         let storedCategories = dataProvider.getAllCategories()
-        
-        if storedCategories.isEmpty {
-            categories = [TrackerCategory(title: "Важное", trackers: [])]
-        } else {
-            categories = storedCategories
-        }
-        
+        categories = storedCategories
         applyFilter(for: currentDate)
     }
 }

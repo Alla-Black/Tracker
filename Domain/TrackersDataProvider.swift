@@ -4,8 +4,8 @@ import CoreData
 // MARK: - TrackersStoreUpdate
 
 struct TrackersStoreUpdate {
-    let insertedIndexes: IndexSet
-    let deletedIndexes: IndexSet
+    let insertedIndexPaths: [IndexPath]
+    let deletedIndexPaths: [IndexPath]
 }
 
 // MARK: - TrackersDataProviderDelegate
@@ -22,7 +22,7 @@ protocol TrackersDataProviderProtocol: AnyObject {
     
     func tracker(at indexPath: IndexPath) -> Tracker
     
-    func add(_ tracker: Tracker) throws
+    func add(_ tracker: Tracker, categoryTitle: String) throws
     func delete(at indexPath: IndexPath) throws
     
     func isTrackerCompleted(_ tracker: Tracker, on date: Date) -> Bool
@@ -44,8 +44,8 @@ final class TrackersDataProvider: NSObject {
     private let trackerStore: TrackerStoreProtocol
     private let recordStore: TrackerRecordStoreProtocol
     
-    private var insertedIndexes: IndexSet?
-    private var deletedIndexes: IndexSet?
+    private var insertedIndexPaths: [IndexPath]?
+    private var deletedIndexPaths: [IndexPath]?
     
     private weak var delegate: TrackersDataProviderDelegate?
     
@@ -54,20 +54,21 @@ final class TrackersDataProvider: NSObject {
     private lazy var fetchedResultsController: NSFetchedResultsController<TrackerCoreData> = {
         let request = TrackerCoreData.fetchRequest()
         request.sortDescriptors = [
+            NSSortDescriptor(key: "category.title", ascending: true),
             NSSortDescriptor(key: "name", ascending: true)
         ]
         
         let fetchedResultsController = NSFetchedResultsController(
             fetchRequest: request,
             managedObjectContext: context,
-            sectionNameKeyPath: nil,
+            sectionNameKeyPath: "category.title",
             cacheName: nil
         )
         
         fetchedResultsController.delegate = self
         
         return fetchedResultsController
-            
+        
     }()
     
     // MARK: - Initializers
@@ -93,12 +94,17 @@ final class TrackersDataProvider: NSObject {
     // MARK: - Public Methods
     
     func getAllCategories() -> [TrackerCategory] {
-        let objects = fetchedResultsController.fetchedObjects ?? []
-        let trackers = objects.compactMap { trackerStore.makeTracker(from: $0) }
+        let sections = fetchedResultsController.sections ?? []
+        guard !sections.isEmpty else { return [] }
         
-        guard !trackers.isEmpty else { return [] }
-        
-        return [TrackerCategory(title: "Важное", trackers: trackers)]
+        return sections.map { section in
+            let title = section.name
+            
+            let objects = section.objects as? [TrackerCoreData] ?? []
+            let trackers = objects.map { trackerStore.makeTracker(from: $0) }
+            
+            return TrackerCategory(title: title, trackers: trackers)
+        }
     }
 }
 
@@ -118,8 +124,8 @@ extension TrackersDataProvider: TrackersDataProviderProtocol {
         return trackerStore.makeTracker(from: object)
     }
     
-    func add(_ tracker: Tracker) throws {
-        try trackerStore.add(tracker)
+    func add(_ tracker: Tracker, categoryTitle: String) throws {
+        try trackerStore.add(tracker, categoryTitle: categoryTitle)
     }
     
     func delete(at indexPath: IndexPath) throws {
@@ -152,8 +158,8 @@ extension TrackersDataProvider: NSFetchedResultsControllerDelegate {
     func controllerWillChangeContent(
         _ controller: NSFetchedResultsController<NSFetchRequestResult>
     ) {
-        insertedIndexes = IndexSet()
-        deletedIndexes = IndexSet()
+        insertedIndexPaths = []
+        deletedIndexPaths = []
     }
     
     func controller(
@@ -166,11 +172,11 @@ extension TrackersDataProvider: NSFetchedResultsControllerDelegate {
         switch type {
         case .insert:
             if let newIndexPath = newIndexPath {
-                insertedIndexes?.insert(newIndexPath.item)
+                insertedIndexPaths?.append(newIndexPath)
             }
         case .delete:
             if let indexPath = indexPath {
-                deletedIndexes?.insert(indexPath.item)
+                deletedIndexPaths?.append(indexPath)
             }
         default:
             break
@@ -181,21 +187,21 @@ extension TrackersDataProvider: NSFetchedResultsControllerDelegate {
         _ controller: NSFetchedResultsController<NSFetchRequestResult>
     ) {
         guard
-            let inserted = insertedIndexes,
-            let deleted = deletedIndexes
+            let inserted = insertedIndexPaths,
+            let deleted = deletedIndexPaths
         else {
-            insertedIndexes = nil
-            deletedIndexes = nil
+            insertedIndexPaths = nil
+            deletedIndexPaths = nil
             return
         }
         
         let update = TrackersStoreUpdate(
-            insertedIndexes: inserted,
-            deletedIndexes: deleted
+            insertedIndexPaths: inserted,
+            deletedIndexPaths: deleted
         )
         delegate?.didUpdate(update)
         
-        insertedIndexes = nil
-        deletedIndexes = nil
+        insertedIndexPaths = nil
+        deletedIndexPaths = nil
     }
 }

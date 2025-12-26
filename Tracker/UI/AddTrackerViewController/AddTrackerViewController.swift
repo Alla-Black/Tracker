@@ -6,12 +6,12 @@ final class AddTrackerViewController: UIViewController {
     
     var onCreateTracker: ((Tracker) -> Void)?
     
-    var selectedCategory: TrackerCategory = TrackerCategory(title: "Важное", trackers: [])
+    var selectedCategory: TrackerCategory = TrackerCategory(title: "", trackers: [])
     
     // MARK: - Private Properties
     
     private lazy var textField: UITextField = {
-        let textField = UITextField()
+        let textField = ClearButtonInsetTextField()
         textField.textAlignment = .left
         textField.textColor = .blackYP
         textField.clearButtonMode = .whileEditing
@@ -241,7 +241,7 @@ final class AddTrackerViewController: UIViewController {
             textFieldContainer.heightAnchor.constraint(equalToConstant: 75),
             
             textField.leadingAnchor.constraint(equalTo: textFieldContainer.leadingAnchor, constant: 16),
-            textField.trailingAnchor.constraint(equalTo: textFieldContainer.trailingAnchor, constant: -16),
+            textField.trailingAnchor.constraint(equalTo: textFieldContainer.trailingAnchor),
             textField.centerYAnchor.constraint(equalTo: textFieldContainer.centerYAnchor),
             
             limitLabel.centerXAnchor.constraint(equalTo: textFieldContainer.centerXAnchor),
@@ -309,9 +309,7 @@ final class AddTrackerViewController: UIViewController {
             switch index {
                 
             case 0:
-                print("Тап по строке Категория")
-                // TODO: открыть экран категорий
-                // self.openCategoryScreen()
+                self.openCategoryScreen()
                 
             case 1:
                 self.openScheduleScreen()
@@ -352,7 +350,8 @@ final class AddTrackerViewController: UIViewController {
         let hasEmoji = selectedEmoji != nil
         let hasColor = selectedColor != nil
         let hasSchedule = !selectedWeekdays.isEmpty
-        let isFormValid = isTitleValid && hasSchedule && hasColor && hasEmoji
+        let hasCategory = !selectedCategory.title.isEmpty
+        let isFormValid = isTitleValid && hasSchedule && hasColor && hasEmoji && hasCategory
         
         createButton.isEnabled = isFormValid
         
@@ -402,6 +401,30 @@ final class AddTrackerViewController: UIViewController {
         }
         
         navigationController?.pushViewController(scheduleViewController, animated: true)
+    }
+    
+    // MARK: - OpenCategoryScreen
+    
+    private func openCategoryScreen() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        
+        let trackerCategoryStore = appDelegate.trackerCategoryStore
+        
+        let viewModel = CategoryListViewModel(trackerCategoryStore: trackerCategoryStore)
+        
+        let categoryListViewController = CategoryListViewController(viewModel: viewModel)
+        
+        categoryListViewController.preselectedCategoryTitle = selectedCategory.title
+        
+        categoryListViewController.onCategoryPicked = { [weak self] title in
+            guard let self else { return }
+            
+            self.selectedCategory = TrackerCategory(title: title, trackers: [])
+            self.settingsTableView.updateCategorySubtitle(title)
+            self.updateCreateButtonState()
+        }
+        
+        navigationController?.pushViewController(categoryListViewController, animated: true)
     }
     
     // MARK: - UpdateScheduleSubtitle
