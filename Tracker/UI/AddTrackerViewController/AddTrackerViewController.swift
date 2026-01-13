@@ -1,5 +1,14 @@
 import UIKit
 
+// MARK: - Enum TrackerSettingsRow
+
+private enum TrackerSettingsRow: Int {
+    case category
+    case schedule
+}
+
+// MARK: - AddTrackerViewController
+
 final class AddTrackerViewController: UIViewController {
     
     // MARK: - Public Properties
@@ -304,18 +313,16 @@ final class AddTrackerViewController: UIViewController {
     
     private func setupTrackerSettingsTableView() {
         settingsTableView.onSelectRow = { [weak self ] index in
-            guard let self else { return }
+            guard
+                let self,
+            let row = TrackerSettingsRow(rawValue: index) else { return }
             
-            switch index {
-                
-            case 0:
+            switch row {
+            case .category:
                 self.openCategoryScreen()
                 
-            case 1:
+            case .schedule:
                 self.openScheduleScreen()
-                
-            default:
-                break
             }
         }
         
