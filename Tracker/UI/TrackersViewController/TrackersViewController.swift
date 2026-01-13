@@ -34,7 +34,7 @@ final class TrackersViewController: UIViewController {
     
     private lazy var titleNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Трекеры"
+        label.text = AppStrings.Trackers.navigationTitle
         label.textColor = UIColor(resource: .blackYP)
         label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
         label.textAlignment = .left
@@ -65,7 +65,7 @@ final class TrackersViewController: UIViewController {
     }()
     private lazy var stubLabel: UILabel = {
         let label = UILabel()
-        label.text = "Что будем отслеживать?"
+        label.text = AppStrings.Trackers.emptyStateTitle
         label.textColor = UIColor(resource: .blackYP)
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.textAlignment = .center
@@ -150,7 +150,7 @@ final class TrackersViewController: UIViewController {
         
         // searchBar
         let placeholder = NSAttributedString(
-            string: "Поиск",
+            string: AppStrings.Trackers.searchPlaceholder,
             attributes: [
                 .foregroundColor: UIColor(resource: .graySearch),
                 .font: UIFont.systemFont(ofSize: 17, weight: .regular)
