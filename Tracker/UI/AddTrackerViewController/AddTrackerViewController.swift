@@ -416,13 +416,10 @@ final class AddTrackerViewController: UIViewController {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
         let trackerCategoryStore = appDelegate.trackerCategoryStore
-        
         let viewModel = CategoryListViewModel(trackerCategoryStore: trackerCategoryStore)
-        
         let categoryListViewController = CategoryListViewController(viewModel: viewModel)
         
         categoryListViewController.preselectedCategoryTitle = selectedCategory.title
-        
         categoryListViewController.onCategoryPicked = { [weak self] title in
             guard let self else { return }
             

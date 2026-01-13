@@ -12,14 +12,34 @@ final class CategoryListTableView: NSObject {
     init(tableView: UITableView, viewModel: CategoryListViewModel) {
         self.viewModel = viewModel
         self.tableView = tableView
-        
         super.init()
         
-        tableView.register(CategoryListCell.self, forCellReuseIdentifier: CategoryListCell.reuseIdentifier)
-        
+        configureTableView()
+    }
+    
+    // MARK: - Private Methods
+
+    private func configureTableView() {
+        guard let tableView = tableView else { return }
+
+        registerCells(in: tableView)
+        setupAppearance(for: tableView)
+        setupDelegates(for: tableView)
+    }
+
+    private func registerCells(in tableView: UITableView) {
+        tableView.register(
+            CategoryListCell.self,
+            forCellReuseIdentifier: CategoryListCell.reuseIdentifier
+        )
+    }
+
+    private func setupDelegates(for tableView: UITableView) {
         tableView.dataSource = self
         tableView.delegate = self
-        
+    }
+
+    private func setupAppearance(for tableView: UITableView) {
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
     }
