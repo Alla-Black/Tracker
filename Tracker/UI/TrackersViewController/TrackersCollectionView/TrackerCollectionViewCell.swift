@@ -172,25 +172,11 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    // MARK: - Declension of the counter days
+    // MARK: - Day counter pluralization
     
     private func makeDaysText(from count: Int) -> String {
-        let lastTwo = count % 100
-        let last = count % 10
-        
-        let word: String
-        if lastTwo >= 11 && lastTwo <= 14 {
-            word = "дней"
-        } else if last == 1 {
-            word = "день"
-        } else if last >= 2 && last <= 4 {
-            word = "дня"
-        } else {
-            word = "дней"
-        }
-        
-        return "\(count) \(word)"
+       String.localizedStringWithFormat(
+            NSLocalizedString("trackers.daysCount", comment: ""), count
+        )
     }
-    
-    
 }
