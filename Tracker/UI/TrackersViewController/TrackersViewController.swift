@@ -107,6 +107,16 @@ final class TrackersViewController: UIViewController {
         reloadFromStore()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        AnalyticsService.shared.reportUIEvent(.open, screen: AnalyticsScreen.main)
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        AnalyticsService.shared.reportUIEvent(.close, screen: AnalyticsScreen.main)
+    }
+    
     // MARK: - Tracker completion helpers
     
     func normalizedDate(_ date: Date) -> Date {
@@ -228,6 +238,8 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc private func didTapAddTrackerButton() {
+        AnalyticsService.shared.reportUIEvent(.click, screen: AnalyticsScreen.main, item: AnalyticsItem.addTrack)
+        
         let addTracker = AddTrackerViewController()
         
         if let defaultCategory = categories.first {

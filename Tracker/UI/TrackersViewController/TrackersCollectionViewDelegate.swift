@@ -13,6 +13,8 @@ extension TrackersViewController: TrackersCollectionViewDelegate {
             return
         }
         
+        AnalyticsService.shared.reportUIEvent(.click, screen: AnalyticsScreen.main, item: AnalyticsItem.track)
+        
         do {
             try dataProvider.toggleRecord(for: tracker, on: selectedDate)
             reloadFromStore()

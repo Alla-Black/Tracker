@@ -53,6 +53,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         WeekdayValueTransformer.register()
         ColorValueTransformer.register()
         
+        AnalyticsService.activate()
+        
         return true
     }
 
