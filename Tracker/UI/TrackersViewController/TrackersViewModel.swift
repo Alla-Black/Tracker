@@ -11,6 +11,7 @@ final class TrackersViewModel {
     
     var onVisibleCategoriesChanged: (([TrackerCategory]) -> Void)?
     var onEmptyStateChanged: ((EmptyState) -> Void)?
+    var onFilterChanged: ((TrackersFilter) -> Void)?
     
     
     // MARK: - Private Properties
@@ -25,6 +26,8 @@ final class TrackersViewModel {
     private var allCategories: [TrackerCategory] = []
     private var selectedDate: Date = Date()
     private var searchText: String = ""
+    private var selectedFilter: TrackersFilter = .all
+    private var completedIDs: Set<UUID> = []
     
     // MARK: - Public Methods
     
@@ -43,15 +46,39 @@ final class TrackersViewModel {
         recalc()
     }
     
+    func setFilter(_ filter: TrackersFilter) {
+        selectedFilter = filter
+        onFilterChanged?(filter)
+        
+        if filter == .today {
+            setSelectedDate(Date())
+            return
+        }
+        
+        recalc()
+    }
+    
+    func setCompletedTrackerIDs(_ ids: Set<UUID>) {
+        completedIDs = ids
+        recalc()
+    }
+    
     // MARK: - Private Methods
     
     private func recalc() {
         let query = normalizedQuery(from: searchText)
+        
         let byDate = filterCategoriesByDate(allCategories, date: selectedDate)
-        let result = filterCategoriesBySearchText(byDate, query: query)
+        let byFilter = filterCategoriesByCompletion(byDate, filter: selectedFilter, completedIDs: completedIDs)
+        let result = filterCategoriesBySearchText(byFilter, query: query)
         
         visibleCategories = result
-        emptyState = makeEmptyState(query: query, visibleCategories: result)
+        emptyState = makeEmptyState(
+            query: query,
+            baseByDate: byDate,
+            visibleCategories: result,
+            filter: selectedFilter
+        )
     }
     
     private func filterCategoriesByDate(_ categories: [TrackerCategory], date: Date) -> [TrackerCategory] {
@@ -67,6 +94,33 @@ final class TrackersViewModel {
             .filter { !$0.trackers.isEmpty }
     }
     
+    private func filterCategoriesByCompletion(
+        _ categories: [TrackerCategory],
+        filter: TrackersFilter,
+        completedIDs: Set<UUID>
+    ) -> [TrackerCategory] {
+        switch filter {
+        case .all, .today:
+            return categories
+            
+        case .completed:
+            return categories
+                .map { category in
+                    let trackers = category.trackers.filter { completedIDs.contains($0.id) }
+                    return TrackerCategory(title: category.title, trackers: trackers)
+                }
+                .filter { !$0.trackers.isEmpty }
+            
+        case .uncompleted:
+            return categories
+                .map { category in
+                    let trackers = category.trackers.filter { !completedIDs.contains($0.id) }
+                    return TrackerCategory(title: category.title, trackers: trackers)
+                }
+                .filter { !$0.trackers.isEmpty }
+        }
+    }
+    
     private func filterCategoriesBySearchText(_ categories: [TrackerCategory], query: String) -> [TrackerCategory] {
         guard !query.isEmpty else { return categories }
         
@@ -80,13 +134,23 @@ final class TrackersViewModel {
             .filter { !$0.trackers.isEmpty }
     }
     
-    private func makeEmptyState(query: String, visibleCategories: [TrackerCategory]) -> EmptyState {
-        if !query.isEmpty && visibleCategories.isEmpty {
-            return .noResults
-        }
-        if visibleCategories.isEmpty {
+    private func makeEmptyState(
+        query: String,
+        baseByDate: [TrackerCategory],
+        visibleCategories: [TrackerCategory],
+        filter: TrackersFilter
+    ) -> EmptyState {
+        if baseByDate.isEmpty {
             return .emptyList
         }
+        
+        if visibleCategories.isEmpty {
+            if !query.isEmpty || filter.isActiveFilter {
+                return .noResults
+            }
+            return .emptyList
+        }
+        
         return .none
     }
     

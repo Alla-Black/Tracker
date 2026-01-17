@@ -9,6 +9,7 @@ protocol TrackerRecordStoreProtocol {
     func hasRecord(trackerId: UUID, date: Date) -> Bool
     func makeRecord(from object: TrackerRecordCoreData) -> TrackerRecord
     func completedCount(for trackerId: UUID) -> Int
+    func completedTrackerIDs(on date: Date) -> Set<UUID>
 }
 
 // MARK: - TrackerRecordStore
@@ -124,6 +125,31 @@ final class TrackerRecordStore: TrackerRecordStoreProtocol {
         } catch {
             assertionFailure("TrackerRecordStore error: failed to get completed count: \(error)")
             return 0
+        }
+    }
+    
+    func completedTrackerIDs(on date: Date) -> Set<UUID> {
+        let request = TrackerRecordCoreData.fetchRequest()
+        
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: date)
+        guard let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay) else {
+            return []
+        }
+        
+        request.predicate = NSPredicate(
+            format: "date >= %@ AND date < %@",
+            startOfDay as CVarArg,
+            endOfDay as CVarArg
+        )
+        
+        do {
+            let records = try context.fetch(request)
+            let ids = records.compactMap { $0.tracker?.id }
+            return Set(ids)
+        } catch {
+            assertionFailure("TrackerRecordStore: failed to fetch completed tracker ids: \(error)")
+            return []
         }
     }
     
