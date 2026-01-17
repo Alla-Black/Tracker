@@ -113,6 +113,18 @@ final class TrackersViewController: UIViewController {
         return collectionView
     }()
     
+    private lazy var filtersButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Фильтры", for: .normal)
+        button.setTitleColor(UIColor(resource: .whiteStatic), for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        button.backgroundColor = UIColor(resource: .blueStatic)
+        button.layer.cornerRadius = 16
+        button.clipsToBounds = true
+        button.addTarget(self, action: #selector(didTapFiltersButton), for: .touchUpInside)
+        return button
+    }()
+    
     private let stubContainer = UIView()
     private let titleContainer = UIView()
     
@@ -131,6 +143,7 @@ final class TrackersViewController: UIViewController {
        
         addSubviews()
         configureAppearance()
+        updateCollectionBottomInset()
         setupConstraints()
         setupDelegates()
         updateCancelButtonVisibility()
@@ -178,10 +191,10 @@ final class TrackersViewController: UIViewController {
         stubContainer.addSubviews([stubImage, stubLabel])
         
         view.addSubview(collectionView)
+        view.addSubview(filtersButton)
     }
     
     private func configureAppearance() {
-        // addTrackerButton
         var config = addTrackerButton.configuration ?? UIButton.Configuration.plain()
         let plusImage = UIImage(resource: .addTracker).withRenderingMode(.alwaysTemplate)
         config.image = plusImage
@@ -190,10 +203,16 @@ final class TrackersViewController: UIViewController {
         addTrackerButton.configuration = config
     }
     
+    private func updateCollectionBottomInset() {
+        let bottomInset: CGFloat = 16 + 50 + 16
+        collectionView.contentInset.bottom = bottomInset
+        collectionView.verticalScrollIndicatorInsets.bottom = bottomInset
+    }
+    
     // MARK: - Constraints
     
     private func setupConstraints() {
-        [titleContainer, titleNameLabel, addTrackerButton, searchTextField, cancelSearchButton, stubContainer, stubImage, stubLabel, datePickerView, collectionView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        [titleContainer, titleNameLabel, addTrackerButton, searchTextField, cancelSearchButton, stubContainer, stubImage, stubLabel, datePickerView, collectionView, filtersButton].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         
         NSLayoutConstraint.activate([
             titleContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -239,7 +258,12 @@ final class TrackersViewController: UIViewController {
             collectionView.topAnchor.constraint(equalTo: titleContainer.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            filtersButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            filtersButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            filtersButton.heightAnchor.constraint(equalToConstant: 50),
+            filtersButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 114)
         ])
         
         searchTrailingToContainer = searchTextField.trailingAnchor.constraint(equalTo: titleContainer.trailingAnchor, constant: -16)
@@ -281,6 +305,10 @@ final class TrackersViewController: UIViewController {
         navigationController.modalPresentationStyle = .pageSheet
         
         present(navigationController, animated: true)
+    }
+    
+    @objc private func didTapFiltersButton() {
+        // Шаг с модалкой FiltersVC сделаем следующим
     }
     
     // MARK: - Search UI helpers
@@ -326,16 +354,19 @@ final class TrackersViewController: UIViewController {
         case .none:
             stubContainer.isHidden = true
             collectionView.isHidden = false
+            filtersButton.isHidden = false
             
         case .emptyList:
             stubContainer.isHidden = false
             collectionView.isHidden = true
+            filtersButton.isHidden = true
             stubImage.image = UIImage(resource: .trackersPlaceholder)
             stubLabel.text = AppStrings.Trackers.emptyStateTitle
             
         case .noResults:
             stubContainer.isHidden = false
             collectionView.isHidden = true
+            filtersButton.isHidden = false
             stubImage.image = UIImage(resource: .notFound)
             stubLabel.text = "Ничего не найдено"
         }
