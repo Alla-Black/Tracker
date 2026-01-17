@@ -347,8 +347,10 @@ final class TrackersViewController: UIViewController {
         let storedCategories = dataProvider.getAllCategories()
         categories = storedCategories
         
+        let date = datePickerView.selectedDate
         viewModel.setCategories(storedCategories)
-        viewModel.setSelectedDate(datePickerView.selectedDate)
+        viewModel.setSelectedDate(date)
+        viewModel.setCompletedTrackerIDs(dataProvider.completedTrackerIDs(on: date))
     }
 }
 
@@ -365,5 +367,6 @@ extension TrackersViewController: TrackersDataProviderDelegate {
 extension TrackersViewController: DatePickerViewDelegate {
     func datePickerView(_ view: DatePickerView, didChangeDate date: Date) {
         viewModel.setSelectedDate(date)
+        viewModel.setCompletedTrackerIDs(dataProvider.completedTrackerIDs(on: date))
     }
 }
