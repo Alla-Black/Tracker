@@ -28,7 +28,7 @@ final class TrackersViewController: UIViewController {
             delegate: self
         )
     }()
- 
+    
     // MARK: - Private Properties
     
     private lazy var titleNameLabel: UILabel = {
@@ -140,7 +140,7 @@ final class TrackersViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+        
         addSubviews()
         configureAppearance()
         updateCollectionBottomInset()
@@ -155,7 +155,7 @@ final class TrackersViewController: UIViewController {
         super.viewDidAppear(animated)
         AnalyticsService.shared.reportUIEvent(.open, screen: AnalyticsScreen.main)
     }
-
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         AnalyticsService.shared.reportUIEvent(.close, screen: AnalyticsScreen.main)
@@ -233,7 +233,7 @@ final class TrackersViewController: UIViewController {
             addTrackerButton.leadingAnchor.constraint(equalTo: titleContainer.leadingAnchor, constant: 16),
             
             searchTextField.leadingAnchor.constraint(equalTo: titleContainer.leadingAnchor, constant: 16),
-           
+            
             searchTextField.topAnchor.constraint(equalTo: titleNameLabel.bottomAnchor, constant: 7),
             searchTextField.heightAnchor.constraint(equalToConstant: 36),
             
@@ -308,7 +308,26 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc private func didTapFiltersButton() {
-        // Шаг с модалкой FiltersVC сделаем следующим
+        let current = viewModel.currentFilter
+        
+        let filtersVM = FiltersViewModel(selectedFilter: current)
+        let filtersVC = FiltersViewController(viewModel: filtersVM)
+        
+        filtersVC.onSelectFilter = { [weak self] filter in
+            guard let self else { return }
+            
+            self.viewModel.setFilter(filter)
+            
+            guard filter != .today else { return }
+            
+            let date = self.datePickerView.selectedDate
+            let ids = self.dataProvider.completedTrackerIDs(on: date)
+            self.viewModel.setCompletedTrackerIDs(ids)
+        }
+        
+        let nav = UINavigationController(rootViewController: filtersVC)
+        nav.modalPresentationStyle = .pageSheet
+        present(nav, animated: true)
     }
     
     // MARK: - Search UI helpers
@@ -347,6 +366,30 @@ final class TrackersViewController: UIViewController {
         viewModel.onEmptyStateChanged = { [weak self] state in
             self?.applyEmptyState(state)
         }
+        
+        viewModel.onFilterChanged = { [weak self] filter in
+            guard let self else { return }
+            
+            self.applyFilterButtonStyle(isActive: filter.isActiveFilter)
+            
+            guard filter == .today else { return }
+            
+            let today = Date()
+            self.datePickerView.setSelectedDate(today, sendDelegate: false)
+            
+            let ids = self.dataProvider.completedTrackerIDs(on: today)
+            self.viewModel.setCompletedTrackerIDs(ids)
+        }
+        
+        applyFilterButtonStyle(isActive: viewModel.currentFilter.isActiveFilter)
+    }
+    
+    private func applyFilterButtonStyle(isActive: Bool) {
+        let titleColor: UIColor = isActive
+        ? UIColor(resource: .redStatic)
+        : UIColor(resource: .whiteStatic)
+        
+        filtersButton.setTitleColor(titleColor, for: .normal)
     }
     
     private func applyEmptyState(_ state: TrackersViewModel.EmptyState) {

@@ -13,6 +13,8 @@ final class TrackersViewModel {
     var onEmptyStateChanged: ((EmptyState) -> Void)?
     var onFilterChanged: ((TrackersFilter) -> Void)?
     
+    var currentFilter: TrackersFilter { selectedFilter }
+    var currentDate: Date { selectedDate }
     
     // MARK: - Private Properties
     
