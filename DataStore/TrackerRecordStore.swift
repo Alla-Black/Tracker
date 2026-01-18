@@ -10,6 +10,7 @@ protocol TrackerRecordStoreProtocol {
     func makeRecord(from object: TrackerRecordCoreData) -> TrackerRecord
     func completedCount(for trackerId: UUID) -> Int
     func completedTrackerIDs(on date: Date) -> Set<UUID>
+    func totalRecordsCount() -> Int
 }
 
 // MARK: - TrackerRecordStore
@@ -150,6 +151,18 @@ final class TrackerRecordStore: TrackerRecordStoreProtocol {
         } catch {
             assertionFailure("TrackerRecordStore: failed to fetch completed tracker ids: \(error)")
             return []
+        }
+    }
+    
+    func totalRecordsCount() -> Int {
+        let request = TrackerRecordCoreData.fetchRequest()
+        
+        do {
+            let count = try context.count(for: request)
+            return count
+        } catch {
+            assertionFailure("TrackerRecordStore error: failed to get total records count: \(error)")
+            return 0
         }
     }
     
