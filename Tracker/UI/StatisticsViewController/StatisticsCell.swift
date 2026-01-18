@@ -1,11 +1,11 @@
 import UIKit
 
 final class StatisticsCell: UITableViewCell {
-
+    
     static let reuseIdentifier = "StatisticsCell"
-
-   // MARK: - Private Properties
-
+    
+    // MARK: - Private Properties
+    
     private let cardView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
@@ -14,7 +14,7 @@ final class StatisticsCell: UITableViewCell {
         
         return view
     }()
-
+    
     private let valueLabel: UILabel = {
         let label = UILabel()
         label.textColor = .blackYP
@@ -22,7 +22,7 @@ final class StatisticsCell: UITableViewCell {
         label.textAlignment = .left
         return label
     }()
-
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .blackYP
@@ -34,7 +34,7 @@ final class StatisticsCell: UITableViewCell {
     
     private let gradientLayer = CAGradientLayer()
     private let shapeLayer = CAShapeLayer()
-
+    
     // MARK: - Initializers
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -43,25 +43,25 @@ final class StatisticsCell: UITableViewCell {
         setupUI()
         setupConstraints()
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-   // MARK: - Public Methods
-
+    
+    // MARK: - Public Methods
+    
     func configure(with item: StatisticsItem) {
         valueLabel.text = "\(item.value)"
         titleLabel.text = item.title
     }
-
-   // MARK: - Private Methods
-
+    
+    // MARK: - Private Methods
+    
     private func setupUI() {
         selectionStyle = .none
         backgroundColor = .clear
         contentView.backgroundColor = .clear
-
+        
         contentView.addSubview(cardView)
         cardView.addSubview(valueLabel)
         cardView.addSubview(titleLabel)
@@ -69,20 +69,20 @@ final class StatisticsCell: UITableViewCell {
         cardView.layer.addSublayer(gradientLayer)
         setupGradient()
     }
-
+    
     private func setupConstraints() {
         [cardView, valueLabel, titleLabel].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
-
+        
         NSLayoutConstraint.activate([
             cardView.topAnchor.constraint(equalTo: contentView.topAnchor),
             cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             cardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-
+            
             valueLabel.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 12),
             valueLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 12),
             valueLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -12),
-
+            
             titleLabel.topAnchor.constraint(equalTo: valueLabel.bottomAnchor, constant: 7),
             titleLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 12),
             titleLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -12),
@@ -106,9 +106,9 @@ final class StatisticsCell: UITableViewCell {
         
         gradientLayer.mask = shapeLayer
     }
-
+    
     // MARK: - Overrides
-
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         valueLabel.text = nil
