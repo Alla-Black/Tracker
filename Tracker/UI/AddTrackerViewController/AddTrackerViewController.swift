@@ -307,6 +307,8 @@ final class AddTrackerViewController: UIViewController {
         collectionHeightConstraint?.isActive = true
     }
     
+    // MARK: -  ConfigureForMode
+    
     private func configureForMode() {
         switch mode {
         case .create:
@@ -327,6 +329,7 @@ final class AddTrackerViewController: UIViewController {
             isTitleValid = !tracker.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             selectedEmoji = tracker.emoji
             selectedColor = tracker.color
+            emojiColorCollection.setSelection(emoji: selectedEmoji, color: selectedColor)
             selectedWeekdays = Set(tracker.schedule)
             updateScheduleSubtitle()
         }
