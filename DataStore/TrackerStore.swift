@@ -8,6 +8,7 @@ protocol TrackerStoreProtocol {
     func add(_ tracker: Tracker, categoryTitle: String) throws
     func delete(_ trackerCoreData: TrackerCoreData) throws
     func makeTracker(from object: TrackerCoreData) -> Tracker
+    func update(_ tracker: Tracker, categoryTitle: String) throws
 }
 
 // MARK: - TrackerStore
@@ -75,6 +76,41 @@ final class TrackerStore: TrackerStoreProtocol {
             emoji: emoji,
             schedule: schedule
             )
+    }
+    
+    func update(_ tracker: Tracker, categoryTitle: String) throws {
+        let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        request.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
+        request.fetchLimit = 1
+        
+        guard let object = try context.fetch(request).first else {
+            assertionFailure("Не найден TrackerCoreData для id: \(tracker.id)")
+            return
+        }
+        
+        object.name = tracker.name
+        object.emoji = tracker.emoji
+        object.color = tracker.color
+        object.schedule = tracker.schedule as NSObject
+        
+        let categoryRequest = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
+        categoryRequest.predicate = NSPredicate(format: "title == %@", categoryTitle)
+        categoryRequest.fetchLimit = 1
+        
+        let fetchedCategories = try context.fetch(categoryRequest)
+        
+        let category: TrackerCategoryCoreData
+        if let existingCategory = fetchedCategories.first {
+            category = existingCategory
+        } else {
+            let newCategory = TrackerCategoryCoreData(context: context)
+            newCategory.title = categoryTitle
+            category = newCategory
+        }
+        
+        object.category = category
+        
+        try context.save()
     }
     
 }
