@@ -6,6 +6,7 @@ import CoreData
 struct TrackersStoreUpdate {
     let insertedIndexPaths: [IndexPath]
     let deletedIndexPaths: [IndexPath]
+    let updatedIndexPaths: [IndexPath]
 }
 
 // MARK: - TrackersDataProviderDelegate
@@ -48,6 +49,7 @@ final class TrackersDataProvider: NSObject {
     
     private var insertedIndexPaths: [IndexPath]?
     private var deletedIndexPaths: [IndexPath]?
+    private var updatedIndexPaths: [IndexPath]?
     
     private weak var delegate: TrackersDataProviderDelegate?
     
@@ -170,6 +172,7 @@ extension TrackersDataProvider: NSFetchedResultsControllerDelegate {
     ) {
         insertedIndexPaths = []
         deletedIndexPaths = []
+        updatedIndexPaths = []
     }
     
     func controller(
@@ -188,6 +191,18 @@ extension TrackersDataProvider: NSFetchedResultsControllerDelegate {
             if let indexPath = indexPath {
                 deletedIndexPaths?.append(indexPath)
             }
+        case .update:
+            if let indexPath = indexPath {
+                updatedIndexPaths?.append(indexPath)
+            }
+
+        case .move:
+            if let indexPath = indexPath {
+                deletedIndexPaths?.append(indexPath)
+            }
+            if let newIndexPath = newIndexPath {
+                insertedIndexPaths?.append(newIndexPath)
+            }
         default:
             break
         }
@@ -198,20 +213,24 @@ extension TrackersDataProvider: NSFetchedResultsControllerDelegate {
     ) {
         guard
             let inserted = insertedIndexPaths,
-            let deleted = deletedIndexPaths
+            let deleted = deletedIndexPaths,
+            let updated = updatedIndexPaths
         else {
             insertedIndexPaths = nil
             deletedIndexPaths = nil
+            updatedIndexPaths = nil
             return
         }
         
         let update = TrackersStoreUpdate(
             insertedIndexPaths: inserted,
-            deletedIndexPaths: deleted
+            deletedIndexPaths: deleted,
+            updatedIndexPaths: updated
         )
         delegate?.didUpdate(update)
         
         insertedIndexPaths = nil
         deletedIndexPaths = nil
+        updatedIndexPaths = nil
     }
 }
