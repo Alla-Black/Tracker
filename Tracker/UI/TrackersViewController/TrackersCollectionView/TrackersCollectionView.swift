@@ -31,6 +31,10 @@ protocol TrackersCollectionViewDelegate: AnyObject {
         _ collectionView: TrackersCollectionView,
         titleForSection section: Int
     ) -> String
+    
+    func trackersCollectionView(_ collectionView: TrackersCollectionView, didRequestEdit tracker: Tracker)
+    
+    func trackersCollectionView(_ collectionView: TrackersCollectionView, didRequestDeleteAt indexPath: IndexPath)
 }
 
 // MARK: TrackersCollectionView
@@ -95,5 +99,37 @@ extension TrackersCollectionView: TrackerCellDelegate {
         else { return }
         
         delegate?.trackersCollectionView(self, didTapPlusFor: tracker, at: indexPath)
+    }
+}
+
+// MARK: - UICollectionViewDelegate (Context Menu)
+
+extension TrackersCollectionView: UICollectionViewDelegate {
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        contextMenuConfigurationForItemAt indexPath: IndexPath,
+        point: CGPoint
+    ) -> UIContextMenuConfiguration? {
+
+        guard let tracker = delegate?.trackersCollectionView(self, trackerAt: indexPath) else {
+            return nil
+        }
+
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ in
+            guard let self else { return UIMenu() }
+
+            let editAction = UIAction(title: "Редактировать") { [weak self] _ in
+                guard let self else { return }
+                self.delegate?.trackersCollectionView(self, didRequestEdit: tracker)
+            }
+
+            let deleteAction = UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
+                guard let self else { return }
+                self.delegate?.trackersCollectionView(self, didRequestDeleteAt: indexPath)
+            }
+
+            return UIMenu(children: [editAction, deleteAction])
+        }
     }
 }
