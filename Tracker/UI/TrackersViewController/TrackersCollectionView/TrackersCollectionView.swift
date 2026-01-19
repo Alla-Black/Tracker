@@ -116,7 +116,7 @@ extension TrackersCollectionView: UICollectionViewDelegate {
             return nil
         }
 
-        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ in
+        return UIContextMenuConfiguration(identifier: indexPath as NSIndexPath, previewProvider: nil) { [weak self] _ in
             guard let self else { return UIMenu() }
 
             let editAction = UIAction(title: "Редактировать") { [weak self] _ in
@@ -131,5 +131,37 @@ extension TrackersCollectionView: UICollectionViewDelegate {
 
             return UIMenu(children: [editAction, deleteAction])
         }
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration
+    ) -> UITargetedPreview? {
+
+        guard
+            let indexPath = (configuration.identifier as? NSIndexPath) as IndexPath?,
+            let cell = collectionView.cellForItem(at: indexPath) as? TrackerCollectionViewCell
+        else { return nil }
+
+        let previewView = cell.contextMenuPreviewView
+
+        let params = UIPreviewParameters()
+        params.backgroundColor = .clear
+        params.visiblePath = UIBezierPath(
+            roundedRect: previewView.bounds,
+            cornerRadius: previewView.layer.cornerRadius
+        )
+
+        return UITargetedPreview(view: previewView, parameters: params)
+    }
+
+    /// Возвращает preview для анимации закрытия контекстного меню,
+    /// чтобы оно схлопывалось обратно в верхнюю карточку трекера
+    /// без захвата футера.
+    func collectionView(
+        _ collectionView: UICollectionView,
+        previewForDismissingContextMenuWithConfiguration configuration: UIContextMenuConfiguration
+    ) -> UITargetedPreview? {
+        return self.collectionView(collectionView, previewForHighlightingContextMenuWithConfiguration: configuration)
     }
 }

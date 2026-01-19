@@ -19,6 +19,9 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     weak var delegate: TrackerCellDelegate?
     
+    /// Вью для подсветки контекстного меню (без нижнего футера).
+    var contextMenuPreviewView: UIView { topContainerView }
+    
     // MARK: - Private Properties
     
     private let topContainerView = UIView()
