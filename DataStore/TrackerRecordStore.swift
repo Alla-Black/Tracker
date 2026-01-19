@@ -1,4 +1,4 @@
-import UIKit
+import Foundation
 import CoreData
 
 // MARK: - TrackerRecordStoreProtocol
@@ -47,6 +47,7 @@ final class TrackerRecordStore: TrackerRecordStoreProtocol {
         recordObject.tracker = trackerObject
         
         try context.save()
+        NotificationCenter.default.post(name: .trackerRecordsDidChange, object: nil)
         
     }
     
@@ -71,6 +72,7 @@ final class TrackerRecordStore: TrackerRecordStoreProtocol {
         
         if !objects.isEmpty {
             try context.save()
+            NotificationCenter.default.post(name: .trackerRecordsDidChange, object: nil)
         }
     }
     

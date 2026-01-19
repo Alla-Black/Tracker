@@ -21,6 +21,8 @@ final class StatisticsViewModel {
             onStatsChanged?(items)
         }
     }
+    
+    private var recordsObserver: NSObjectProtocol?
 
     // MARK: - Initializers
     
@@ -31,6 +33,7 @@ final class StatisticsViewModel {
     // MARK: - Public Methods
     
     func viewDidLoad() {
+        setupObservers()
         reload()
     }
     
@@ -43,11 +46,27 @@ final class StatisticsViewModel {
         }
     }
     
+    private func setupObservers() {
+        recordsObserver = NotificationCenter.default.addObserver(
+            forName: .trackerRecordsDidChange,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.reload()
+        }
+    }
+    
     func numberOfItems() -> Int {
         items.count
     }
     
     func item(at index: Int) -> StatisticsItem {
         items[index]
+    }
+    
+    deinit {
+        if let recordsObserver {
+            NotificationCenter.default.removeObserver(recordsObserver)
+        }
     }
 }
