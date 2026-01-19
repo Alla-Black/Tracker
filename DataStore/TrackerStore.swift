@@ -57,6 +57,8 @@ final class TrackerStore: TrackerStoreProtocol {
     func delete(_ trackerCoreData: TrackerCoreData) throws {
         context.delete(trackerCoreData)
         try context.save()
+        
+        NotificationCenter.default.post(name: .trackerRecordsDidChange, object: nil)
     }
     
     func makeTracker(from object: TrackerCoreData) -> Tracker {
