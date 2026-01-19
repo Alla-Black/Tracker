@@ -510,4 +510,32 @@ extension TrackersViewController: TrackersCollectionViewDelegate {
         guard visibleCategories.indices.contains(section) else { return "" }
         return visibleCategories[section].title
     }
+    
+    func trackersCollectionView(_ collectionView: TrackersCollectionView, didRequestDeleteAt indexPath: IndexPath) {
+        let alert = UIAlertController(
+            title: "Уверены что хотите удалить трекер?",
+            message: nil,
+            preferredStyle: .actionSheet
+        )
+
+        let delete = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+            guard let self else { return }
+            do {
+                try self.dataProvider.delete(at: indexPath)
+            } catch {
+                assertionFailure("Не удалось удалить трекер: \(error)")
+            }
+        }
+
+        let cancel = UIAlertAction(title: "Отменить", style: .cancel)
+
+        alert.addAction(delete)
+        alert.addAction(cancel)
+
+        present(alert, animated: true)
+    }
+    
+    func trackersCollectionView(_ collectionView: TrackersCollectionView, didRequestEdit tracker: Tracker) {
+        // запустить экран редактирования
+    }
 }
