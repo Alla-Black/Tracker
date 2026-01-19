@@ -185,6 +185,7 @@ final class AddTrackerViewController: UIViewController {
         
         updateLimitLayout(isTooLong: false)
         configureForMode()
+        setupTextFieldObservers()
     }
     
     override func viewDidLayoutSubviews() {
@@ -334,6 +335,27 @@ final class AddTrackerViewController: UIViewController {
             updateScheduleSubtitle()
         }
 
+        updateCreateButtonState()
+    }
+    
+    // MARK: - Setup TextField Observers
+    
+    private func setupTextFieldObservers() {
+        textField.addTarget(self, action: #selector(titleDidChange), for: .editingChanged)
+    }
+    
+    // MARK: - Title Validation
+    
+    @objc private func titleDidChange() {
+        let text = textField.text ?? ""
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        let isTooLong = text.count > characterLimit
+        let isEmpty = trimmed.isEmpty
+
+        updateLimitLayout(isTooLong: isTooLong)
+
+        isTitleValid = !isEmpty && !isTooLong
         updateCreateButtonState()
     }
     
