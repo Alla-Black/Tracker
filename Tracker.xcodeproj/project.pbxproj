@@ -18,7 +18,11 @@
 		4D6423B32F1C2CC500025C78 /* FiltersTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6423B22F1C2CC500025C78 /* FiltersTableView.swift */; };
 		4D6423B52F1C2D4000025C78 /* FiltersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6423B42F1C2D4000025C78 /* FiltersViewModel.swift */; };
 		4D6423B72F1C319900025C78 /* FiltersListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6423B62F1C319900025C78 /* FiltersListCell.swift */; };
-		4D6B5D3C2EC358F40060D37E /* StatisticViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6B5D352EC358F40060D37E /* StatisticViewController.swift */; };
+		4D6423BD2F1CF1F700025C78 /* StatisticsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6423BC2F1CF1F700025C78 /* StatisticsViewModel.swift */; };
+		4D6423BF2F1CF53800025C78 /* StatisticsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6423BE2F1CF53800025C78 /* StatisticsProvider.swift */; };
+		4D6423C12F1CFB4A00025C78 /* StatisticsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6423C02F1CFB4A00025C78 /* StatisticsCell.swift */; };
+		4D6423C32F1D0C8900025C78 /* StatisticsTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6423C22F1D0C8900025C78 /* StatisticsTableView.swift */; };
+		4D6B5D3C2EC358F40060D37E /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6B5D352EC358F40060D37E /* StatisticsViewController.swift */; };
 		4D6B5D3D2EC358F40060D37E /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6B5D372EC358F40060D37E /* TabBarController.swift */; };
 		4D6B5D3E2EC358F40060D37E /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6B5D392EC358F40060D37E /* TrackersViewController.swift */; };
 		4D9B6F7D2EF2FF5100740CCE /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9B6F7B2EF2FF5100740CCE /* OnboardingViewController.swift */; };
@@ -84,10 +88,14 @@
 		4D6423B22F1C2CC500025C78 /* FiltersTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersTableView.swift; sourceTree = "<group>"; };
 		4D6423B42F1C2D4000025C78 /* FiltersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersViewModel.swift; sourceTree = "<group>"; };
 		4D6423B62F1C319900025C78 /* FiltersListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersListCell.swift; sourceTree = "<group>"; };
+		4D6423BC2F1CF1F700025C78 /* StatisticsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewModel.swift; sourceTree = "<group>"; };
+		4D6423BE2F1CF53800025C78 /* StatisticsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsProvider.swift; sourceTree = "<group>"; };
+		4D6423C02F1CFB4A00025C78 /* StatisticsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsCell.swift; sourceTree = "<group>"; };
+		4D6423C22F1D0C8900025C78 /* StatisticsTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsTableView.swift; sourceTree = "<group>"; };
 		4D6B5C752EC221AE0060D37E /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D6B5C8B2EC221B00060D37E /* TrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D6B5C952EC221B00060D37E /* TrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4D6B5D352EC358F40060D37E /* StatisticViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticViewController.swift; sourceTree = "<group>"; };
+		4D6B5D352EC358F40060D37E /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		4D6B5D372EC358F40060D37E /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		4D6B5D392EC358F40060D37E /* TrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewController.swift; sourceTree = "<group>"; };
 		4D9B6F7B2EF2FF5100740CCE /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
@@ -200,6 +208,7 @@
 			children = (
 				4D0B9D662EE2FB1400C7BC48 /* TrackersDataProvider.swift */,
 				4DDEA95E2F19808D00702127 /* AnalyticsService.swift */,
+				4D6423BE2F1CF53800025C78 /* StatisticsProvider.swift */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -221,6 +230,15 @@
 				4D6423B62F1C319900025C78 /* FiltersListCell.swift */,
 			);
 			path = FiltersTableView;
+			sourceTree = "<group>";
+		};
+		4D6423C52F1E344100025C78 /* StatisticsTableView */ = {
+			isa = PBXGroup;
+			children = (
+				4D6423C02F1CFB4A00025C78 /* StatisticsCell.swift */,
+				4D6423C22F1D0C8900025C78 /* StatisticsTableView.swift */,
+			);
+			path = StatisticsTableView;
 			sourceTree = "<group>";
 		};
 		4D6B5C6C2EC221AE0060D37E = {
@@ -258,12 +276,14 @@
 			path = Tracker;
 			sourceTree = "<group>";
 		};
-		4D6B5D362EC358F40060D37E /* StatisticViewController */ = {
+		4D6B5D362EC358F40060D37E /* StatisticsViewController */ = {
 			isa = PBXGroup;
 			children = (
-				4D6B5D352EC358F40060D37E /* StatisticViewController.swift */,
+				4D6B5D352EC358F40060D37E /* StatisticsViewController.swift */,
+				4D6423BC2F1CF1F700025C78 /* StatisticsViewModel.swift */,
+				4D6423C52F1E344100025C78 /* StatisticsTableView */,
 			);
-			path = StatisticViewController;
+			path = StatisticsViewController;
 			sourceTree = "<group>";
 		};
 		4D6B5D382EC358F40060D37E /* TabBarController */ = {
@@ -298,7 +318,7 @@
 				4D6B5D382EC358F40060D37E /* TabBarController */,
 				4D6B5D3A2EC358F40060D37E /* TrackersViewController */,
 				4D6423AD2F1C1B5A00025C78 /* FiltersViewController */,
-				4D6B5D362EC358F40060D37E /* StatisticViewController */,
+				4D6B5D362EC358F40060D37E /* StatisticsViewController */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -573,6 +593,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D6423C32F1D0C8900025C78 /* StatisticsTableView.swift in Sources */,
 				4DBF55DD2ED3ABCB00076E0F /* ScheduleCell.swift in Sources */,
 				4D9B6F9F2EF9D97A00740CCE /* CategoryListTableView.swift in Sources */,
 				4D9B6FA52EFABDBC00740CCE /* CategoryListCell.swift in Sources */,
@@ -584,15 +605,18 @@
 				4DBF55CB2ED0ED3000076E0F /* TrackerSettingsTableView.swift in Sources */,
 				4DBF55AE2ECF9C4700076E0F /* TrackerSectionHeaderView.swift in Sources */,
 				4DEEFF532EDDC0A100EB43D7 /* EmojiColorDataSource.swift in Sources */,
+				4D6423C12F1CFB4A00025C78 /* StatisticsCell.swift in Sources */,
 				4D6423AB2F1BF23A00025C78 /* TrackersFilter.swift in Sources */,
 				4DBF55AA2ECF474800076E0F /* CollectionDelegateFlowLayout.swift in Sources */,
 				4D6423B32F1C2CC500025C78 /* FiltersTableView.swift in Sources */,
 				4DBF55BD2ED07FA200076E0F /* AddTrackerViewController.swift in Sources */,
 				4DEEFF4F2EDA51DA00EB43D7 /* EmojiColorHeaderView.swift in Sources */,
+				4D6423BD2F1CF1F700025C78 /* StatisticsViewModel.swift in Sources */,
 				4DDEA95F2F19808D00702127 /* AnalyticsService.swift in Sources */,
 				4D0B9D5F2EE0A21100C7BC48 /* TrackerStore.swift in Sources */,
 				4D9B6FA32EF9F74500740CCE /* Binding.swift in Sources */,
 				4D6423B52F1C2D4000025C78 /* FiltersViewModel.swift in Sources */,
+				4D6423BF2F1CF53800025C78 /* StatisticsProvider.swift in Sources */,
 				4DEEFE932EDA336100EB43D7 /* EmojiColorMockData.swift in Sources */,
 				4DEEFF802EDF711100EB43D7 /* TrackerCoreDataModel.xcdatamodeld in Sources */,
 				4D9B6F972EF442CA00740CCE /* CategoryListViewController.swift in Sources */,
@@ -611,7 +635,7 @@
 				4DBF55D72ED39A0800076E0F /* ScheduleViewController.swift in Sources */,
 				4D9B6F7F2EF3346200740CCE /* PageViewController.swift in Sources */,
 				4DEEFF822EDF77FB00EB43D7 /* WeekdayValueTransformer.swift in Sources */,
-				4D6B5D3C2EC358F40060D37E /* StatisticViewController.swift in Sources */,
+				4D6B5D3C2EC358F40060D37E /* StatisticsViewController.swift in Sources */,
 				4DBF55B42ECFCE4A00076E0F /* TrackersMockData.swift in Sources */,
 				4D6B5D3D2EC358F40060D37E /* TabBarController.swift in Sources */,
 				4D0B9D612EE0A22400C7BC48 /* TrackerCategoryStore.swift in Sources */,
