@@ -130,5 +130,15 @@ final class StatisticsCell: UITableViewCell {
         
         shapeLayer.path = path.cgPath
     }
+    
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        guard window != nil else { return }
+        
+        DispatchQueue.main.async { [weak self] in
+            self?.setNeedsLayout()
+            self?.layoutIfNeeded()
+        }
+    }
 }
 
