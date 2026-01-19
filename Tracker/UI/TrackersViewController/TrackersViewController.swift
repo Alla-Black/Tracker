@@ -289,11 +289,8 @@ final class TrackersViewController: UIViewController {
             addTracker.selectedCategory = defaultCategory
         }
         
-        addTracker.onCreateTracker = { [weak self] tracker in
+        addTracker.onSubmitTracker = { [weak self] tracker, categoryTitle in
             guard let self else { return }
-            
-            let categoryTitle = addTracker.selectedCategory.title
-            
             do {
                 try self.dataProvider.add(tracker, categoryTitle: categoryTitle)
             } catch {
@@ -536,6 +533,27 @@ extension TrackersViewController: TrackersCollectionViewDelegate {
     }
     
     func trackersCollectionView(_ collectionView: TrackersCollectionView, didRequestEdit tracker: Tracker) {
-        // запустить экран редактирования
+        let completedDays = dataProvider.completedCount(for: tracker)
+        
+        let editVC = AddTrackerViewController(mode: .edit(tracker: tracker, completedDays: completedDays))
+        
+        if let category = categories.first(where: { category in
+            category.trackers.contains(where: { $0.id == tracker.id })
+        }) {
+            editVC.selectedCategory = category
+        }
+        
+        editVC.onSubmitTracker = { [weak self] updatedTracker, categoryTitle in
+            guard let self else { return }
+            do {
+                try self.dataProvider.update(updatedTracker, categoryTitle: categoryTitle)
+            } catch {
+                assertionFailure("Не удалось обновить трекер: \(error)")
+            }
+        }
+        
+        let nav = UINavigationController(rootViewController: editVC)
+        nav.modalPresentationStyle = .pageSheet
+        present(nav, animated: true)
     }
 }
