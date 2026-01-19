@@ -30,6 +30,7 @@ protocol TrackersDataProviderProtocol: AnyObject {
     func completedTrackerIDs(on date: Date) -> Set<UUID>
     func getAllCategories() -> [TrackerCategory]
     func completedCount(for tracker: Tracker) -> Int
+    func update(_ tracker: Tracker, categoryTitle: String) throws
 }
 
 // MARK: - TrackersDataProvider
@@ -153,6 +154,10 @@ extension TrackersDataProvider: TrackersDataProviderProtocol {
     
     func completedCount(for tracker: Tracker) -> Int {
         recordStore.completedCount(for: tracker.id)
+    }
+    
+    func update(_ tracker: Tracker, categoryTitle: String) throws {
+        try trackerStore.update(tracker, categoryTitle: categoryTitle)
     }
 }
 
