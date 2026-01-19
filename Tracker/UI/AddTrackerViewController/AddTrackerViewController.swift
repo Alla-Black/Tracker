@@ -11,9 +11,16 @@ private enum TrackerSettingsRow: Int {
 
 final class AddTrackerViewController: UIViewController {
     
+    // MARK: - Create/edit mode Enum
+
+    enum Mode {
+        case create
+        case edit(tracker: Tracker, completedDays: Int)
+    }
+    
     // MARK: - Public Properties
     
-    var onCreateTracker: ((Tracker) -> Void)?
+    var onSubmitTracker: ((Tracker, String) -> Void)?
     
     var selectedCategory: TrackerCategory = TrackerCategory(title: "", trackers: [])
     
@@ -125,6 +132,15 @@ final class AddTrackerViewController: UIViewController {
         return collectionView
     }()
     
+    private lazy var completedDaysLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        label.textColor = .blackYP
+        label.textAlignment = .center
+        label.isHidden = true
+        return label
+    }()
+    
     private let params = CollectionLayoutParams(cellCount: 6, leftInset: 2, rightInset: 3, cellSpaсing: 5)
     
     private lazy var emojiColorCollection = EmojiColorCollectionView(using: params, collectionView: collectionView)
@@ -139,6 +155,19 @@ final class AddTrackerViewController: UIViewController {
     private var selectedColor: UIColor?
     
     private let characterLimit = 38
+    
+    private let mode: Mode
+    
+    // MARK: - Initializers
+    
+    init(mode: Mode = .create) {
+        self.mode = mode
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Lifecycle
     
@@ -155,7 +184,7 @@ final class AddTrackerViewController: UIViewController {
         _ = emojiColorCollection
         
         updateLimitLayout(isTooLong: false)
-        updateCreateButtonState()
+        configureForMode()
     }
     
     override func viewDidLayoutSubviews() {
@@ -176,6 +205,8 @@ final class AddTrackerViewController: UIViewController {
         scrollView.addSubview(contentView)
         contentView.addSubview(mainStack)
         
+        mainStack.addArrangedSubview(completedDaysLabel)
+        mainStack.setCustomSpacing(40, after: completedDaysLabel)
         mainStack.addArrangedSubview(textFieldContainer)
         mainStack.addArrangedSubview(limitLabel)
         mainStack.addArrangedSubview(tableViewContainer)
@@ -191,7 +222,6 @@ final class AddTrackerViewController: UIViewController {
         view.backgroundColor = .whiteYP
         
         // NavBar Title
-        title = "Новая привычка"
         if let navBar = navigationController?.navigationBar {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
@@ -277,6 +307,33 @@ final class AddTrackerViewController: UIViewController {
         collectionHeightConstraint?.isActive = true
     }
     
+    private func configureForMode() {
+        switch mode {
+        case .create:
+            title = "Новая привычка"
+            createButton.setTitle("Создать", for: .normal)
+            completedDaysLabel.isHidden = true
+
+        case .edit(let tracker, let completedDays):
+            title = "Редактирование привычки"
+            createButton.setTitle("Сохранить", for: .normal)
+            completedDaysLabel.isHidden = false
+            completedDaysLabel.text = String.localizedStringWithFormat(
+                NSLocalizedString("trackers.daysCount", comment: ""),
+                completedDays
+            )
+
+            textField.text = tracker.name
+            isTitleValid = !tracker.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            selectedEmoji = tracker.emoji
+            selectedColor = tracker.color
+            selectedWeekdays = Set(tracker.schedule)
+            updateScheduleSubtitle()
+        }
+
+        updateCreateButtonState()
+    }
+    
     // MARK: - Setup Actions
     
     private func setupDelegates() {
@@ -297,15 +354,24 @@ final class AddTrackerViewController: UIViewController {
             return
         }
         
+        let trackerId: UUID
+        switch mode {
+        case .create:
+            trackerId = UUID()
+        case .edit(let tracker, _):
+            trackerId = tracker.id
+        }
+        
         let tracker = Tracker(
-            id: UUID(),
+            id: trackerId,
             name: textField.text?.trimmed ?? "",
             color: color,
             emoji: emoji,
             schedule: Array(selectedWeekdays)
             )
         
-        onCreateTracker?(tracker)
+        let categoryTitle = selectedCategory.title
+        onSubmitTracker?(tracker, categoryTitle)
         dismiss(animated: true)
     }
     
