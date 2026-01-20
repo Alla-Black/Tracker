@@ -195,6 +195,10 @@ final class TrackersViewController: UIViewController {
     }
     
     private func configureAppearance() {
+        view.backgroundColor = .whiteYP
+        titleContainer.backgroundColor = .whiteYP
+        collectionView.backgroundColor = .whiteYP
+        
         var config = addTrackerButton.configuration ?? UIButton.Configuration.plain()
         let plusImage = UIImage(resource: .addTracker).withRenderingMode(.alwaysTemplate)
         config.image = plusImage
