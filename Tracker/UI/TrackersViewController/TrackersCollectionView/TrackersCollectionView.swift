@@ -121,11 +121,17 @@ extension TrackersCollectionView: UICollectionViewDelegate {
 
             let editAction = UIAction(title: AppStrings.Common.editButton) { [weak self] _ in
                 guard let self else { return }
+                // отправка аналитики
+                AnalyticsService.shared.reportUIEvent(.click, screen: AnalyticsScreen.main, item: AnalyticsItem.edit)
+                
                 self.delegate?.trackersCollectionView(self, didRequestEdit: tracker)
             }
 
             let deleteAction = UIAction(title: AppStrings.Common.deleteButton, attributes: .destructive) { [weak self] _ in
                 guard let self else { return }
+                // отправка аналитики
+                AnalyticsService.shared.reportUIEvent(.click, screen: AnalyticsScreen.main, item: AnalyticsItem.delete)
+                
                 self.delegate?.trackersCollectionView(self, didRequestDeleteAt: indexPath)
             }
 
