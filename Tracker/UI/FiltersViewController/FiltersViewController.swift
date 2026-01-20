@@ -64,7 +64,7 @@ final class FiltersViewController: UIViewController {
         view.backgroundColor = .whiteYP
         
         // NavBar Title
-        title = "Фильтры"
+        title = AppStrings.Trackers.filtersButtonTitle
         if let navBar = navigationController?.navigationBar {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()

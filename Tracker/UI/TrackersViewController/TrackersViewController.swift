@@ -55,7 +55,7 @@ final class TrackersViewController: UIViewController {
         field.textColor = UIColor(resource: .blackYP)
         
         let placeholder = NSAttributedString(
-            string: AppStrings.Trackers.searchPlaceholder,
+            string: AppStrings.Common.searchPlaceholder,
             attributes: [
                 .foregroundColor: UIColor(resource: .graySearch),
                 .font: UIFont.systemFont(ofSize: 17, weight: .regular)
@@ -83,7 +83,7 @@ final class TrackersViewController: UIViewController {
     
     private lazy var cancelSearchButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Отменить", for: .normal)
+        button.setTitle(AppStrings.Common.сancelButton, for: .normal)
         button.setTitleColor(UIColor(resource: .blueStatic), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         button.titleLabel?.textAlignment = .center
@@ -115,7 +115,7 @@ final class TrackersViewController: UIViewController {
     
     private lazy var filtersButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Фильтры", for: .normal)
+        button.setTitle(AppStrings.Trackers.filtersButtonTitle, for: .normal)
         button.setTitleColor(UIColor(resource: .whiteStatic), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         button.backgroundColor = UIColor(resource: .blueStatic)
@@ -408,7 +408,7 @@ final class TrackersViewController: UIViewController {
             collectionView.isHidden = true
             filtersButton.isHidden = false
             stubImage.image = UIImage(resource: .notFound)
-            stubLabel.text = "Ничего не найдено"
+            stubLabel.text = AppStrings.Trackers.noResultsTitle
         }
     }
     
@@ -510,12 +510,12 @@ extension TrackersViewController: TrackersCollectionViewDelegate {
     
     func trackersCollectionView(_ collectionView: TrackersCollectionView, didRequestDeleteAt indexPath: IndexPath) {
         let alert = UIAlertController(
-            title: "Уверены что хотите удалить трекер?",
+            title: AppStrings.Trackers.deleteAlertTitle,
             message: nil,
             preferredStyle: .actionSheet
         )
 
-        let delete = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+        let delete = UIAlertAction(title: AppStrings.Common.deleteButton, style: .destructive) { [weak self] _ in
             guard let self else { return }
             do {
                 try self.dataProvider.delete(at: indexPath)
@@ -524,7 +524,7 @@ extension TrackersViewController: TrackersCollectionViewDelegate {
             }
         }
 
-        let cancel = UIAlertAction(title: "Отменить", style: .cancel)
+        let cancel = UIAlertAction(title: AppStrings.Common.сancelButton, style: .cancel)
 
         alert.addAction(delete)
         alert.addAction(cancel)

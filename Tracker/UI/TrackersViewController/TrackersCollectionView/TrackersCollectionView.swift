@@ -119,12 +119,12 @@ extension TrackersCollectionView: UICollectionViewDelegate {
         return UIContextMenuConfiguration(identifier: indexPath as NSIndexPath, previewProvider: nil) { [weak self] _ in
             guard let self else { return UIMenu() }
 
-            let editAction = UIAction(title: "Редактировать") { [weak self] _ in
+            let editAction = UIAction(title: AppStrings.Common.editButton) { [weak self] _ in
                 guard let self else { return }
                 self.delegate?.trackersCollectionView(self, didRequestEdit: tracker)
             }
 
-            let deleteAction = UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
+            let deleteAction = UIAction(title: AppStrings.Common.deleteButton, attributes: .destructive) { [weak self] _ in
                 guard let self else { return }
                 self.delegate?.trackersCollectionView(self, didRequestDeleteAt: indexPath)
             }

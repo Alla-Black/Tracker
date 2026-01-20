@@ -8,10 +8,10 @@ enum TrackersFilter: Int, CaseIterable {
     
     var title: String {
         switch self {
-        case .all: return "Все трекеры"
-        case .today: return "Трекеры на сегодня"
-        case .completed: return "Завершенные"
-        case .uncompleted: return "Не завершенные"
+        case .all: return AppStrings.Filters.all
+        case .today: return AppStrings.Filters.today
+        case .completed: return AppStrings.Filters.completed
+        case .uncompleted: return AppStrings.Filters.incomplete
         }
     }
     
