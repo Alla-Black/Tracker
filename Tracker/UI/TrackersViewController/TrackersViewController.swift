@@ -305,6 +305,8 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc private func didTapFiltersButton() {
+        AnalyticsService.shared.reportUIEvent(.click, screen: AnalyticsScreen.main, item: AnalyticsItem.filter)
+        
         let current = viewModel.currentFilter
         
         let filtersVM = FiltersViewModel(selectedFilter: current)
