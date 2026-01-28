@@ -31,6 +31,10 @@ protocol TrackersCollectionViewDelegate: AnyObject {
         _ collectionView: TrackersCollectionView,
         titleForSection section: Int
     ) -> String
+    
+    func trackersCollectionView(_ collectionView: TrackersCollectionView, didRequestEdit tracker: Tracker)
+    
+    func trackersCollectionView(_ collectionView: TrackersCollectionView, didRequestDeleteAt indexPath: IndexPath)
 }
 
 // MARK: TrackersCollectionView
@@ -95,5 +99,75 @@ extension TrackersCollectionView: TrackerCellDelegate {
         else { return }
         
         delegate?.trackersCollectionView(self, didTapPlusFor: tracker, at: indexPath)
+    }
+}
+
+// MARK: - UICollectionViewDelegate (Context Menu)
+
+extension TrackersCollectionView: UICollectionViewDelegate {
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        contextMenuConfigurationForItemAt indexPath: IndexPath,
+        point: CGPoint
+    ) -> UIContextMenuConfiguration? {
+
+        guard let tracker = delegate?.trackersCollectionView(self, trackerAt: indexPath) else {
+            return nil
+        }
+
+        return UIContextMenuConfiguration(identifier: indexPath as NSIndexPath, previewProvider: nil) { [weak self] _ in
+            guard let self else { return UIMenu() }
+
+            let editAction = UIAction(title: AppStrings.Common.editButton) { [weak self] _ in
+                guard let self else { return }
+                // отправка аналитики
+                AnalyticsService.shared.reportUIEvent(.click, screen: AnalyticsScreen.main, item: AnalyticsItem.edit)
+                
+                self.delegate?.trackersCollectionView(self, didRequestEdit: tracker)
+            }
+
+            let deleteAction = UIAction(title: AppStrings.Common.deleteButton, attributes: .destructive) { [weak self] _ in
+                guard let self else { return }
+                // отправка аналитики
+                AnalyticsService.shared.reportUIEvent(.click, screen: AnalyticsScreen.main, item: AnalyticsItem.delete)
+                
+                self.delegate?.trackersCollectionView(self, didRequestDeleteAt: indexPath)
+            }
+
+            return UIMenu(children: [editAction, deleteAction])
+        }
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration
+    ) -> UITargetedPreview? {
+
+        guard
+            let indexPath = (configuration.identifier as? NSIndexPath) as IndexPath?,
+            let cell = collectionView.cellForItem(at: indexPath) as? TrackerCollectionViewCell
+        else { return nil }
+
+        let previewView = cell.contextMenuPreviewView
+
+        let params = UIPreviewParameters()
+        params.backgroundColor = .clear
+        params.visiblePath = UIBezierPath(
+            roundedRect: previewView.bounds,
+            cornerRadius: previewView.layer.cornerRadius
+        )
+
+        return UITargetedPreview(view: previewView, parameters: params)
+    }
+
+    /// Возвращает preview для анимации закрытия контекстного меню,
+    /// чтобы оно схлопывалось обратно в верхнюю карточку трекера
+    /// без захвата футера.
+    func collectionView(
+        _ collectionView: UICollectionView,
+        previewForDismissingContextMenuWithConfiguration configuration: UIContextMenuConfiguration
+    ) -> UITargetedPreview? {
+        return self.collectionView(collectionView, previewForHighlightingContextMenuWithConfiguration: configuration)
     }
 }

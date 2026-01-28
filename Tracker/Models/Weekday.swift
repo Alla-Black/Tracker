@@ -1,4 +1,4 @@
-import UIKit
+import Foundation
 
 enum Weekday: Int, CaseIterable, Codable {
     case monday

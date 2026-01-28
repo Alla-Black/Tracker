@@ -35,6 +35,17 @@ final class DatePickerView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Public Methods
+    
+    func setSelectedDate(_ date: Date, sendDelegate: Bool = true) {
+        datePicker.setDate(date, animated: true)
+        dateLabel.text = DateFormatterHelper.dateFormatter.string(from: date)
+        
+        if sendDelegate {
+            delegate?.datePickerView(self, didChangeDate: date)
+        }
+    }
+    
     // MARK: - Private Methods
     
     private func setupView() {

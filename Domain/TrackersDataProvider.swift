@@ -6,6 +6,7 @@ import CoreData
 struct TrackersStoreUpdate {
     let insertedIndexPaths: [IndexPath]
     let deletedIndexPaths: [IndexPath]
+    let updatedIndexPaths: [IndexPath]
 }
 
 // MARK: - TrackersDataProviderDelegate
@@ -27,8 +28,10 @@ protocol TrackersDataProviderProtocol: AnyObject {
     
     func isTrackerCompleted(_ tracker: Tracker, on date: Date) -> Bool
     func toggleRecord(for tracker: Tracker, on date: Date) throws
+    func completedTrackerIDs(on date: Date) -> Set<UUID>
     func getAllCategories() -> [TrackerCategory]
     func completedCount(for tracker: Tracker) -> Int
+    func update(_ tracker: Tracker, categoryTitle: String) throws
 }
 
 // MARK: - TrackersDataProvider
@@ -46,6 +49,7 @@ final class TrackersDataProvider: NSObject {
     
     private var insertedIndexPaths: [IndexPath]?
     private var deletedIndexPaths: [IndexPath]?
+    private var updatedIndexPaths: [IndexPath]?
     
     private weak var delegate: TrackersDataProviderDelegate?
     
@@ -146,8 +150,16 @@ extension TrackersDataProvider: TrackersDataProviderProtocol {
         }
     }
     
+    func completedTrackerIDs(on date: Date) -> Set<UUID> {
+        recordStore.completedTrackerIDs(on: date)
+    }
+    
     func completedCount(for tracker: Tracker) -> Int {
         recordStore.completedCount(for: tracker.id)
+    }
+    
+    func update(_ tracker: Tracker, categoryTitle: String) throws {
+        try trackerStore.update(tracker, categoryTitle: categoryTitle)
     }
 }
 
@@ -160,6 +172,7 @@ extension TrackersDataProvider: NSFetchedResultsControllerDelegate {
     ) {
         insertedIndexPaths = []
         deletedIndexPaths = []
+        updatedIndexPaths = []
     }
     
     func controller(
@@ -178,6 +191,18 @@ extension TrackersDataProvider: NSFetchedResultsControllerDelegate {
             if let indexPath = indexPath {
                 deletedIndexPaths?.append(indexPath)
             }
+        case .update:
+            if let indexPath = indexPath {
+                updatedIndexPaths?.append(indexPath)
+            }
+
+        case .move:
+            if let indexPath = indexPath {
+                deletedIndexPaths?.append(indexPath)
+            }
+            if let newIndexPath = newIndexPath {
+                insertedIndexPaths?.append(newIndexPath)
+            }
         default:
             break
         }
@@ -188,20 +213,24 @@ extension TrackersDataProvider: NSFetchedResultsControllerDelegate {
     ) {
         guard
             let inserted = insertedIndexPaths,
-            let deleted = deletedIndexPaths
+            let deleted = deletedIndexPaths,
+            let updated = updatedIndexPaths
         else {
             insertedIndexPaths = nil
             deletedIndexPaths = nil
+            updatedIndexPaths = nil
             return
         }
         
         let update = TrackersStoreUpdate(
             insertedIndexPaths: inserted,
-            deletedIndexPaths: deleted
+            deletedIndexPaths: deleted,
+            updatedIndexPaths: updated
         )
         delegate?.didUpdate(update)
         
         insertedIndexPaths = nil
         deletedIndexPaths = nil
+        updatedIndexPaths = nil
     }
 }

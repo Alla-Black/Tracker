@@ -1,0 +1,15 @@
+"mainTab.trackers.title" = "Трекеры";
+"mainTab.statistics.title" = "Статистика";
+"trackers.nav.title" = "Трекеры";
+"common.search.placeholder" = "Поиск";
+"common.cancel.button" = "Отменить";
+"common.delete.button" = "Удалить";
+"common.edit.button" = "Редактировать";
+"trackers.emptyState.title" = "Что будем отслеживать?";
+"trackers.filters.button" = "Фильтры";
+"trackers.noResults.title" = "Ничего не найдено";
+"trackers.deleteAlert.title" = "Уверены что хотите удалить трекер?";
+"trackers.filters.all" = "Все трекеры";
+"trackers.filters.today" = "Трекеры на сегодня";
+"trackers.filters.completed" = "Завершенные";
+"trackers.filters.incomplete" = "Не завершенные";

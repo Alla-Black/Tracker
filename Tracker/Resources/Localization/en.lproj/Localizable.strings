@@ -1,0 +1,16 @@
+"mainTab.trackers.title" = "Trackers";
+"mainTab.statistics.title" = "Statistics";
+"trackers.nav.title" = "Trackers";
+"common.search.placeholder" = "Search";
+"common.cancel.button" = "Cancel";
+"common.delete.button" = "Delete";
+"common.edit.button" = "Edit";
+"trackers.emptyState.title" = "What will we be tracking?";
+"trackers.filters.button" = "Filters";
+"trackers.noResults.title" = "Nothing found";
+"trackers.deleteAlert.title" = "Are you sure you want to delete this tracker?";
+"trackers.filters.all" = "All Trackers";
+"trackers.filters.today" = "Today’s Trackers";
+"trackers.filters.completed" = "Completed";
+"trackers.filters.incomplete" = "Incomplete";
+
