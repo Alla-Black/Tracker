@@ -1,5 +1,6 @@
 import Foundation
 import AppMetricaCore
+import os
 
 // MARK: - Analytics constants
 
@@ -27,6 +28,11 @@ final class AnalyticsService {
     static let shared = AnalyticsService()
     private init() {}
     
+    private let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier ?? "Tracker",
+        category: "Analytics"
+        )
+    
     static func activate() {
         guard let configuration = AppMetricaConfiguration(apiKey: "f9f44997-b522-407d-9e64-803149da02b2") else { return }
         
@@ -47,15 +53,15 @@ final class AnalyticsService {
             params["item"] = item
         }
         
-#if DEBUG
-        print("Analytics ui_event:", params)
-#endif
+        logger.debug("Analytics ui_event with params: \(params, privacy: .public)")
         
         AppMetrica.reportEvent(
             name: "ui_event",
             parameters: params,
-            onFailure: { error in
-                print("REPORT ERROR: %@", error.localizedDescription)
+            onFailure: { [weak self] error in
+                self?.logger.error(
+                    "AppMetrica report failed: \(error.localizedDescription, privacy: .public)"
+                )
             }
         )
     }
