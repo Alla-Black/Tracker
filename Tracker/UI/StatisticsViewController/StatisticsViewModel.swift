@@ -39,11 +39,7 @@ final class StatisticsViewModel {
     
     func reload() {
         let completed = statisticsProvider.completedCount()
-        if completed == 0 {
-            items = []
-        } else {
-            items = [StatisticsItem(value: completed, title: "Трекеров завершено")]
-        }
+        items = completed == 0 ? [] : [StatisticsItem(value: completed, title: "Трекеров завершено")]
     }
     
     private func setupObservers() {

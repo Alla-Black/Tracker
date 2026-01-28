@@ -8,13 +8,13 @@ final class StatisticsViewController: UIViewController {
     private var tableManager: StatisticsTableView?
 
     private lazy var titleLabel: UILabel = {
-            let label = UILabel()
-            label.text = "Статистика"
-            label.textColor = UIColor(resource: .blackYP)
-            label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
-            label.textAlignment = .left
-            return label
-        }()
+        let label = UILabel()
+        label.text = "Статистика"
+        label.textColor = UIColor(resource: .blackYP)
+        label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
+        label.textAlignment = .left
+        return label
+    }()
     
     private lazy var stubImageView: UIImageView = {
         let iv = UIImageView()

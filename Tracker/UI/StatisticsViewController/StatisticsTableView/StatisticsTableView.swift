@@ -20,7 +20,7 @@ final class StatisticsTableView: NSObject {
     // MARK: - Private Methods
     
     private func configureTableView() {
-        guard let tableView = tableView else { return }
+        guard let tableView else { return }
 
         registerCells(in: tableView)
         setupAppearance(for: tableView)
